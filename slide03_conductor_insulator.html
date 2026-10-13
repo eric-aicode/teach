@@ -144,6 +144,12 @@
       justify-content: stretch;
     }
 
+    .material-column, #circuitStagePanel {
+      touch-action: none;
+      user-select: none;
+      -webkit-user-select: none;
+    }
+
     /* 材料卡片：超大 SVG 圖示 (上方) + 超大英文單字 (下方) */
     .mat-hero-card {
       background: var(--bg-card);
@@ -161,6 +167,9 @@
       position: relative;
       transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
       flex: 1;
+      touch-action: none !important;
+      user-select: none !important;
+      -webkit-user-select: none !important;
     }
 
     .mat-hero-card:active {
@@ -892,16 +901,22 @@
 
       cards.forEach(card => {
         card.addEventListener('pointerdown', (e) => {
-          // 只處理滑鼠主鍵
-          if (e.button !== 0) return;
+          // 只處理滑鼠主鍵或觸控
+          if (e.pointerType === 'mouse' && e.button !== 0) return;
           const matKey = card.dataset.mat;
           if (!matKey) return;
+
+          // 大屏觸控核心：鎖定指標捕捉，確保手指滑過大螢幕時不脫鉤
+          try { card.setPointerCapture(e.pointerId); } catch(err) {}
 
           let startX = e.clientX;
           let startY = e.clientY;
           let hasMoved = false;
 
           function onPointerMove(moveEvent) {
+            // 阻止瀏覽器預設手勢攔截
+            if (moveEvent.cancelable) moveEvent.preventDefault();
+
             const dx = moveEvent.clientX - startX;
             const dy = moveEvent.clientY - startY;
             if (!hasMoved && Math.hypot(dx, dy) > 8) {
@@ -915,15 +930,13 @@
               activeDragAvatar.style.left = moveEvent.clientX + 'px';
               activeDragAvatar.style.top = moveEvent.clientY + 'px';
 
-              // 檢查游標是否在測試台插槽範圍
+              // 檢查游標是否接近右側測試台（大屏寬鬆吸附判斷）
+              const rect = stagePanel ? stagePanel.getBoundingClientRect() : null;
+              const isOverStage = rect ? (
+                moveEvent.clientX >= rect.left - 40 ||
+                moveEvent.clientX >= window.innerWidth * 0.35
+              ) : false;
               const slotBox = document.getElementById('slotGuideBox');
-              const rect = stagePanel.getBoundingClientRect();
-              const isOverStage = (
-                moveEvent.clientX >= rect.left &&
-                moveEvent.clientX <= rect.right &&
-                moveEvent.clientY >= rect.top &&
-                moveEvent.clientY <= rect.bottom
-              );
               if (slotBox) {
                 slotBox.classList.toggle('slot-active-hover', isOverStage);
               }
@@ -931,6 +944,7 @@
           }
 
           function onPointerUp(upEvent) {
+            try { card.releasePointerCapture(upEvent.pointerId); } catch(err) {}
             window.removeEventListener('pointermove', onPointerMove);
             window.removeEventListener('pointerup', onPointerUp);
             window.removeEventListener('pointercancel', onPointerUp);
@@ -940,24 +954,24 @@
 
             if (isDragging) {
               isDragging = false;
-              // 判定釋放點是否在右側電路板
-              const rect = stagePanel.getBoundingClientRect();
-              const isDroppedOnStage = (
-                upEvent.clientX >= rect.left &&
-                upEvent.clientX <= rect.right &&
-                upEvent.clientY >= rect.top &&
-                upEvent.clientY <= rect.bottom
-              );
+              // 大屏智慧判定：手指只要拖過中線 (35% 寬度) 或在右側電路板範圍內放開，即判定成功置入！
+              const rect = stagePanel ? stagePanel.getBoundingClientRect() : null;
+              const isDroppedOnStage = rect ? (
+                (upEvent.clientX >= rect.left - 60 && upEvent.clientY >= rect.top - 80 && upEvent.clientY <= rect.bottom + 80) ||
+                upEvent.clientX >= window.innerWidth * 0.35
+              ) : (upEvent.clientX >= window.innerWidth * 0.35);
 
               if (isDroppedOnStage && dragMatKey) {
                 selectMat(dragMatKey);
               }
               removeSolidAvatar();
               dragMatKey = null;
+            } else if (!hasMoved) {
+              selectMat(matKey);
             }
           }
 
-          window.addEventListener('pointermove', onPointerMove);
+          window.addEventListener('pointermove', onPointerMove, { passive: false });
           window.addEventListener('pointerup', onPointerUp);
           window.addEventListener('pointercancel', onPointerUp);
         });
