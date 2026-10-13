@@ -1,0 +1,1301 @@
+<!DOCTYPE html>
+<html lang="zh-Hant" data-theme="dark">
+
+<head>
+  <link rel="stylesheet" href="slides_theme.css?v=20261013">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Slide 03: 導電特性檢驗：導體 vs 絕緣體 | 生活科技雙語教學</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@500;700;800;900&family=Outfit:wght@700;800;900&display=swap"
+    rel="stylesheet">
+  <style>
+    :root {
+      --font-display: 'Outfit', sans-serif;
+      --font-main: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+    }
+
+    
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: var(--font-main);
+      background-color: var(--bg-deep) !important;
+      background-image: var(--bg-gradient) !important;
+      color: var(--text-pure);
+      height: 100vh;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-start;
+      padding: 0;
+      position: relative;
+      overflow: hidden;
+      user-select: none;
+    }
+
+    /* Lab Toolbar */
+    .lab-bar {
+      position: relative;
+      width: 100%;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: var(--nav-bg) !important;
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border-subtle) !important;
+      padding: 0.35rem 1.6rem;
+      z-index: 100;
+      box-sizing: border-box;
+    }
+
+    .lab-btn {
+      background: var(--bg-card);
+      border: 1px solid var(--border-subtle);
+      color: var(--text-heading);
+      padding: 0.22rem 0.65rem;
+      border-radius: 9999px;
+      font-size: 0.8rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .lab-btn:hover {
+      background: var(--cyan-core);
+      color: #04091a !important;
+    }
+
+    /* Viewport Slide Container */
+    .slide-viewport {
+      width: 100%;
+      max-width: 1360px;
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 0.2rem 1.4rem;
+      box-sizing: border-box;
+    }
+
+    /* Slide Header */
+    .slide-header {
+      text-align: center;
+      margin-bottom: 0.55rem;
+    }
+
+    .slide-tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      font-size: 0.9rem;
+      font-weight: 800;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--cyan-core);
+      background: rgba(56, 189, 248, 0.12);
+      border: 1px solid rgba(56, 189, 248, 0.35);
+      padding: 0.2rem 0.8rem;
+      border-radius: 9999px;
+      margin-bottom: 0.25rem;
+    }
+
+    .slide-title {
+      font-family: var(--font-display);
+      font-size: clamp(2.3rem, 3.5vw, 3.2rem);
+      font-weight: 900;
+      letter-spacing: -0.025em;
+      color: var(--text-pure);
+      line-height: 1.15;
+    }
+
+    .slide-subtitle {
+      font-size: clamp(1.05rem, 1.28vw, 1.22rem);
+      font-weight: 600;
+      color: var(--text-body);
+      margin-top: 0.2rem;
+    }
+
+    /* ==========================================================================
+       左側 1/3 (三大材料卡) + 右側 2/3 (大電路測試台)
+       ========================================================================== */
+    .lab-layout {
+      display: grid;
+      grid-template-columns: 390px 1fr;
+      gap: 1.4rem;
+      width: 100%;
+      align-items: stretch;
+    }
+
+    /* 左側材料欄 (只有導體與絕緣體 2 張超大卡片) */
+    .material-column {
+      display: flex;
+      flex-direction: column;
+      gap: 0.95rem;
+      justify-content: stretch;
+    }
+
+    /* 材料卡片：超大 SVG 圖示 (上方) + 超大英文單字 (下方) */
+    .mat-hero-card {
+      background: var(--bg-card);
+      border: 2.5px solid var(--border-subtle);
+      border-radius: 22px;
+      padding: 0.85rem 1rem 1rem 1rem;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      gap: 0.35rem;
+      box-shadow: var(--shadow-card);
+      backdrop-filter: blur(12px);
+      cursor: grab;
+      position: relative;
+      transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+      flex: 1;
+    }
+
+    .mat-hero-card:active {
+      cursor: grabbing;
+    }
+
+    .mat-hero-card:hover {
+      transform: translateY(-3px);
+      border-color: var(--border-light);
+      box-shadow: 0 14px 30px rgba(0, 0, 0, 0.35);
+    }
+
+    .mat-hero-card.selected {
+      transform: translateY(-3px);
+    }
+
+    .mat-hero-card#card-conductor.selected {
+      border-color: var(--amber-gold);
+      background: linear-gradient(180deg, rgba(245, 158, 11, 0.24) 0%, var(--bg-card) 100%);
+      box-shadow: 0 0 35px rgba(245, 158, 11, 0.45);
+    }
+
+    .mat-hero-card#card-conductor.selected::before {
+      color: var(--amber-gold);
+      background: rgba(245, 158, 11, 0.2);
+      border-color: var(--amber-gold);
+    }
+
+    .mat-hero-card#card-insulator.selected {
+      border-color: var(--coral-rose);
+      background: linear-gradient(180deg, rgba(251, 113, 133, 0.24) 0%, var(--bg-card) 100%);
+      box-shadow: 0 0 35px rgba(251, 113, 133, 0.45);
+    }
+
+    .mat-hero-card#card-insulator.selected::before {
+      color: var(--coral-rose);
+      background: rgba(251, 113, 133, 0.2);
+      border-color: var(--coral-rose);
+    }
+
+    .mat-hero-card.selected::before {
+      content: '● 測試中';
+      position: absolute;
+      right: 14px;
+      top: 10px;
+      font-size: 0.78rem;
+      font-weight: 900;
+      padding: 0.18rem 0.65rem;
+      border-radius: 9999px;
+      border: 1px solid currentColor;
+    }
+
+    /* 超大 SVG 向量圖框 (高達 150px！) */
+    .mat-svg-frame {
+      width: 100%;
+      height: 150px;
+      border-radius: 16px;
+      background: rgba(0, 0, 0, 0.28);
+      border: 1.5px solid var(--border-subtle);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 8px 12px;
+      box-shadow: inset 0 2px 8px rgba(0, 0, 0, 0.25);
+      transition: all 0.2s ease;
+    }
+
+    [data-theme="light"] .mat-svg-frame {
+      background: rgba(241, 245, 249, 0.85);
+      border-color: rgba(0, 0, 0, 0.08);
+    }
+
+    .mat-vector-svg {
+      width: 100%;
+      height: 100%;
+      display: block;
+      filter: drop-shadow(0 3px 8px rgba(0, 0, 0, 0.35));
+    }
+
+    .mat-text-group {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.2rem;
+    }
+
+    /* 超大英文核心名稱 (Conductor / Insulator) */
+    .mat-word-en {
+      font-family: var(--font-display);
+      font-size: clamp(2rem, 2.7vw, 2.5rem);
+      font-weight: 900;
+      line-height: 1.05;
+      letter-spacing: -0.02em;
+    }
+
+    /* 材料中文標示 */
+    .mat-word-zh {
+      font-size: 1.22rem;
+      font-weight: 800;
+      color: var(--text-body);
+    }
+
+    /* ==========================================================================
+       右側 2/3：大型電路測試台
+       ========================================================================== */
+    .circuit-stage-panel {
+      background: var(--bg-card);
+      border: 2px solid var(--border-subtle);
+      border-radius: 24px;
+      padding: 1.25rem 1.75rem 1.4rem 1.75rem;
+      box-shadow: var(--shadow-card);
+      backdrop-filter: blur(12px);
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      position: relative;
+    }
+
+    .stage-top-bar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding-bottom: 0.65rem;
+      border-bottom: 1px solid var(--border-subtle);
+      margin-bottom: 0.5rem;
+    }
+
+    .stage-title-wrap {
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+      font-size: 1.25rem;
+      font-weight: 800;
+      color: var(--text-heading);
+    }
+
+    .quick-selector {
+      display: flex;
+      align-items: center;
+      gap: 0.45rem;
+    }
+
+    .quick-btn {
+      background: rgba(255, 255, 255, 0.06);
+      border: 1px solid var(--border-subtle);
+      color: var(--text-body);
+      font-size: 0.88rem;
+      font-weight: 800;
+      padding: 0.28rem 0.85rem;
+      border-radius: 9999px;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
+      transition: all 0.2s ease;
+    }
+
+    .quick-btn:hover {
+      color: var(--text-pure);
+      border-color: var(--border-light);
+      background: rgba(255, 255, 255, 0.12);
+    }
+
+    .quick-btn.active {
+      background: rgba(56, 189, 248, 0.2);
+      border-color: var(--cyan-core);
+      color: var(--cyan-core);
+      box-shadow: 0 0 12px rgba(56, 189, 248, 0.35);
+    }
+
+    /* 大比例 SVG 電路畫布 (viewBox 0 0 800 340，大幅加高版) */
+    .bench-svg {
+      width: 100%;
+      height: 340px;
+      overflow: visible;
+      display: block;
+    }
+
+    /* 插槽懸停吸附提示 */
+    .slot-rect-guide {
+      cursor: pointer;
+      transition: all 0.25s ease;
+    }
+
+    .slot-rect-guide:hover,
+    .slot-active-hover {
+      stroke: var(--cyan-core) !important;
+      stroke-width: 3.5px !important;
+      filter: drop-shadow(0 0 15px rgba(56, 189, 248, 0.6));
+    }
+
+    /* 超大燈泡發光光暈 (多重暖金強光) */
+    .bulb-glow-lit {
+      fill: #facc15;
+      filter: drop-shadow(0 0 30px #f59e0b) drop-shadow(0 0 70px #fbbf24) drop-shadow(0 0 110px rgba(254, 240, 138, 0.85));
+      animation: pulseBulb 1.5s infinite alternate ease-in-out;
+    }
+
+    .bulb-glow-off {
+      fill: #1e293b;
+      opacity: 0.6;
+    }
+
+    @keyframes pulseBulb {
+      0% {
+        filter: drop-shadow(0 0 25px #f59e0b) drop-shadow(0 0 60px #fbbf24);
+      }
+
+      100% {
+        filter: drop-shadow(0 0 45px #fbbf24) drop-shadow(0 0 95px #fde047) drop-shadow(0 0 130px rgba(253, 224, 71, 0.6));
+      }
+    }
+
+    /* 電子流動循環動畫 */
+    .electron-flow-active {
+      stroke-dasharray: 14 16;
+      animation: electronLoopAnim 1s linear infinite;
+    }
+
+    @keyframes electronLoopAnim {
+      from {
+        stroke-dashoffset: 90;
+      }
+
+      to {
+        stroke-dashoffset: 0;
+      }
+    }
+
+    /* 自訂 100% 實體不透明拖曳跟隨元件 (呈現完整大圖示，無半透明、無殘影) */
+    .solid-drag-avatar {
+      position: fixed;
+      z-index: 999999;
+      pointer-events: none;
+      opacity: 1 !important;
+      border-radius: 20px;
+      background: var(--bg-card);
+      border: 3px solid var(--border-glow);
+      box-shadow: 0 25px 60px rgba(0, 0, 0, 0.85), 0 0 30px var(--cyan-core);
+      padding: 10px 14px 12px 14px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 6px;
+      width: 240px;
+      transform: translate(-50%, -50%) scale(1.05);
+      transition: transform 0.05s ease-out;
+      user-select: none;
+    }
+
+    .solid-drag-avatar .avatar-svg-box {
+      width: 100%;
+      height: 116px;
+      border-radius: 14px;
+      background: rgba(0, 0, 0, 0.35);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 6px 10px;
+      box-shadow: inset 0 2px 8px rgba(0, 0, 0, 0.3);
+    }
+
+    .solid-drag-avatar .avatar-svg-box svg {
+      width: 100%;
+      height: 100%;
+      display: block;
+      filter: drop-shadow(0 4px 10px rgba(0, 0, 0, 0.4));
+    }
+
+    /* 底部測試結果評估欄 */
+    .stage-bottom-eval {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-top: 1px solid var(--border-subtle);
+      padding-top: 0.65rem;
+      margin-top: 0.4rem;
+      gap: 1rem;
+      flex-wrap: wrap;
+    }
+
+    .eval-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.6rem;
+      font-size: 1.35rem;
+      font-weight: 900;
+      letter-spacing: -0.01em;
+      padding: 0.55rem 1.55rem;
+      border-radius: 9999px;
+      transition: all 0.25s ease;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+    }
+
+    .eval-badge.pass {
+      background: rgba(16, 185, 129, 0.22);
+      border: 2.5px solid var(--emerald-mint);
+      color: #34d399;
+      box-shadow: 0 0 25px rgba(52, 211, 153, 0.45);
+    }
+
+    .eval-badge.stop {
+      background: rgba(244, 63, 94, 0.22);
+      border: 2.5px solid var(--coral-rose);
+      color: #fb7185;
+      box-shadow: 0 0 25px rgba(251, 113, 133, 0.45);
+    }
+
+    .eval-badge.empty {
+      background: rgba(255, 255, 255, 0.08);
+      border: 2px dashed var(--border-light);
+      color: var(--text-dim);
+    }
+
+    .eval-desc-box {
+      font-size: 1.15rem;
+      font-weight: 700;
+      color: var(--text-heading);
+      flex: 1;
+      text-align: center;
+      line-height: 1.35;
+    }
+
+    .slot-reset-btn {
+      background: rgba(255, 255, 255, 0.08);
+      border: 1px solid var(--border-subtle);
+      color: var(--text-body);
+      padding: 0.45rem 1rem;
+      border-radius: 9999px;
+      font-size: 0.9rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .slot-reset-btn:hover {
+      background: rgba(255, 255, 255, 0.16);
+      color: var(--text-pure);
+    }
+  </style>
+</head>
+
+<body>
+  <!-- High-Tech Semiconductor Wafer Photographic Backdrop -->
+  <div class="tech-bg-wallpaper"></div>
+
+
+  <!-- Lab Toolbar -->
+    <!-- 頂部獨立調校導覽列 -->
+  <header class="lab-bar" style="width: 100%; display: flex; justify-content: space-between; align-items: center; padding: 0.35rem 1.6rem; z-index: 999; box-sizing: border-box; backdrop-filter: blur(10px); border-bottom: 1px solid var(--border-subtle);">
+    <div style="display: flex; align-items: center; gap: 0.8rem;">
+      <a href="index.html" class="lab-btn" style="text-decoration: none; color: var(--emerald-mint); font-weight: 800;">📋 簡報目錄</a>
+      <span style="font-family: var(--font-mono, monospace); font-weight: 900; color: var(--cyan-core); font-size: 0.88rem; background: rgba(56, 189, 248, 0.12); border: 1px solid rgba(56, 189, 248, 0.35); padding: 0.18rem 0.6rem; border-radius: 6px;">
+        SLIDE 03 / 12
+      </span>
+      <span style="color: var(--text-dim); font-size: 0.82rem; font-weight: 600;">| 導電特性檢驗：導體 vs 絕緣體</span>
+    </div>
+
+    <div style="display: flex; align-items: center; gap: 0.5rem;">
+      <a href="slide02_tsmc_hook.html" class="lab-btn" style="text-decoration: none;">◀ 上一頁 (02)</a>
+      <a href="slide04_semiconductor_switch.html" class="lab-btn" style="text-decoration: none;">下一頁 (04) ▶</a>
+      <button class="lab-btn" onclick="selectMat(null)">🔄 清空插槽 (R)</button>
+      <button class="lab-btn" onclick="toggleTheme()" title="切換主題 (T)">
+        <span id="themeIcon">☀️</span> 切換淺色/深色
+      </button>
+    </div>
+  </header>
+
+  <main class="slide-viewport">
+
+    <!-- Slide Header -->
+    <div class="slide-header">
+      <span class="slide-tag">Part 1 &bull; Material Properties</span>
+      <h1 class="slide-title">Review: Conductors vs. Insulators</h1>
+      <p class="slide-subtitle">將左側材料拖曳或點選置入右側電路中，即時觀察導電（Conducts）與絕緣（Does Not Conduct）的特性！</p>
+    </div>
+
+    <!-- 左 1/3 (兩大材料：導體 vs 絕緣體) + 右 2/3 (大電路測試台) -->
+    <div class="lab-layout">
+
+      <!-- 左側：兩大材料卡片 (超大 SVG 向量圖示 + 超大英文單字 + 清楚中文) -->
+      <aside class="material-column">
+
+        <!-- 1. 導體 Conductor (銅線) -->
+        <div class="mat-hero-card" id="card-conductor" data-mat="conductor" onclick="selectMat('conductor')">
+          <!-- 超大 SVG 向量圖：剝皮裸銅線束 (Stripped Copper Wire) -->
+          <div class="mat-svg-frame" style="border-color: rgba(245, 158, 11, 0.45);">
+            <svg class="mat-vector-svg" viewBox="0 0 200 110">
+              <defs>
+                <linearGradient id="cableSheath" x1="0" y1="0" x2="0" y2="1">
+                  <stop offset="0%" stop-color="#3b82f6" />
+                  <stop offset="25%" stop-color="#60a5fa" />
+                  <stop offset="65%" stop-color="#1d4ed8" />
+                  <stop offset="100%" stop-color="#172554" />
+                </linearGradient>
+                <linearGradient id="innerJacket" x1="0" y1="0" x2="0" y2="1">
+                  <stop offset="0%" stop-color="#ffffff" />
+                  <stop offset="100%" stop-color="#cbd5e1" />
+                </linearGradient>
+                <linearGradient id="copperMetal" x1="0" y1="0" x2="1" y2="0">
+                  <stop offset="0%" stop-color="#b45309" />
+                  <stop offset="18%" stop-color="#ea580c" />
+                  <stop offset="42%" stop-color="#f59e0b" />
+                  <stop offset="65%" stop-color="#fef08a" />
+                  <stop offset="85%" stop-color="#f59e0b" />
+                  <stop offset="100%" stop-color="#92400e" />
+                </linearGradient>
+                <filter id="copperGlow" x="-20%" y="-20%" width="140%" height="140%">
+                  <feGaussianBlur stdDeviation="3" result="blur" />
+                  <feComposite in="SourceGraphic" in2="blur" operator="over" />
+                </filter>
+              </defs>
+
+              <!-- 底部陰影 -->
+              <ellipse cx="100" cy="100" rx="88" ry="7" fill="rgba(0,0,0,0.38)" />
+
+              <!-- 粗電線外絕緣膠皮 (主體) -->
+              <path d="M 8 34 L 82 34 C 88 34 94 38 94 54 C 94 70 88 74 82 74 L 8 74 Z" fill="url(#cableSheath)" />
+              <line x1="14" y1="41" x2="78" y2="41" stroke="#bfdbfe" stroke-width="3" stroke-linecap="round"
+                opacity="0.85" />
+
+              <!-- 外皮環狀切口 -->
+              <ellipse cx="82" cy="54" rx="7" ry="20" fill="#1e40af" stroke="#93c5fd" stroke-width="1.8" />
+
+              <!-- 內層白色絕緣層 -->
+              <ellipse cx="86" cy="54" rx="5.5" ry="16" fill="url(#innerJacket)" />
+
+              <!-- 裸露閃亮紅銅多股絞線束 -->
+              <g filter="url(#copperGlow)">
+                <path d="M 88 48 C 112 44 140 24 182 18" fill="none" stroke="url(#copperMetal)" stroke-width="6"
+                  stroke-linecap="round" />
+                <path d="M 88 52 C 118 48 148 38 190 35" fill="none" stroke="url(#copperMetal)" stroke-width="6.5"
+                  stroke-linecap="round" />
+                <path d="M 88 55 C 122 55 152 57 192 56" fill="none" stroke="url(#copperMetal)" stroke-width="6.5"
+                  stroke-linecap="round" />
+                <path d="M 88 58 C 118 63 146 76 182 85" fill="none" stroke="url(#copperMetal)" stroke-width="6.5"
+                  stroke-linecap="round" />
+                <path d="M 88 55 C 112 55 132 68 162 72" fill="none" stroke="#f59e0b" stroke-width="4"
+                  stroke-linecap="round" />
+              </g>
+
+              <!-- 銅線尖端圓亮金屬點 -->
+              <circle cx="182" cy="18" r="4" fill="#fef08a" />
+              <circle cx="190" cy="35" r="4.5" fill="#ffffff" />
+              <circle cx="192" cy="56" r="4.5" fill="#ffffff" />
+              <circle cx="182" cy="85" r="4" fill="#fef08a" />
+
+              <!-- 金屬光澤閃爍星星 -->
+              <path d="M 154 28 L 157 35 L 164 36 L 158 42 L 159 49 L 154 45 L 148 49 L 150 42 L 144 36 L 151 35 Z"
+                fill="#fef08a" opacity="0.95" />
+              <path d="M 132 72 L 134 76 L 139 77 L 135 81 L 136 86 L 132 83 L 127 86 L 129 81 L 125 77 L 130 76 Z"
+                fill="#ffffff" opacity="0.9" />
+              <circle cx="112" cy="50" r="2.5" fill="#ffffff" />
+            </svg>
+          </div>
+          <div class="mat-text-group">
+            <div class="mat-word-en" style="color: var(--amber-gold);">Conductor</div>
+            <div class="mat-word-zh">導體</div>
+          </div>
+        </div>
+
+        <!-- 2. 絕緣體 Insulator (木材) -->
+        <div class="mat-hero-card" id="card-insulator" data-mat="insulator" onclick="selectMat('insulator')">
+          <!-- 超大 SVG 向量圖：天然原木與清楚年輪 (Cut Wood Log & Tree Rings) -->
+          <div class="mat-svg-frame" style="border-color: rgba(251, 113, 133, 0.45);">
+            <svg class="mat-vector-svg" viewBox="0 0 200 110">
+              <defs>
+                <linearGradient id="barkGrad" x1="0" y1="0" x2="0" y2="1">
+                  <stop offset="0%" stop-color="#92400e" />
+                  <stop offset="30%" stop-color="#78350f" />
+                  <stop offset="70%" stop-color="#451a03" />
+                  <stop offset="100%" stop-color="#291003" />
+                </linearGradient>
+                <radialGradient id="ringGrad" cx="44%" cy="48%" r="56%">
+                  <stop offset="0%" stop-color="#fef3c7" />
+                  <stop offset="35%" stop-color="#fde68a" />
+                  <stop offset="70%" stop-color="#d97706" />
+                  <stop offset="95%" stop-color="#92400e" />
+                  <stop offset="100%" stop-color="#451a03" />
+                </radialGradient>
+              </defs>
+
+              <!-- 底部陰影 -->
+              <ellipse cx="102" cy="100" rx="86" ry="7" fill="rgba(0,0,0,0.4)" />
+
+              <!-- 原木圓柱體 (身段) -->
+              <path d="M 54 16 L 160 16 C 176 16 186 31 186 52 C 186 73 176 88 160 88 L 54 88 Z" fill="url(#barkGrad)"
+                stroke="#291003" stroke-width="2.5" />
+
+              <!-- 圓木末端背面立體圓弧邊緣 -->
+              <path d="M 160 16 C 176 16 186 31 186 52 C 186 73 176 88 160 88" fill="none" stroke="#78350f"
+                stroke-width="3.5" />
+
+              <!-- 樹皮天然粗糙深色縱向木紋 -->
+              <path d="M 76 28 L 152 28" stroke="#451a03" stroke-width="2.8" stroke-linecap="round" />
+              <path d="M 68 44 L 164 44" stroke="#291003" stroke-width="3.2" stroke-linecap="round" />
+              <path d="M 74 60 L 156 60" stroke="#451a03" stroke-width="2.8" stroke-linecap="round" />
+              <path d="M 82 74 L 148 74" stroke="#291003" stroke-width="2.8" stroke-linecap="round" />
+
+              <!-- 原木正面切面 (大年輪橫切斷面) -->
+              <ellipse cx="50" cy="52" rx="40" ry="36" fill="url(#ringGrad)" stroke="#291003" stroke-width="3.5" />
+
+              <!-- 清楚年輪圈層 (Concentric Tree Growth Rings) -->
+              <ellipse cx="50" cy="52" rx="31" ry="27.5" fill="none" stroke="#b45309" stroke-width="2.5" opacity="0.8"
+                stroke-dasharray="32 3 24 2" />
+              <ellipse cx="50" cy="52" rx="21" ry="18.5" fill="none" stroke="#92400e" stroke-width="2.5"
+                opacity="0.9" />
+              <ellipse cx="50" cy="52" rx="11" ry="9.5" fill="none" stroke="#78350f" stroke-width="2.5"
+                opacity="0.95" />
+
+              <!-- 樹心與天然裂紋 -->
+              <circle cx="50" cy="52" r="3.5" fill="#451a03" />
+              <path d="M 50 52 L 72 40" stroke="#451a03" stroke-width="2.5" stroke-linecap="round" />
+              <path d="M 50 52 L 36 64" stroke="#451a03" stroke-width="2" stroke-linecap="round" />
+
+              <!-- 木頭上方的青翠小綠葉 -->
+              <g transform="translate(156, 7)">
+                <path d="M 0 14 C 9 -3 25 1 23 13 C 16 20 5 18 0 14 Z" fill="#22c55e" stroke="#15803d"
+                  stroke-width="1.2" />
+                <path d="M 0 14 Q 12 8 20 11" fill="none" stroke="#166534" stroke-width="1.2" stroke-linecap="round" />
+              </g>
+            </svg>
+          </div>
+          <div class="mat-text-group">
+            <div class="mat-word-en" style="color: var(--coral-rose);">Insulator</div>
+            <div class="mat-word-zh">絕緣體</div>
+          </div>
+        </div>
+
+      </aside>
+
+      <!-- 右側：大電路測試台 (大比例電路、大燈泡、完整動態) -->
+      <section class="circuit-stage-panel" id="circuitStagePanel">
+
+        <!-- 頂部標題與快速按鈕 -->
+        <div class="stage-top-bar">
+          <div class="stage-title-wrap">
+            <span>🔬</span>
+            <span>電路特性測試台 (Circuit Bench)</span>
+          </div>
+          <div class="quick-selector">
+            <span style="font-size: 0.84rem; font-weight: 700; color: var(--text-dim);">快速切換：</span>
+            <button class="quick-btn" id="btn-quick-empty" onclick="selectMat(null)">🚫 空插槽</button>
+            <button class="quick-btn" id="btn-quick-conductor" onclick="selectMat('conductor')">⚡ 導體
+              (Conductor)</button>
+            <button class="quick-btn" id="btn-quick-insulator" onclick="selectMat('insulator')">🛑 絕緣體
+              (Insulator)</button>
+          </div>
+        </div>
+
+        <!-- 大型 SVG 電路畫布 (加高版 viewBox 0 0 800 340，正中央設置震撼狀態顯示看板) -->
+        <svg class="bench-svg" viewBox="0 0 800 340" id="circuitSvg">
+          <defs>
+            <!-- 實體純紅銅漸層 (100% 不透明) -->
+            <linearGradient id="solidSlotCopper" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0%" stop-color="#b45309" />
+              <stop offset="20%" stop-color="#ea580c" />
+              <stop offset="45%" stop-color="#f59e0b" />
+              <stop offset="60%" stop-color="#fef08a" />
+              <stop offset="80%" stop-color="#f59e0b" />
+              <stop offset="100%" stop-color="#92400e" />
+            </linearGradient>
+            <!-- 實體木材漸層 (100% 不透明) -->
+            <linearGradient id="solidSlotWood" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0%" stop-color="#92400e" />
+              <stop offset="35%" stop-color="#78350f" />
+              <stop offset="75%" stop-color="#451a03" />
+              <stop offset="100%" stop-color="#291003" />
+            </linearGradient>
+            <!-- 燈泡玻璃鏡面高光漸層 -->
+            <linearGradient id="glassShine" x1="0" y1="0" x2="1" y2="1">
+              <stop offset="0%" stop-color="#ffffff" stop-opacity="0.75" />
+              <stop offset="40%" stop-color="#ffffff" stop-opacity="0.15" />
+              <stop offset="100%" stop-color="#ffffff" stop-opacity="0" />
+            </linearGradient>
+            <!-- 金屬燈座螺紋漸層 -->
+            <linearGradient id="screwThread" x1="0" y1="0" x2="1" y2="0">
+              <stop offset="0%" stop-color="#64748b" />
+              <stop offset="30%" stop-color="#cbd5e1" />
+              <stop offset="70%" stop-color="#94a3b8" />
+              <stop offset="100%" stop-color="#475569" />
+            </linearGradient>
+          </defs>
+
+          <!-- 背景厚實導線 (厚度 12px，結實電氣母線) -->
+          <!-- 頂部正極導線：電池正極 (104, 70) -> 插槽左端子 (205, 70) -->
+          <path d="M 104 70 L 205 70" fill="none" stroke="rgba(255,255,255,0.22)" stroke-width="12"
+            stroke-linecap="round" />
+          <!-- 頂部輸出導線：插槽右端子 (515, 70) -> 燈泡左側 (585, 70) -->
+          <path d="M 515 70 L 585 70" fill="none" stroke="rgba(255,255,255,0.22)" stroke-width="12"
+            stroke-linecap="round" />
+          <!-- 迴路回流導線：燈座底部 (635, 175) -> 底部轉角 (635, 290) -> 轉角往上 (62, 290) -> 回到電池底座負極 (62, 195) -->
+          <path d="M 635 175 L 635 290 L 62 290 L 62 195" fill="none" stroke="rgba(255,255,255,0.22)" stroke-width="12"
+            stroke-linecap="round" stroke-linejoin="round" />
+
+          <!-- 左側：超大震撼 9V 重裝電池 (寬達 86px，高達 150px！) -->
+          <g transform="translate(18, 25)">
+            <!-- 底部立體陰影 -->
+            <rect x="3" y="24" width="86" height="150" rx="14" fill="rgba(0,0,0,0.5)" />
+            <!-- 電池藍色金屬主體外殼 -->
+            <rect x="0" y="22" width="86" height="148" rx="12" fill="#1e3a8a" stroke="#60a5fa" stroke-width="3" />
+            <!-- 金屬底蓋座 -->
+            <rect x="0" y="152" width="86" height="18" rx="4" fill="#334155" stroke="#475569" stroke-width="2" />
+
+            <!-- 頂部正極陽極王冠端子 (金色六角柱) -->
+            <rect x="14" y="4" width="24" height="20" rx="4" fill="#f59e0b" stroke="#fbbf24" stroke-width="2" />
+            <rect x="20" y="-1" width="12" height="6" fill="#fef08a" />
+            <!-- 頂部負極金屬環形凹槽端子 (銀色圓柱) -->
+            <rect x="50" y="8" width="22" height="16" rx="3" fill="#94a3b8" stroke="#e2e8f0" stroke-width="2" />
+
+            <!-- 電池正中央耀眼金色 9V 橫條標籤 -->
+            <rect x="0" y="66" width="86" height="42" fill="#f59e0b" />
+            <text x="43" y="96" fill="#0f172a" font-size="24" font-weight="900" text-anchor="middle"
+              letter-spacing="1">9V</text>
+
+            <!-- 正負極清晰標誌 -->
+            <text x="26" y="50" fill="#ffffff" font-size="24" font-weight="900" text-anchor="middle">+</text>
+            <text x="61" y="48" fill="#cbd5e1" font-size="24" font-weight="900" text-anchor="middle">-</text>
+
+            <!-- 下方電力說明 -->
+            <text x="43" y="136" fill="#93c5fd" font-size="12" font-weight="900" text-anchor="middle"
+              letter-spacing="1">HEAVY DUTY</text>
+            <text x="43" y="190" fill="var(--text-heading)" font-size="14" font-weight="800" text-anchor="middle">9V 電池
+              (Power)</text>
+          </g>
+
+          <!-- 亮起時流動電子粒子迴路 (通電時啟用，粗達 8px 耀眼青光) -->
+          <path id="electronStream" class="electron-flow-active"
+            d="M 62 195 L 62 290 L 635 290 L 635 175 L 635 70 L 515 70 L 205 70 L 104 70 L 62 70 Z" fill="none" stroke="#38bdf8"
+            stroke-width="8" stroke-linecap="round" stroke-linejoin="round" style="display: none;" />
+
+          <!-- 中央核心材料測試插槽 (X: 205 ~ 515, 寬達 310px, Y: 70) -->
+          <g id="dropSlotGroup" onclick="handleSlotCycle()" style="cursor: pointer;">
+            <!-- 虛線放置引導框 (未放材料時顯示) -->
+            <rect id="slotGuideBox" class="slot-rect-guide" x="195" y="33" width="330" height="74" rx="16"
+              fill="rgba(255,255,255,0.03)" stroke="rgba(255,255,255,0.35)" stroke-width="2.5" stroke-dasharray="8 8" />
+
+            <!-- 左右大金屬夾頭端子 (半徑達 16px 粗重黃銅接線柱) -->
+            <circle cx="205" cy="70" r="16" fill="#f59e0b" stroke="#fbbf24" stroke-width="3.5" />
+            <circle cx="205" cy="70" r="7" fill="#78350f" />
+            <circle cx="515" cy="70" r="16" fill="#f59e0b" stroke="#fbbf24" stroke-width="3.5" />
+            <circle cx="515" cy="70" r="7" fill="#78350f" />
+
+            <!-- 插槽內動態渲染 100% 實體材料圖案 (零半透明、零穿透) -->
+            <g id="slotContentVisual">
+              <text x="360" y="76" fill="var(--text-dim)" font-size="16" font-weight="800" text-anchor="middle">
+                📥 拖曳或點選左側材料置入此處
+              </text>
+            </g>
+          </g>
+
+          <!-- ===================================================================
+               ★ 電路圖正中央：核心狀態顯示看板 (Central Circuit HUD Banner) ★
+               =================================================================== -->
+          <g id="circuitCenterHud" transform="translate(360, 182)">
+            <!-- 動態注入看板內容 -->
+          </g>
+
+          <!-- 右側：超震撼巨型鎢絲燈泡 (直徑高達 108px，Center at 635, 70) -->
+          <g id="bulbGroup" transform="translate(635, 70)">
+            <!-- 大發光金色外光暈 (多層次光環) -->
+            <circle id="bulbAuraOuter" cx="0" cy="0" r="115" fill="#fef08a" opacity="0" />
+            <circle id="bulbAura" cx="0" cy="0" r="68" class="bulb-glow-off" />
+
+            <!-- 燈泡玻璃球體外框 (半徑 54px，直徑 108px！) -->
+            <circle cx="0" cy="0" r="54" fill="none" stroke="rgba(255,255,255,0.5)" stroke-width="3" />
+            <circle id="bulbGlassFill" cx="0" cy="0" r="52.5" fill="rgba(255,255,255,0.08)" />
+
+            <!-- 燈泡玻璃反光弧 (增加晶瑩玻璃立體感) -->
+            <path d="M -36 -28 A 46 46 0 0 1 20 -46" fill="none" stroke="url(#glassShine)" stroke-width="6"
+              stroke-linecap="round" />
+
+            <!-- 燈泡內部厚實金屬支架與鎢絲 (Coiled Filament) -->
+            <g id="filamentGroup">
+              <!-- 兩根金屬支撐架 -->
+              <line x1="-16" y1="42" x2="-10" y2="2" stroke="#94a3b8" stroke-width="2.5" />
+              <line x1="16" y1="42" x2="10" y2="2" stroke="#94a3b8" stroke-width="2.5" />
+              <!-- 鎢絲線圈波浪路徑 -->
+              <path id="filamentWire" d="M -10 2 L -6 -18 L -2 -10 L 2 -18 L 6 -10 L 10 2" fill="none" stroke="#f59e0b"
+                stroke-width="3" stroke-linecap="round" stroke-linejoin="round" />
+              <circle id="bulbFilamentGlow" cx="0" cy="-14" r="14" fill="#ffffff" style="display:none;" />
+            </g>
+
+            <!-- 金屬螺紋燈頭底座 (E27 Screw Socket，寬達 44px) -->
+            <g transform="translate(0, 52)">
+              <rect x="-20" y="0" width="40" height="7" rx="2" fill="url(#screwThread)" stroke="#475569"
+                stroke-width="1" />
+              <rect x="-22" y="7" width="44" height="7" rx="2" fill="url(#screwThread)" stroke="#334155"
+                stroke-width="1" />
+              <rect x="-20" y="14" width="40" height="7" rx="2" fill="url(#screwThread)" stroke="#475569"
+                stroke-width="1" />
+              <rect x="-18" y="21" width="36" height="6" rx="2" fill="url(#screwThread)" stroke="#334155"
+                stroke-width="1" />
+              <!-- 底部接點凸起 -->
+              <ellipse cx="0" cy="30" rx="10" ry="5" fill="#1e293b" stroke="#0f172a" stroke-width="1.5" />
+            </g>
+
+            <!-- 燈泡狀態文字與說明 -->
+            <text id="bulbText" x="0" y="10" font-size="22" font-weight="900" fill="#ffffff"
+              text-anchor="middle">OFF</text>
+            <text x="0" y="104" fill="var(--text-heading)" font-size="14" font-weight="800" text-anchor="middle">Bulb 燈泡
+              (Load)</text>
+          </g>
+        </svg>
+
+        <!-- 底部重測控制按鈕 -->
+        <div style="display: flex; justify-content: flex-end; padding: 0.35rem 0.5rem 0.15rem;">
+          <button class="slot-reset-btn" onclick="selectMat(null)">清空重測</button>
+        </div>
+
+      </section>
+
+    </div>
+
+  </main>
+
+  <script>
+    let currentMat = null; // 預設空插槽，等待使用者拖入測試
+    let activeDragAvatar = null;
+    let isDragging = false;
+    let dragMatKey = null;
+
+    // =========================================================================
+    // 100% 實體不透明自訂拖曳跟隨系統 (徹底解決瀏覽器原生半透明殘影問題)
+    // =========================================================================
+    function initSolidDragSystem() {
+      const cards = document.querySelectorAll('.mat-hero-card');
+      const stagePanel = document.getElementById('circuitStagePanel');
+
+      cards.forEach(card => {
+        card.addEventListener('pointerdown', (e) => {
+          // 只處理滑鼠主鍵
+          if (e.button !== 0) return;
+          const matKey = card.dataset.mat;
+          if (!matKey) return;
+
+          let startX = e.clientX;
+          let startY = e.clientY;
+          let hasMoved = false;
+
+          function onPointerMove(moveEvent) {
+            const dx = moveEvent.clientX - startX;
+            const dy = moveEvent.clientY - startY;
+            if (!hasMoved && Math.hypot(dx, dy) > 8) {
+              hasMoved = true;
+              isDragging = true;
+              dragMatKey = matKey;
+              createSolidAvatar(matKey, moveEvent.clientX, moveEvent.clientY);
+            }
+
+            if (isDragging && activeDragAvatar) {
+              activeDragAvatar.style.left = moveEvent.clientX + 'px';
+              activeDragAvatar.style.top = moveEvent.clientY + 'px';
+
+              // 檢查游標是否在測試台插槽範圍
+              const slotBox = document.getElementById('slotGuideBox');
+              const rect = stagePanel.getBoundingClientRect();
+              const isOverStage = (
+                moveEvent.clientX >= rect.left &&
+                moveEvent.clientX <= rect.right &&
+                moveEvent.clientY >= rect.top &&
+                moveEvent.clientY <= rect.bottom
+              );
+              if (slotBox) {
+                slotBox.classList.toggle('slot-active-hover', isOverStage);
+              }
+            }
+          }
+
+          function onPointerUp(upEvent) {
+            window.removeEventListener('pointermove', onPointerMove);
+            window.removeEventListener('pointerup', onPointerUp);
+            window.removeEventListener('pointercancel', onPointerUp);
+
+            const slotBox = document.getElementById('slotGuideBox');
+            if (slotBox) slotBox.classList.remove('slot-active-hover');
+
+            if (isDragging) {
+              isDragging = false;
+              // 判定釋放點是否在右側電路板
+              const rect = stagePanel.getBoundingClientRect();
+              const isDroppedOnStage = (
+                upEvent.clientX >= rect.left &&
+                upEvent.clientX <= rect.right &&
+                upEvent.clientY >= rect.top &&
+                upEvent.clientY <= rect.bottom
+              );
+
+              if (isDroppedOnStage && dragMatKey) {
+                selectMat(dragMatKey);
+              }
+              removeSolidAvatar();
+              dragMatKey = null;
+            }
+          }
+
+          window.addEventListener('pointermove', onPointerMove);
+          window.addEventListener('pointerup', onPointerUp);
+          window.addEventListener('pointercancel', onPointerUp);
+        });
+      });
+    }
+
+    // 建立 100% 實體不透明的浮動預覽元素 (完整呈現高品質 SVG 向量圖案與大字標題)
+    function createSolidAvatar(matKey, x, y) {
+      removeSolidAvatar();
+
+      const sourceCard = document.getElementById(`card-${matKey}`);
+      const svgFrame = sourceCard ? sourceCard.querySelector('.mat-svg-frame') : null;
+      const svgContent = svgFrame ? svgFrame.innerHTML : '';
+
+      const avatar = document.createElement('div');
+      avatar.className = 'solid-drag-avatar';
+      avatar.style.left = x + 'px';
+      avatar.style.top = y + 'px';
+
+      if (matKey === 'conductor') {
+        avatar.style.borderColor = 'var(--amber-gold)';
+        avatar.innerHTML = `
+          <div class="avatar-svg-box" style="border: 1.5px solid rgba(245, 158, 11, 0.5);">
+            ${svgContent}
+          </div>
+          <div style="font-family: var(--font-display); font-size: 1.3rem; font-weight: 900; color: var(--amber-gold); line-height: 1.1; margin-top: 2px;">Conductor</div>
+          <div style="font-size: 0.95rem; font-weight: 800; color: #f1f5f9;">導體（銅線）</div>
+        `;
+      } else {
+        avatar.style.borderColor = 'var(--coral-rose)';
+        avatar.innerHTML = `
+          <div class="avatar-svg-box" style="border: 1.5px solid rgba(251, 113, 133, 0.5);">
+            ${svgContent}
+          </div>
+          <div style="font-family: var(--font-display); font-size: 1.3rem; font-weight: 900; color: var(--coral-rose); line-height: 1.1; margin-top: 2px;">Insulator</div>
+          <div style="font-size: 0.95rem; font-weight: 800; color: #f1f5f9;">絕緣體（木材）</div>
+        `;
+      }
+
+      document.body.appendChild(avatar);
+      activeDragAvatar = avatar;
+    }
+
+    function removeSolidAvatar() {
+      if (activeDragAvatar && activeDragAvatar.parentNode) {
+        activeDragAvatar.parentNode.removeChild(activeDragAvatar);
+      }
+      activeDragAvatar = null;
+    }
+
+    // =========================================================================
+    // 材料切換與電路動態渲染 (100% 實體圖案)
+    // =========================================================================
+    function selectMat(matKey) {
+      currentMat = matKey;
+      renderLabUI();
+    }
+
+    function handleSlotCycle() {
+      if (!currentMat) selectMat('conductor');
+      else if (currentMat === 'conductor') selectMat('insulator');
+      else selectMat(null);
+    }
+
+    function renderLabUI() {
+      // 1. 左側卡片反白與按鈕標記
+      ['conductor', 'insulator'].forEach(m => {
+        const card = document.getElementById(`card-${m}`);
+        const btn = document.getElementById(`btn-quick-${m}`);
+        if (card) card.classList.toggle('selected', currentMat === m);
+        if (btn) btn.classList.toggle('active', currentMat === m);
+      });
+      const emptyBtn = document.getElementById('btn-quick-empty');
+      if (emptyBtn) emptyBtn.classList.toggle('active', currentMat === null);
+
+      // 2. 電路畫布動態渲染
+      const stream = document.getElementById('electronStream');
+      const bulbAura = document.getElementById('bulbAura');
+      const bulbAuraOuter = document.getElementById('bulbAuraOuter');
+      const bulbGlassFill = document.getElementById('bulbGlassFill');
+      const bulbFilamentGlow = document.getElementById('bulbFilamentGlow');
+      const filamentWire = document.getElementById('filamentWire');
+      const bulbText = document.getElementById('bulbText');
+      const slotBox = document.getElementById('slotGuideBox');
+      const slotContent = document.getElementById('slotContentVisual');
+      const centerHud = document.getElementById('circuitCenterHud');
+      const evalBadge = document.getElementById('evalBadge');
+      const evalIcon = document.getElementById('evalIcon');
+      const evalTitle = document.getElementById('evalTitle');
+      const evalDesc = document.getElementById('evalDesc');
+
+      if (!slotContent) return;
+
+      if (!currentMat) {
+        // ------------------ 空插槽 (開路斷電) ------------------
+        slotBox.style.display = 'block';
+        slotBox.setAttribute('stroke', 'rgba(255,255,255,0.35)');
+        slotBox.setAttribute('stroke-dasharray', '8 8');
+        slotBox.setAttribute('fill', 'rgba(255,255,255,0.03)');
+
+        slotContent.innerHTML = `
+          <text x="360" y="67" fill="var(--cyan-core)" font-size="17" font-weight="900" text-anchor="middle">
+            📥 請拖曳或點選左側材料置入此處
+          </text>
+          <text x="360" y="89" fill="var(--text-dim)" font-size="13" font-weight="700" text-anchor="middle">
+            (Drag Conductor or Insulator Here)
+          </text>
+        `;
+
+        if (centerHud) {
+          centerHud.innerHTML = `
+            <!-- 預設等待卡片 (置於電路正中央) -->
+            <rect x="-200" y="-45" width="400" height="90" rx="20" fill="var(--bg-card)" stroke="var(--cyan-core)" stroke-width="2" stroke-dasharray="8 6" />
+            <text x="0" y="-6" fill="var(--cyan-core)" font-size="21" font-weight="900" text-anchor="middle">
+              📥 請拖曳材料置入上方測試插槽
+            </text>
+            <text x="0" y="24" fill="var(--text-body)" font-size="14" font-weight="800" text-anchor="middle">
+              Drag Conductor or Insulator to Test
+            </text>
+          `;
+        }
+
+        stream.style.display = 'none';
+
+        bulbAura.className.baseVal = 'bulb-glow-off';
+        if (bulbAuraOuter) bulbAuraOuter.setAttribute('opacity', '0');
+        if (bulbFilamentGlow) bulbFilamentGlow.style.display = 'none';
+        if (filamentWire) {
+          filamentWire.setAttribute('stroke', '#64748b');
+          filamentWire.setAttribute('stroke-width', '2.5');
+        }
+        if (bulbGlassFill) bulbGlassFill.setAttribute('fill', 'rgba(255,255,255,0.08)');
+        bulbText.textContent = 'OFF';
+        bulbText.setAttribute('fill', '#94a3b8');
+        if (evalBadge) {
+          evalBadge.className = 'eval-badge empty';
+          if (evalIcon) evalIcon.textContent = '⚪';
+          if (evalTitle) evalTitle.textContent = 'Circuit Open (等待置入材料)';
+          if (evalDesc) evalDesc.innerHTML = '電路尚未接通。請將左側<strong>導體（銅線）</strong>或<strong>絕緣體（木材）</strong>拖曳置入電路測試！';
+        }
+      } else if (currentMat === 'conductor') {
+        // ------------------ 銅導線 (100% 實體無半透明) ------------------
+        slotBox.style.display = 'none';
+
+        slotContent.innerHTML = `
+          <!-- 100% 實色底襯阻擋板 (徹底遮蓋背景線與邊框，無任何穿透) -->
+          <rect x="200" y="37" width="320" height="66" rx="12" fill="var(--bg-surface)" />
+
+          <!-- 左右兩端厚實橡膠藍色絕緣套 (100% 實體不透明) -->
+          <rect x="200" y="41" width="50" height="58" rx="8" fill="#1d4ed8" stroke="#3b82f6" stroke-width="2.5" />
+          <ellipse cx="250" cy="70" rx="7" ry="24" fill="#172554" stroke="#60a5fa" stroke-width="2" />
+          
+          <rect x="470" y="41" width="50" height="58" rx="8" fill="#1d4ed8" stroke="#3b82f6" stroke-width="2.5" />
+          <ellipse cx="470" cy="70" rx="7" ry="24" fill="#172554" stroke="#60a5fa" stroke-width="2" />
+
+          <!-- 中間超粗 100% 實體金屬紅銅芯線 (厚達 48px，立體銅色漸層) -->
+          <rect x="250" y="46" width="220" height="48" rx="8" fill="url(#solidSlotCopper)" stroke="#fef08a" stroke-width="2.5" />
+          
+          <!-- 實心金屬光澤高光線 -->
+          <line x1="258" y1="55" x2="462" y2="55" stroke="#ffffff" stroke-width="3.5" stroke-linecap="round" />
+          <line x1="258" y1="77" x2="462" y2="77" stroke="#b45309" stroke-width="3" stroke-linecap="round" />
+          
+          <!-- 100% 實體清晰文字標籤：Electricity Can Pass! -->
+          <text x="360" y="76" fill="#451a03" font-size="16" font-weight="900" text-anchor="middle" letter-spacing="0.5">
+            ⚡ COPPER • Electricity Can Pass!
+          </text>
+          
+          <!-- 導通閃耀亮點 -->
+          <circle cx="256" cy="70" r="4.5" fill="#ffffff" />
+          <circle cx="464" cy="70" r="4.5" fill="#ffffff" />
+        `;
+
+        if (centerHud) {
+          centerHud.innerHTML = `
+            <!-- ★ 電路圖正中央：超大震撼綠色狀態看板 ★ -->
+            <rect x="-215" y="-50" width="430" height="100" rx="24" fill="#022c22" stroke="#10b981" stroke-width="4" filter="drop-shadow(0 0 35px rgba(16, 185, 129, 0.75))" />
+            <text x="0" y="-8" fill="#34d399" font-size="30" font-weight="900" text-anchor="middle" letter-spacing="0.5">
+              🟢 Electricity Can Pass!
+            </text>
+            <text x="0" y="28" fill="#a7f3d0" font-size="17" font-weight="800" text-anchor="middle">
+              ⚡ 電流暢通通行 • 燈泡大放光明 (Circuit Closed)
+            </text>
+          `;
+        }
+
+        stream.style.display = 'block';
+        stream.setAttribute('stroke', '#38bdf8');
+
+        bulbAura.className.baseVal = 'bulb-glow-lit';
+        if (bulbAuraOuter) bulbAuraOuter.setAttribute('opacity', '0.45');
+        if (bulbFilamentGlow) bulbFilamentGlow.style.display = 'block';
+        if (filamentWire) {
+          filamentWire.setAttribute('stroke', '#fef08a');
+          filamentWire.setAttribute('stroke-width', '4');
+        }
+        if (bulbGlassFill) bulbGlassFill.setAttribute('fill', 'rgba(254, 240, 138, 0.45)');
+        bulbText.textContent = 'ON';
+        bulbText.setAttribute('fill', '#78350f');
+
+        if (evalBadge) {
+          evalBadge.className = 'eval-badge pass';
+          if (evalIcon) evalIcon.textContent = '🟢';
+          if (evalTitle) evalTitle.textContent = 'Electricity Can Pass!';
+          if (evalDesc) evalDesc.innerHTML = '<strong>導體 (Conductor) 特性：</strong>金屬內部富含自由電子，電阻極低，<strong>電可以通過（Electricity can pass）</strong>，燈泡發光！';
+        }
+
+      } else if (currentMat === 'insulator') {
+        // ------------------ 原木材 (100% 實體無半透明) ------------------
+        slotBox.style.display = 'none';
+
+        slotContent.innerHTML = `
+          <!-- 100% 實色底襯阻擋板 (徹底遮蓋背景線，無任何穿透) -->
+          <rect x="200" y="37" width="320" height="66" rx="12" fill="var(--bg-surface)" />
+
+          <!-- 實心原木塊本體 (厚達 64px，100% 實色樹皮紋理) -->
+          <rect x="200" y="38" width="320" height="64" rx="10" fill="url(#solidSlotWood)" stroke="#291003" stroke-width="3.5" />
+          
+          <!-- 粗木紋深色紋理 (100% 實色) -->
+          <line x1="245" y1="53" x2="495" y2="53" stroke="#291003" stroke-width="3.5" stroke-linecap="round" />
+          <line x1="230" y1="70" x2="505" y2="70" stroke="#451a03" stroke-width="4" stroke-linecap="round" />
+          <line x1="240" y1="87" x2="490" y2="87" stroke="#291003" stroke-width="3.5" stroke-linecap="round" />
+
+          <!-- 左側木頭年輪切面 (100% 實體原木橫斷面) -->
+          <ellipse cx="225" cy="70" rx="18" ry="26" fill="#fde68a" stroke="#451a03" stroke-width="3" />
+          <ellipse cx="225" cy="70" rx="10" ry="14" fill="none" stroke="#92400e" stroke-width="2.5" />
+          <circle cx="225" cy="70" r="3" fill="#451a03" />
+
+          <!-- 實體大字標籤：Electricity Cannot Pass! -->
+          <text x="365" y="76" fill="#fef3c7" font-size="16" font-weight="900" text-anchor="middle" letter-spacing="0.5">
+            🛑 WOOD • Electricity Cannot Pass!
+          </text>
+          <text x="190" y="35" fill="#ef4444" font-size="22" font-weight="900">❌</text>
+          <text x="510" y="35" fill="#ef4444" font-size="22" font-weight="900">❌</text>
+        `;
+
+        if (centerHud) {
+          centerHud.innerHTML = `
+            <!-- ★ 電路圖正中央：超大震撼紅色狀態看板 ★ -->
+            <rect x="-215" y="-50" width="430" height="100" rx="24" fill="#4c0519" stroke="#f43f5e" stroke-width="4" filter="drop-shadow(0 0 35px rgba(244, 63, 94, 0.75))" />
+            <text x="0" y="-8" fill="#fb7185" font-size="30" font-weight="900" text-anchor="middle" letter-spacing="0.5">
+              🔴 Electricity Cannot Pass!
+            </text>
+            <text x="0" y="28" fill="#fecdd3" font-size="17" font-weight="800" text-anchor="middle">
+              🛑 電流被木材阻斷 • 燈泡完全熄滅 (Circuit Open)
+            </text>
+          `;
+        }
+
+        stream.style.display = 'none';
+
+        bulbAura.className.baseVal = 'bulb-glow-off';
+        if (bulbAuraOuter) bulbAuraOuter.setAttribute('opacity', '0');
+        if (bulbFilamentGlow) bulbFilamentGlow.style.display = 'none';
+        if (filamentWire) {
+          filamentWire.setAttribute('stroke', '#64748b');
+          filamentWire.setAttribute('stroke-width', '2.5');
+        }
+        if (bulbGlassFill) bulbGlassFill.setAttribute('fill', 'rgba(255,255,255,0.08)');
+        bulbText.textContent = 'OFF';
+        bulbText.setAttribute('fill', '#94a3b8');
+
+        if (evalBadge) {
+          evalBadge.className = 'eval-badge stop';
+          if (evalIcon) evalIcon.textContent = '🔴';
+          if (evalTitle) evalTitle.textContent = 'Electricity Cannot Pass!';
+          if (evalDesc) evalDesc.innerHTML = '<strong>絕緣體 (Insulator) 特性：</strong>電子被原子核緊密束縛，<strong>電無法通過（Electricity cannot pass）</strong>，燈泡熄滅！';
+        }
+      }
+    }
+
+    function toggleTheme() {
+      const curr = document.documentElement.getAttribute('data-theme');
+      document.documentElement.setAttribute('data-theme', curr === 'dark' ? 'light' : 'dark');
+    }
+
+    document.addEventListener('keydown', (e) => {
+      const k = e.key.toLowerCase();
+      if (k === '1') selectMat('conductor');
+      else if (k === '2') selectMat('insulator');
+      else if (k === 'r') selectMat(null);
+      else if (k === 't') toggleTheme();
+    });
+
+    // 初始化自訂實體拖曳，預設空插槽給使用者拖入
+    window.addEventListener('DOMContentLoaded', () => {
+      initSolidDragSystem();
+      selectMat(null);
+    });
+    // 保險觸發
+    initSolidDragSystem();
+    selectMat(null);
+  </script>
+
+  
+
+  <!-- 4 大主題切換與播放器父子通訊橋接 -->
+  <script>
+    (function() {
+      const THEMES = ['cyber', 'clean', 'maker', 'titanium'];
+      function applyTheme(theme) {
+        if (!theme) theme = 'cyber';
+        document.documentElement.setAttribute('data-theme', theme);
+      }
+      try {
+        const savedTheme = localStorage.getItem('slides_theme') || 'cyber';
+        applyTheme(savedTheme);
+      } catch(e) {}
+
+      function cycleLocalTheme() {
+        const curr = document.documentElement.getAttribute('data-theme') || 'cyber';
+        let idx = THEMES.indexOf(curr);
+        if (idx === -1) idx = 0;
+        const next = THEMES[(idx + 1) % THEMES.length];
+        applyTheme(next);
+        try { localStorage.setItem('slides_theme', next); } catch(e) {}
+      }
+
+      window.addEventListener('keydown', function(e) {
+        if (window.parent && window.parent !== window) {
+          if (e.key === 'ArrowRight' || e.key === 'PageDown' || e.key === ' ') {
+            e.preventDefault();
+            window.parent.postMessage({ type: 'SLIDE_NAV', action: 'next' }, '*');
+          } else if (e.key === 'ArrowLeft' || e.key === 'PageUp') {
+            e.preventDefault();
+            window.parent.postMessage({ type: 'SLIDE_NAV', action: 'prev' }, '*');
+          } else if (e.key === 't' || e.key === 'T') {
+            window.parent.postMessage({ type: 'SLIDE_NAV', action: 'theme' }, '*');
+          }
+        } else {
+          // 獨立開啟時按 T 也能切換 4 種風格
+          if (e.key === 't' || e.key === 'T') {
+            cycleLocalTheme();
+          }
+        }
+      });
+    })();
+  </script>
+
+</body>
+
+</html>

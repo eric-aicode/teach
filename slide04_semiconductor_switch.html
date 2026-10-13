@@ -1,0 +1,859 @@
+<!DOCTYPE html>
+<html lang="zh-TW" data-theme="dark">
+<head>
+  <link rel="stylesheet" href="slides_theme.css?v=20261013">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Slide 04: 半導體雙重性：光控路燈與垂直調光 | 生活科技雙語教學</title>
+  
+  <!-- Google Fonts: Inter & Outfit -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Outfit:wght@500;600;700;800;900&family=JetBrains+Mono:wght@600;700;800&display=swap" rel="stylesheet">
+
+  <style>
+    /* ===================================================================
+       1. Design Tokens & High-Contrast Visual System
+       =================================================================== */
+    :root {
+      --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      --font-display: 'Outfit', var(--font-sans);
+      --font-mono: 'JetBrains Mono', monospace;
+    }
+
+    
+
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background-color: var(--bg-deep) !important;
+      background-image: var(--bg-gradient) !important;
+      transition: background-color 0.3s ease, color 0.3s ease;
+    }
+
+    /* 頂部快捷控制列 */
+    .lab-bar {
+      width: 100%;
+      background: var(--nav-bg) !important;
+      backdrop-filter: blur(8px);
+      border-bottom: 1px solid var(--border-subtle) !important;
+      padding: 0.35rem 1.5rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      z-index: 100;
+    }
+    .lab-btn {
+      background: rgba(255, 255, 255, 0.08);
+      border: 1px solid var(--border-subtle);
+      color: var(--text-body);
+      padding: 0.25rem 0.65rem;
+      border-radius: 8px;
+      font-size: 0.8rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+    .lab-btn:hover {
+      background: rgba(255, 255, 255, 0.16);
+      color: var(--text-pure);
+      border-color: var(--border-light);
+    }
+
+    /* 投影片主畫布容器 (Zero-Scroll 1080p 規格) */
+    .slide-viewport {
+      width: 100%;
+      max-width: 1580px;
+      padding: 0.4rem 1.4rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.45rem;
+    }
+
+    /* 頁面標題區塊 */
+    .slide-header {
+      text-align: center;
+      margin-bottom: 0.1rem;
+    }
+    .slide-tag {
+      font-family: var(--font-mono);
+      font-size: 0.84rem;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: var(--cyan-core);
+      background: rgba(56, 189, 248, 0.12);
+      border: 1px solid rgba(56, 189, 248, 0.3);
+      padding: 0.15rem 0.75rem;
+      border-radius: 9999px;
+      display: inline-block;
+      margin-bottom: 0.2rem;
+    }
+    .slide-title {
+      font-family: var(--font-display);
+      font-size: clamp(2.4rem, 3.4vw, 3.4rem);
+      font-weight: 900;
+      letter-spacing: -0.025em;
+      color: var(--text-heading);
+      line-height: 1.12;
+      text-shadow: 0 4px 20px rgba(0, 0, 0, 0.45);
+    }
+    
+    /* 變因補充小字膠囊橫條 (提及所有控制變因) */
+    .factors-ticker {
+      display: inline-flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid var(--border-subtle);
+      padding: 0.22rem 0.85rem;
+      border-radius: 9999px;
+      margin-top: 0.3rem;
+      font-size: 0.84rem;
+      font-weight: 700;
+      color: var(--text-dim);
+    }
+    .factor-chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.2rem;
+      padding: 0.12rem 0.55rem;
+      border-radius: 9999px;
+      background: rgba(255, 255, 255, 0.06);
+      border: 1px solid var(--border-subtle);
+      color: var(--text-body);
+      font-size: 0.8rem;
+    }
+    .factor-chip.active-core {
+      color: #fef08a;
+      background: rgba(234, 179, 8, 0.15);
+      border-color: rgba(234, 179, 8, 0.35);
+      font-weight: 800;
+    }
+
+    /* 主舞台面板 (全幅展開，內含左側垂直拉桿與右側超大電路) */
+    .circuit-stage-panel {
+      background: var(--bg-card);
+      border: 2px solid var(--border-subtle);
+      border-radius: 24px;
+      padding: 0.75rem 1.25rem;
+      box-shadow: var(--shadow-card);
+      backdrop-filter: blur(12px);
+      display: flex;
+      flex-direction: column;
+      gap: 0.4rem;
+      width: 100%;
+    }
+    .stage-top-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding-bottom: 0.35rem;
+      border-bottom: 1px solid var(--border-subtle);
+    }
+    .stage-title-wrap {
+      display: flex;
+      align-items: center;
+      gap: 0.55rem;
+      font-size: 1.25rem;
+      font-weight: 800;
+      color: var(--text-heading);
+    }
+
+    /* 主舞台橫向分佈：左側垂直調光桿 + 右側超大電路畫布 */
+    .stage-body-layout {
+      display: flex;
+      align-items: center;
+      gap: 1.2rem;
+      width: 100%;
+    }
+
+    /* ===================================================================
+       ★ 左側專屬「垂直日照調光桿」 (Vertical Sunlight Slider Bar) ★
+       =================================================================== */
+    .vertical-slider-bar {
+      background: rgba(0, 0, 0, 0.38);
+      border: 1.5px solid var(--border-light);
+      border-radius: 22px;
+      padding: 0.9rem 0.65rem;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: space-between;
+      width: 88px;
+      height: 480px;
+      box-shadow: inset 0 2px 10px rgba(0, 0, 0, 0.5), 0 8px 24px rgba(0, 0, 0, 0.35);
+      user-select: none;
+      flex-shrink: 0;
+    }
+    .v-slider-btn {
+      background: none;
+      border: none;
+      font-size: 1.6rem;
+      cursor: pointer;
+      transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .v-slider-btn:hover {
+      transform: scale(1.22);
+    }
+    .v-badge-wrap {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.15rem;
+    }
+    .v-badge-val {
+      font-family: var(--font-mono);
+      font-size: 1.2rem;
+      font-weight: 900;
+      color: #facc15;
+      background: rgba(255, 255, 255, 0.12);
+      padding: 0.2rem 0.5rem;
+      border-radius: 8px;
+      border: 1px solid rgba(250, 204, 21, 0.3);
+      text-align: center;
+      min-width: 58px;
+    }
+    .v-badge-lbl {
+      font-size: 0.76rem;
+      font-weight: 800;
+      color: var(--text-dim);
+      letter-spacing: 0.05em;
+    }
+
+    /* 垂直滑桿本體 (旋轉 -90 度：往上為 100% 烈日，往下為 0% 黑夜) */
+    .v-slider-track-wrap {
+      width: 44px;
+      height: 270px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+    }
+    .vertical-range {
+      -webkit-appearance: none;
+      appearance: none;
+      width: 250px;
+      height: 14px;
+      border-radius: 7px;
+      background: linear-gradient(to right, #0f172a 0%, #334155 25%, #f59e0b 65%, #fef08a 100%);
+      outline: none;
+      cursor: pointer;
+      transform: rotate(-90deg);
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+    }
+    .vertical-range::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      appearance: none;
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      background: #facc15;
+      border: 3.5px solid #ffffff;
+      box-shadow: 0 0 18px #facc15;
+      cursor: grab;
+      transition: transform 0.1s ease;
+    }
+    .vertical-range::-webkit-slider-thumb:hover {
+      transform: scale(1.18);
+    }
+
+    /* 寬幅超大比例 SVG 電路畫布 (viewBox 0 -270 1150 580，全幅大比例電路) */
+    .bench-svg {
+      width: 100%;
+      height: 530px;
+      overflow: visible;
+      display: block;
+      flex: 1;
+    }
+
+    /* 動態電子粒子流動動畫 */
+    @keyframes electronCirculate {
+      from { stroke-dashoffset: 90; }
+      to { stroke-dashoffset: 0; }
+    }
+    .electron-flow-active {
+      stroke-dasharray: 14 16;
+      animation: electronCirculate 1s linear infinite;
+    }
+
+    /* 燈泡光暈動畫 */
+    .bulb-glow-lit {
+      fill: #facc15;
+      filter: drop-shadow(0 0 35px #f59e0b) drop-shadow(0 0 80px #fbbf24) drop-shadow(0 0 125px rgba(254, 240, 138, 0.9));
+      animation: pulseBulb 1.5s infinite alternate ease-in-out;
+    }
+    .bulb-glow-off {
+      fill: #1e293b;
+      opacity: 0.6;
+    }
+    @keyframes pulseBulb {
+      0% { filter: drop-shadow(0 0 30px #f59e0b) drop-shadow(0 0 70px #fbbf24); }
+      100% { filter: drop-shadow(0 0 50px #fbbf24) drop-shadow(0 0 110px #fde047); }
+    }
+  </style>
+</head>
+<body>
+  <!-- High-Tech Semiconductor Wafer Photographic Backdrop -->
+  <div class="tech-bg-wallpaper"></div>
+
+
+  <!-- Lab Toolbar -->
+    <!-- 頂部獨立調校導覽列 -->
+  <header class="lab-bar" style="width: 100%; display: flex; justify-content: space-between; align-items: center; padding: 0.35rem 1.6rem; z-index: 999; box-sizing: border-box; backdrop-filter: blur(10px); border-bottom: 1px solid var(--border-subtle);">
+    <div style="display: flex; align-items: center; gap: 0.8rem;">
+      <a href="index.html" class="lab-btn" style="text-decoration: none; color: var(--emerald-mint); font-weight: 800;">📋 簡報目錄</a>
+      <span style="font-family: var(--font-mono, monospace); font-weight: 900; color: var(--cyan-core); font-size: 0.88rem; background: rgba(56, 189, 248, 0.12); border: 1px solid rgba(56, 189, 248, 0.35); padding: 0.18rem 0.6rem; border-radius: 6px;">
+        SLIDE 04 / 12
+      </span>
+      <span style="color: var(--text-dim); font-size: 0.82rem; font-weight: 600;">| 半導體雙重性：光控路燈與垂直調光</span>
+    </div>
+
+    <div style="display: flex; align-items: center; gap: 0.5rem;">
+      <a href="slide03_conductor_insulator.html" class="lab-btn" style="text-decoration: none;">◀ 上一頁 (03)</a>
+      <a href="slide05_core_functions.html" class="lab-btn" style="text-decoration: none;">下一頁 (05) ▶</a>
+      <button class="lab-btn" onclick="setSunlight(0)">🌑 0%</button><button class="lab-btn" onclick="setSunlight(20)">🌤️ 20%</button><button class="lab-btn" onclick="setSunlight(100)">☀️ 100%</button>
+      <button class="lab-btn" onclick="toggleTheme()" title="切換主題 (T)">
+        <span id="themeIcon">☀️</span> 切換淺色/深色
+      </button>
+    </div>
+  </header>
+
+  <main class="slide-viewport">
+    
+    <!-- Slide Header -->
+    <div class="slide-header">
+      <span class="slide-tag">Part 2 &bull; Advanced Properties</span>
+      <h1 class="slide-title">Semiconductors Can Be Both!</h1>
+      <!-- 清楚列出所有可控制變因 (光線、電壓、溫度、磁場、微量摻雜) -->
+      <div class="factors-ticker">
+        <span class="factor-chip active-core">☀️ 1. 光線 (Light • 光敏電阻/本頁核心)</span>
+        <span class="factor-chip">⚡ 2. 電壓 (Voltage • 電晶體/CPU)</span>
+        <span class="factor-chip">🌡️ 3. 溫度 (Temperature • 熱敏電阻)</span>
+        <span class="factor-chip">🧲 4. 磁場 (Magnetic Field • 霍爾感測)</span>
+        <span class="factor-chip">🧪 5. 雜質 (Doping • P/N型基底)</span>
+      </div>
+    </div>
+
+    <!-- 主舞台：包含左側垂直調光桿與右側超大震撼動態電路 -->
+    <section class="circuit-stage-panel">
+      
+      <div class="stage-top-bar">
+        <div class="stage-title-wrap">
+          <span>🔬</span>
+          <span>☀️ 自動感光路燈控制電路 (Auto Streetlight Circuit)</span>
+        </div>
+        <div style="display:flex; align-items:center; gap:0.75rem;">
+          <div style="font-size: 0.9rem; font-weight: 800; color: var(--text-dim);">
+            即時載子密度：<span id="carrierDensityText" style="color: var(--cyan-core); font-family: var(--font-mono);">中等 (Moderate)</span>
+          </div>
+          <button class="lab-btn" onclick="resetControls()" style="font-size:0.75rem; padding:0.18rem 0.55rem;">重設 (R)</button>
+        </div>
+      </div>
+
+      <div class="stage-body-layout">
+        
+        <!-- ===================================================================
+             ★ 電路圖左側：垂直日照拉桿 (Vertical Sunlight Control Bar) ★
+             =================================================================== -->
+        <aside class="vertical-slider-bar" title="滑動調控太陽光照強度 (往上: 烈日強光 / 往下: 暗夜無光)">
+          <!-- 頂部太陽按鈕 (點選直達 100% 烈日) -->
+          <button type="button" class="v-slider-btn" onclick="handleLightChange(100); document.getElementById('lightSlider').value=100;" title="快速切換至 100% 烈日">
+            ☀️
+          </button>
+
+          <!-- 即時數值標籤 -->
+          <div class="v-badge-wrap">
+            <div class="v-badge-val" id="lightBadge">0%</div>
+            <div class="v-badge-lbl">SUNLIGHT</div>
+          </div>
+
+          <!-- 垂直滑桿本體 -->
+          <div class="v-slider-track-wrap">
+            <input type="range" min="0" max="100" value="0" class="vertical-range" id="lightSlider" oninput="handleLightChange(this.value)">
+          </div>
+
+          <!-- 底部月亮按鈕 (點選直達 0% 暗夜) -->
+          <button type="button" class="v-slider-btn" onclick="handleLightChange(0); document.getElementById('lightSlider').value=0;" title="快速切換至 0% 暗夜">
+            🌑
+          </button>
+        </aside>
+
+        <!-- ===================================================================
+             ★ 右側：全幅超大震撼 SVG 電路畫布 (viewBox 0 -270 1150 580) ★
+             =================================================================== -->
+        <svg class="bench-svg" viewBox="0 -270 1150 580" id="circuitSvg">
+          <defs>
+            <!-- 實體矽晶片漸層 -->
+            <linearGradient id="siliconBody" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0%" stop-color="#334155" />
+              <stop offset="25%" stop-color="#1e293b" />
+              <stop offset="75%" stop-color="#0f172a" />
+              <stop offset="100%" stop-color="#020617" />
+            </linearGradient>
+            <!-- 金屬引腳金黃漸層 -->
+            <linearGradient id="goldPin" x1="0" y1="0" x2="1" y2="0">
+              <stop offset="0%" stop-color="#f59e0b" />
+              <stop offset="50%" stop-color="#fef08a" />
+              <stop offset="100%" stop-color="#b45309" />
+            </linearGradient>
+            <!-- 燈座金屬螺紋漸層 -->
+            <linearGradient id="screwThread" x1="0" y1="0" x2="1" y2="0">
+              <stop offset="0%" stop-color="#64748b" />
+              <stop offset="30%" stop-color="#cbd5e1" />
+              <stop offset="70%" stop-color="#94a3b8" />
+              <stop offset="100%" stop-color="#475569" />
+            </linearGradient>
+            <!-- 黑夜隱沒大太陽月夜漸層 -->
+            <radialGradient id="sunDarkRadial" cx="50%" cy="50%" r="50%">
+              <stop offset="0%" stop-color="#334155" />
+              <stop offset="60%" stop-color="#1e293b" />
+              <stop offset="100%" stop-color="#0b1329" />
+            </radialGradient>
+            <!-- 耀眼大太陽本體放射漸層 -->
+            <radialGradient id="sunRadial" cx="50%" cy="50%" r="50%">
+              <stop offset="0%" stop-color="#ffffff" />
+              <stop offset="30%" stop-color="#fef08a" />
+              <stop offset="70%" stop-color="#f59e0b" />
+              <stop offset="100%" stop-color="#d97706" />
+            </radialGradient>
+            <!-- 太陽光芒放射光暈 -->
+            <radialGradient id="sunAuraGrad" cx="50%" cy="50%" r="50%">
+              <stop offset="0%" stop-color="#fef08a" stop-opacity="0.95" />
+              <stop offset="45%" stop-color="#f59e0b" stop-opacity="0.45" />
+              <stop offset="100%" stop-color="#fbbf24" stop-opacity="0" />
+            </radialGradient>
+            <!-- 震撼大面積立體錐形投射光束漸層 -->
+            <linearGradient id="sunBeamGrad" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0%" stop-color="#fef08a" stop-opacity="0.9" />
+              <stop offset="35%" stop-color="#fde047" stop-opacity="0.65" />
+              <stop offset="75%" stop-color="#f59e0b" stop-opacity="0.3" />
+              <stop offset="100%" stop-color="#fbbf24" stop-opacity="0.06" />
+            </linearGradient>
+            <!-- 核心強光光柱漸層 -->
+            <linearGradient id="coreBeamGrad" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0%" stop-color="#ffffff" stop-opacity="0.95" />
+              <stop offset="40%" stop-color="#fef08a" stop-opacity="0.75" />
+              <stop offset="100%" stop-color="#fde047" stop-opacity="0.15" />
+            </linearGradient>
+          </defs>
+
+          <!-- 背景厚實導線 (厚度 13px) -->
+          <!-- 頂部正極導線：電池正極 (176, 70) -> 插槽左端子 (350, 70) -->
+          <path d="M 176 70 L 350 70" fill="none" stroke="rgba(255,255,255,0.22)" stroke-width="13" stroke-linecap="round" />
+          <!-- 頂部輸出導線：插槽右端子 (800, 70) -> 燈泡左側 (915, 70) -->
+          <path d="M 800 70 L 915 70" fill="none" stroke="rgba(255,255,255,0.22)" stroke-width="13" stroke-linecap="round" />
+          <!-- 迴路回流導線：燈座底部 (985, 185) -> 底部轉角 (985, 280) -> 回到電池底座負極 (125, 280) -> (125, 180) -->
+          <path d="M 985 185 L 985 280 L 125 280 L 125 180" fill="none" stroke="rgba(255,255,255,0.22)" stroke-width="13" stroke-linecap="round" stroke-linejoin="round" />
+
+          <!-- 左側：超大震撼 9V 重裝電池 (96x160px，Center X ~ 125) -->
+          <g transform="translate(77, 20)">
+            <rect x="3" y="24" width="96" height="156" rx="14" fill="rgba(0,0,0,0.5)" />
+            <rect x="0" y="22" width="96" height="154" rx="12" fill="#1e3a8a" stroke="#60a5fa" stroke-width="3.5" />
+            <rect x="0" y="156" width="96" height="20" rx="4" fill="#334155" stroke="#475569" stroke-width="2" />
+            <rect x="16" y="3" width="26" height="22" rx="4" fill="#f59e0b" stroke="#fbbf24" stroke-width="2" />
+            <rect x="23" y="-2" width="12" height="6" fill="#fef08a" />
+            <rect x="56" y="8" width="24" height="17" rx="3" fill="#94a3b8" stroke="#e2e8f0" stroke-width="2" />
+            <rect x="0" y="68" width="96" height="44" fill="#f59e0b" />
+            <text x="48" y="100" fill="#0f172a" font-size="26" font-weight="900" text-anchor="middle" letter-spacing="1">9V</text>
+            <text x="29" y="52" fill="#ffffff" font-size="26" font-weight="900" text-anchor="middle">+</text>
+            <text x="68" y="50" fill="#cbd5e1" font-size="26" font-weight="900" text-anchor="middle">-</text>
+            <text x="48" y="142" fill="#93c5fd" font-size="13" font-weight="900" text-anchor="middle" letter-spacing="1">HEAVY DUTY</text>
+            <text x="48" y="198" fill="var(--text-heading)" font-size="15" font-weight="800" text-anchor="middle">9V 電池 (Power)</text>
+          </g>
+
+          <!-- 亮起時流動電子粒子迴路 (通電時啟用，9px 耀眼青光) -->
+          <path id="electronStream" class="electron-flow-active" d="M 125 280 L 985 280 L 985 185 L 985 70 L 800 70 L 350 70 L 176 70 L 125 70 L 125 280 Z" fill="none" stroke="#38bdf8" stroke-width="9" stroke-linecap="round" stroke-linejoin="round" style="display: none;" />
+
+          <!-- 端子接點夾頭 (半徑 17px 粗重黃銅接線柱) -->
+          <circle cx="350" cy="70" r="17" fill="#f59e0b" stroke="#fbbf24" stroke-width="4" />
+          <circle cx="350" cy="70" r="7.5" fill="#78350f" />
+          <circle cx="800" cy="70" r="17" fill="#f59e0b" stroke="#fbbf24" stroke-width="4" />
+          <circle cx="800" cy="70" r="7.5" fill="#78350f" />
+
+          <!-- 中央核心半導體元件展示區 (X: 350 ~ 800, Y: 70) -->
+          <g id="semiComponentGroup">
+            <!-- 動態渲染晶片/感測器外觀與外部刺激 (光束 / 電壓線) -->
+          </g>
+
+          <!-- ===================================================================
+               ★ 電路圖正中央：核心狀態顯示看板 (Central Circuit HUD Banner at X: 575) ★
+               =================================================================== -->
+          <g id="circuitCenterHud" transform="translate(575, 185)">
+            <!-- 動態注入看板內容 -->
+          </g>
+
+          <!-- 右側：超震撼巨型鎢絲燈泡 (直徑 120px，Center at 985, 70) -->
+          <g id="bulbGroup" transform="translate(985, 70)">
+            <circle id="bulbAuraOuter" cx="0" cy="0" r="130" fill="#fef08a" opacity="0" />
+            <circle id="bulbAura" cx="0" cy="0" r="76" class="bulb-glow-off" />
+            <circle cx="0" cy="0" r="60" fill="none" stroke="rgba(255,255,255,0.5)" stroke-width="3.5" />
+            <circle id="bulbGlassFill" cx="0" cy="0" r="58.5" fill="rgba(255,255,255,0.08)" />
+
+            <!-- 燈泡內部金屬支架與鎢絲 -->
+            <g id="filamentGroup">
+              <line x1="-18" y1="46" x2="-11" y2="3" stroke="#94a3b8" stroke-width="2.8" />
+              <line x1="18" y1="46" x2="11" y2="3" stroke="#94a3b8" stroke-width="2.8" />
+              <path id="filamentWire" d="M -11 3 L -7 -20 L -2 -11 L 2 -20 L 7 -11 L 11 3" fill="none" stroke="#64748b" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" />
+              <circle id="bulbFilamentGlow" cx="0" cy="-15" r="16" fill="#ffffff" style="display:none;" />
+            </g>
+
+            <!-- 金屬螺紋燈頭底座 (E27) -->
+            <g transform="translate(0, 58)">
+              <rect x="-22" y="0" width="44" height="8" rx="2" fill="url(#screwThread)" stroke="#475569" stroke-width="1" />
+              <rect x="-24" y="8" width="48" height="8" rx="2" fill="url(#screwThread)" stroke="#334155" stroke-width="1" />
+              <rect x="-22" y="16" width="44" height="8" rx="2" fill="url(#screwThread)" stroke="#475569" stroke-width="1" />
+              <rect x="-20" y="24" width="40" height="7" rx="2" fill="url(#screwThread)" stroke="#334155" stroke-width="1" />
+              <ellipse cx="0" cy="34" rx="11" ry="6" fill="#1e293b" stroke="#0f172a" stroke-width="1.5" />
+            </g>
+
+            <!-- 燈泡狀態文字 -->
+            <text id="bulbText" x="0" y="12" font-size="24" font-weight="900" fill="#94a3b8" text-anchor="middle">OFF</text>
+            <text x="0" y="116" fill="var(--text-heading)" font-size="15" font-weight="800" text-anchor="middle">Bulb 燈泡 (Load)</text>
+          </g>
+        </svg>
+
+      </div>
+
+    </section>
+
+  </main>
+
+  <script>
+    // 專注於光線調控 (Light Control & Automatic Streetlight)
+    const state = {
+      light: 0      // 0 ~ 100 % (預設 0% 暗夜月亮狀態)
+    };
+
+    function setSunlight(val) {
+      handleLightChange(val);
+      const sl = document.getElementById('lightSlider');
+      if (sl) sl.value = val;
+    }
+
+    function handleLightChange(val) {
+      state.light = parseInt(val, 10);
+      const badge = document.getElementById('lightBadge');
+      if (badge) {
+        badge.textContent = `${state.light}%`;
+        badge.style.color = state.light > 50 ? '#fef08a' : '#facc15';
+      }
+      renderCircuit();
+    }
+
+    function renderCircuit() {
+      const ratio = state.light / 100;
+      // 自動感光路燈邏輯：環境光照強時 (>= 50%) 燈光熄滅；光線暗時 (< 50%) 自動點亮！
+      const isConducting = state.light < 50;
+      
+      // 隨光照強度平滑變暗：0% 最亮 (1.0)，隨著光照增強逐漸變暗，超過 50% 完全熄滅 (0.0)
+      let bulbBrightness = 0.0;
+      if (state.light < 50) {
+        bulbBrightness = 1.0 - (state.light / 50) * 0.7; // 1.0 -> 0.3
+      } else {
+        bulbBrightness = 0.0;
+      }
+
+      // 載子密度文字 (在光敏電阻中，照光越多載子密度越高)
+      const densityEl = document.getElementById('carrierDensityText');
+      if (densityEl) {
+        if (ratio >= 0.7) {
+          densityEl.textContent = '極高 (Dense)';
+          densityEl.style.color = '#34d399';
+        } else if (ratio >= 0.4) {
+          densityEl.textContent = '中等 (Moderate)';
+          densityEl.style.color = '#38bdf8';
+        } else {
+          densityEl.textContent = '極低 (Sparse)';
+          densityEl.style.color = '#f87171';
+        }
+      }
+
+      // 電路元件更新
+      const stream = document.getElementById('electronStream');
+      const bulbAura = document.getElementById('bulbAura');
+      const bulbAuraOuter = document.getElementById('bulbAuraOuter');
+      const bulbGlassFill = document.getElementById('bulbGlassFill');
+      const bulbFilamentGlow = document.getElementById('bulbFilamentGlow');
+      const filamentWire = document.getElementById('filamentWire');
+      const bulbText = document.getElementById('bulbText');
+      const centerHud = document.getElementById('circuitCenterHud');
+
+      if (isConducting) {
+        // 通電導通 (Electricity Can Pass!)
+        if (stream) stream.style.display = 'block';
+        if (bulbAura) {
+          bulbAura.className.baseVal = 'bulb-glow-lit';
+          bulbAura.style.opacity = bulbBrightness;
+        }
+        if (bulbAuraOuter) bulbAuraOuter.setAttribute('opacity', (bulbBrightness * 0.45).toFixed(2));
+        if (bulbFilamentGlow) {
+          bulbFilamentGlow.style.display = 'block';
+          bulbFilamentGlow.setAttribute('opacity', bulbBrightness.toFixed(2));
+        }
+        if (filamentWire) {
+          filamentWire.setAttribute('stroke', bulbBrightness > 0.6 ? '#fef08a' : '#f59e0b');
+          filamentWire.setAttribute('stroke-width', (3.0 + bulbBrightness * 1.5).toFixed(1));
+        }
+        if (bulbGlassFill) bulbGlassFill.setAttribute('fill', `rgba(254, 240, 138, ${(bulbBrightness * 0.45).toFixed(2)})`);
+        if (bulbText) {
+          bulbText.textContent = bulbBrightness > 0.6 ? 'ON' : 'DIM';
+          bulbText.setAttribute('fill', '#78350f');
+        }
+
+        // ★ 電路圖正中央：震撼綠色看板 (寬幅 500px) ★
+        if (centerHud) {
+          centerHud.innerHTML = `
+            <rect x="-250" y="-52" width="500" height="104" rx="26" fill="#022c22" stroke="#10b981" stroke-width="4.5" filter="drop-shadow(0 0 35px rgba(16, 185, 129, 0.75))" />
+            <text x="0" y="-8" fill="#34d399" font-size="33" font-weight="900" text-anchor="middle" letter-spacing="0.5">
+              🟢 Electricity Can Pass!
+            </text>
+            <text x="0" y="30" fill="#a7f3d0" font-size="17" font-weight="800" text-anchor="middle">
+              🌑 夜晚環境 • 自動路燈導通點亮 (${Math.round(bulbBrightness * 100)}% 亮度)
+            </text>
+          `;
+        }
+
+      } else {
+        // 阻斷絕緣 / 熄滅 (Electricity Cannot Pass!)
+        if (stream) stream.style.display = 'none';
+        if (bulbAura) {
+          bulbAura.className.baseVal = 'bulb-glow-off';
+          bulbAura.style.opacity = '0.6';
+        }
+        if (bulbAuraOuter) bulbAuraOuter.setAttribute('opacity', '0');
+        if (bulbFilamentGlow) bulbFilamentGlow.style.display = 'none';
+        if (filamentWire) {
+          filamentWire.setAttribute('stroke', '#64748b');
+          filamentWire.setAttribute('stroke-width', '3');
+        }
+        if (bulbGlassFill) bulbGlassFill.setAttribute('fill', 'rgba(255,255,255,0.08)');
+        if (bulbText) {
+          bulbText.textContent = 'OFF';
+          bulbText.setAttribute('fill', '#94a3b8');
+        }
+
+        // ★ 電路圖正中央：震撼紅色看板 (寬幅 500px) ★
+        if (centerHud) {
+          centerHud.innerHTML = `
+            <rect x="-250" y="-52" width="500" height="104" rx="26" fill="#4c0519" stroke="#f43f5e" stroke-width="4.5" filter="drop-shadow(0 0 35px rgba(244, 63, 94, 0.75))" />
+            <text x="0" y="-8" fill="#fb7185" font-size="33" font-weight="900" text-anchor="middle" letter-spacing="0.5">
+              🔴 Electricity Cannot Pass!
+            </text>
+            <text x="0" y="30" fill="#fecdd3" font-size="17" font-weight="800" text-anchor="middle">
+              ☀️ 白天大太陽照射 • 自動路燈熄滅省電 (Streetlight OFF)
+            </text>
+          `;
+        }
+      }
+
+      // 渲染電路圖上的主角大太陽與感測元件
+      renderCenterChip(ratio, isConducting);
+    }
+
+    // 中央半導體晶片與【電路圖上超醒目高空大太陽主角 (Center at X: 575)】動態渲染
+    function renderCenterChip(ratio, isConducting) {
+      const g = document.getElementById('semiComponentGroup');
+      if (!g) return;
+
+      const isNight = state.light === 0;
+      // 超震撼主角大太陽規格：加大尺寸，高掛天空 Y: -138！
+      const sunCenterY = -138;
+      const sunRadius = 68 + ratio * 28;     // 直徑 136px ~ 192px 震撼大太陽
+      const auraRadius = 95 + ratio * 55;     // 柔和太陽大氣光冕
+
+      // 16 條動態金黃太陽耀斑光芒 (附帶發光端點星芒)
+      let sunRaysSvg = '';
+      if (ratio > 0.05) {
+        const angles = [0, 22.5, 45, 67.5, 90, 112.5, 135, 157.5, 180, 202.5, 225, 247.5, 270, 292.5, 315, 337.5];
+        const rayAlpha = Math.min(1, ratio * 1.35);
+        sunRaysSvg = angles.map((ang, i) => {
+          const isLong = (i % 2 === 0);
+          const rayLen = isLong ? (18 + ratio * 42) : (10 + ratio * 25);
+          const rad = (ang * Math.PI) / 180;
+          const x1 = Math.cos(rad) * (sunRadius + 3);
+          const y1 = Math.sin(rad) * (sunRadius + 3);
+          const x2 = Math.cos(rad) * (sunRadius + rayLen);
+          const y2 = Math.sin(rad) * (sunRadius + rayLen);
+          const w = isLong ? (3.0 + ratio * 3.5) : (2.2 + ratio * 2.2);
+          const tipDot = isLong ? `<circle cx="${x2.toFixed(1)}" cy="${y2.toFixed(1)}" r="${(2.2 + ratio * 2.5).toFixed(1)}" fill="#ffffff" filter="drop-shadow(0 0 5px #facc15)" />` : '';
+          return `
+            <line x1="${x1.toFixed(1)}" y1="${y1.toFixed(1)}" x2="${x2.toFixed(1)}" y2="${y2.toFixed(1)}" stroke="${isLong ? '#ffffff' : '#fde047'}" stroke-width="${w.toFixed(1)}" stroke-linecap="round" opacity="${rayAlpha.toFixed(2)}" filter="drop-shadow(0 0 7px #facc15)" />
+            ${tipDot}
+          `;
+        }).join('');
+      }
+
+      // 5 道乾淨俐落垂直向下照射的陽光箭頭示意（無火山錐形面，直覺清晰）
+      let sunlightArrowsSvg = '';
+      if (ratio > 0.05) {
+        const arrowAlpha = Math.min(1, 0.35 + ratio * 0.65);
+        const arrowStrokeW = (2.6 + ratio * 2.2).toFixed(1);
+        const arrowHeadSize = 8 + ratio * 4;
+        const arrowStartY = sunCenterY + sunRadius + 18; // 自太陽下緣起始
+        const arrowEndY = 36;                            // 照至光敏電阻上方
+
+        const arrowXs = [465, 520, 575, 630, 685];
+        sunlightArrowsSvg = `
+          <g opacity="${arrowAlpha.toFixed(2)}" filter="drop-shadow(0 0 8px #f59e0b)">
+            ${arrowXs.map(x => {
+              const isCenter = (x === 575);
+              const color = isCenter ? '#ffffff' : '#fde047';
+              return `
+                <line x1="${x}" y1="${arrowStartY.toFixed(1)}" x2="${x}" y2="${arrowEndY}" stroke="${color}" stroke-width="${arrowStrokeW}" stroke-linecap="round" stroke-dasharray="${isCenter ? 'none' : '6 4'}" />
+                <polyline points="${(x - arrowHeadSize).toFixed(1)},${(arrowEndY - arrowHeadSize).toFixed(1)} ${x},${arrowEndY} ${(x + arrowHeadSize).toFixed(1)},${(arrowEndY - arrowHeadSize).toFixed(1)}" fill="none" stroke="${color}" stroke-width="${arrowStrokeW}" stroke-linecap="round" stroke-linejoin="round" />
+              `;
+            }).join('')}
+          </g>
+        `;
+      }
+
+      g.innerHTML = `
+        <!-- 寬幅晶片底座 (寬 400px, X: 380 ~ 770, Y: 42 ~ 98, Center at 575) -->
+        <rect x="380" y="42" width="390" height="56" rx="14" fill="url(#siliconBody)" stroke="${ratio > 0.4 ? '#facc15' : '#64748b'}" stroke-width="2.8" />
+        
+        <!-- 晶片兩側厚實金屬引腳 (Pins) -->
+        <rect x="350" y="65" width="30" height="10" fill="url(#goldPin)" />
+        <rect x="770" y="65" width="30" height="10" fill="url(#goldPin)" />
+        
+        <!-- 晶片內部寬幅蛇形光敏元件 (LDR Track, Center at 575) -->
+        <path d="M 425 70 L 455 54 L 485 86 L 515 54 L 545 86 L 575 54 L 605 86 L 635 54 L 665 86 L 695 54 L 725 70" fill="none" stroke="${ratio > 0.4 ? '#fef08a' : '#78350f'}" stroke-width="${(4.2 + ratio * 2.8).toFixed(1)}" stroke-linecap="round" />
+        
+        <!-- 晶片中央文字標籤 -->
+        <text x="575" y="90" fill="${ratio > 0.4 ? '#ffffff' : '#94a3b8'}" font-size="13" font-weight="900" text-anchor="middle" letter-spacing="1">
+          PHOTO-RESISTOR (LDR) : ${state.light}% LIGHT ${ratio >= 0.5 ? '(DAY 白天)' : '(NIGHT 夜間)'}
+        </text>
+
+        <!-- ★ 向下照射的陽光箭頭示意 (乾淨俐落) ★ -->
+        ${sunlightArrowsSvg}
+
+        <!-- ===================================================================
+             ★ 【電路圖上超醒目高空大太陽主角】(Hero Big Sun Celestial Body at X: 575, Y: ${sunCenterY}) ★
+             =================================================================== -->
+        <g transform="translate(575, ${sunCenterY})">
+          ${isNight ? `
+            <!-- 0% 完全黑暗夜空：暗黑隱沒大太陽 + 微光月牙 + 星辰 -->
+            <circle cx="0" cy="0" r="62" fill="url(#sunDarkRadial)" stroke="#475569" stroke-width="3" />
+            <circle cx="0" cy="0" r="52" fill="#0b1329" />
+            <text x="0" y="16" font-size="48" text-anchor="middle">🌙</text>
+            <text x="-32" y="-24" font-size="16" fill="#94a3b8" opacity="0.6">✦</text>
+            <text x="35" y="-22" font-size="18" fill="#94a3b8" opacity="0.8">✨</text>
+            <text x="32" y="32" font-size="14" fill="#94a3b8" opacity="0.5">✦</text>
+            <!-- 頂部狀態文字 -->
+            <text x="0" y="-82" fill="#94a3b8" font-size="15" font-weight="900" text-anchor="middle" letter-spacing="1">
+              🌑 0% NIGHT (暗夜無光 • 太陽隱沒)
+            </text>
+          ` : `
+            <!-- 太陽光芒放射射線 (16 條發散耀眼光芒 + 發光端點) -->
+            ${sunRaysSvg}
+            
+            <!-- 太陽外層漫射光暈 (暗到亮逐漸膨脹發散) -->
+            <circle cx="0" cy="0" r="${auraRadius.toFixed(1)}" fill="url(#sunAuraGrad)" opacity="${(0.4 + ratio * 0.6).toFixed(2)}" />
+            
+            <!-- 大太陽本體立體發光圓球 (耀眼白金核心) -->
+            <circle cx="0" cy="0" r="${sunRadius.toFixed(1)}" fill="url(#sunRadial)" stroke="#ffffff" stroke-width="${(2.6 + ratio * 3.8).toFixed(1)}" filter="drop-shadow(0 0 ${(18 + ratio * 50).toFixed(0)}px #f59e0b)" />
+            
+            <!-- 太陽立體符號 -->
+            <text x="0" y="${(18 + ratio * 6).toFixed(0)}" font-size="${(42 + ratio * 16).toFixed(0)}" text-anchor="middle">☀️</text>
+            
+            <!-- 太陽頂部狀態文字 (超醒目主角標籤) -->
+            <text x="0" y="${(-sunRadius - 16).toFixed(0)}" fill="${ratio > 0.4 ? '#fef08a' : '#fbbf24'}" font-size="16" font-weight="900" text-anchor="middle" letter-spacing="1" filter="drop-shadow(0 0 10px rgba(0,0,0,0.95))">
+              ☀️ ${state.light}% SUNLIGHT (大太陽主角)
+            </text>
+          `}
+        </g>
+      `;
+    }
+
+    function toggleTheme() {
+      const curr = document.documentElement.getAttribute('data-theme');
+      document.documentElement.setAttribute('data-theme', curr === 'dark' ? 'light' : 'dark');
+    }
+
+    function resetControls() {
+      handleLightChange(0);
+      const sl = document.getElementById('lightSlider');
+      if (sl) sl.value = 0;
+    }
+
+    // 鍵盤無障礙支援
+    window.addEventListener('keydown', (e) => {
+      if (e.key === 'ArrowRight' || e.key === 'ArrowUp') {
+        const next = Math.min(100, state.light + 5);
+        handleLightChange(next);
+        const sl = document.getElementById('lightSlider');
+        if (sl) sl.value = next;
+      } else if (e.key === 'ArrowLeft' || e.key === 'ArrowDown') {
+        const next = Math.max(0, state.light - 5);
+        handleLightChange(next);
+        const sl = document.getElementById('lightSlider');
+        if (sl) sl.value = next;
+      } else if (e.key === 't' || e.key === 'T') {
+        toggleTheme();
+      } else if (e.key === 'r' || e.key === 'R') {
+        resetControls();
+      }
+    });
+
+    // 初始化
+    window.addEventListener('DOMContentLoaded', () => {
+      resetControls();
+    });
+  </script>
+
+  
+
+  <!-- 4 大主題切換與播放器父子通訊橋接 -->
+  <script>
+    (function() {
+      const THEMES = ['cyber', 'clean', 'maker', 'titanium'];
+      function applyTheme(theme) {
+        if (!theme) theme = 'cyber';
+        document.documentElement.setAttribute('data-theme', theme);
+      }
+      try {
+        const savedTheme = localStorage.getItem('slides_theme') || 'cyber';
+        applyTheme(savedTheme);
+      } catch(e) {}
+
+      function cycleLocalTheme() {
+        const curr = document.documentElement.getAttribute('data-theme') || 'cyber';
+        let idx = THEMES.indexOf(curr);
+        if (idx === -1) idx = 0;
+        const next = THEMES[(idx + 1) % THEMES.length];
+        applyTheme(next);
+        try { localStorage.setItem('slides_theme', next); } catch(e) {}
+      }
+
+      window.addEventListener('keydown', function(e) {
+        if (window.parent && window.parent !== window) {
+          if (e.key === 'ArrowRight' || e.key === 'PageDown' || e.key === ' ') {
+            e.preventDefault();
+            window.parent.postMessage({ type: 'SLIDE_NAV', action: 'next' }, '*');
+          } else if (e.key === 'ArrowLeft' || e.key === 'PageUp') {
+            e.preventDefault();
+            window.parent.postMessage({ type: 'SLIDE_NAV', action: 'prev' }, '*');
+          } else if (e.key === 't' || e.key === 'T') {
+            window.parent.postMessage({ type: 'SLIDE_NAV', action: 'theme' }, '*');
+          }
+        } else {
+          // 獨立開啟時按 T 也能切換 4 種風格
+          if (e.key === 't' || e.key === 'T') {
+            cycleLocalTheme();
+          }
+        }
+      });
+    })();
+  </script>
+
+</body>
+</html>

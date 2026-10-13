@@ -1,0 +1,1037 @@
+<!DOCTYPE html>
+<html lang="zh-TW" data-theme="dark">
+<head>
+  <link rel="stylesheet" href="slides_theme.css?v=20261013">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Slide 10: 閃亮聖誕燈製作：正負布局與銲接示範 | 生活科技雙語教學</title>
+  
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Outfit:wght@500;600;700;800;900&family=JetBrains+Mono:wght@600;700;800&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --font-display: 'Outfit', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, "Microsoft JhengHei", "PingFang TC", sans-serif;
+      --font-mono: 'JetBrains Mono', monospace;
+    }
+
+    /* 🌌 Theme: 深色主題 (Cyber Dark) - 預設 */
+    
+
+    /* ☀️ Theme: 亮色主題 (Light Tech) */
+    
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      user-select: none;
+    }
+
+    body {
+      font-family: var(--font-sans);
+      background-color: var(--bg-deep) !important;
+      background-image: var(--bg-gradient) !important;
+      color: var(--text-body);
+      height: 100vh;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      transition: background-color 0.3s ease, color 0.3s ease;
+    }
+
+    /* 頂部獨立調校導覽列 */
+    .lab-bar {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 0.55rem 1.8rem;
+      background: var(--nav-bg);
+      backdrop-filter: blur(16px);
+      border-bottom: 1px solid var(--border-subtle);
+    }
+
+    .lab-bar-left, .lab-bar-right {
+      display: flex;
+      align-items: center;
+      gap: 0.8rem;
+    }
+
+    .lab-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      padding: 0.4rem 0.95rem;
+      border-radius: 9999px;
+      font-size: 0.84rem;
+      font-weight: 700;
+      text-decoration: none;
+      color: var(--text-heading);
+      background: rgba(255, 255, 255, 0.06);
+      border: 1px solid var(--border-subtle);
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+    .lab-btn:hover {
+      background: var(--cyan-core);
+      color: #ffffff;
+      border-color: var(--cyan-core);
+      transform: translateY(-1px);
+    }
+
+    .lab-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
+      padding: 0.22rem 0.75rem;
+      border-radius: 9999px;
+      font-size: 0.76rem;
+      font-weight: 800;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      background: rgba(244, 63, 94, 0.14);
+      color: var(--coral-rose);
+      border: 1px solid rgba(244, 63, 94, 0.3);
+    }
+
+    /* 主舞台版面 (16:9 寬螢幕雙欄自適應 · 嚴格 100vh 零捲軸) */
+    .workshop-stage {
+      flex: 1;
+      width: 100%;
+      max-width: 1720px;
+      margin: 0 auto;
+      padding: clamp(0.35rem, 0.9vh, 0.75rem) clamp(1rem, 2vw, 1.8rem);
+      display: flex;
+      flex-direction: column;
+      gap: clamp(0.35rem, 0.75vh, 0.65rem);
+      height: calc(100vh - 54px);
+      min-height: 0;
+      box-sizing: border-box;
+      overflow: hidden;
+    }
+
+    /* 頂部雙語主題標題列 */
+    .stage-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      flex-wrap: wrap;
+      gap: 0.6rem;
+      flex-shrink: 0;
+    }
+
+    .stage-title-wrap {
+      display: flex;
+      align-items: baseline;
+      gap: 1.1rem;
+      flex-wrap: wrap;
+    }
+
+    .stage-title-en {
+      font-family: var(--font-display);
+      font-size: clamp(2.1rem, 3.0vw, 3.0rem);
+      font-weight: 900;
+      color: var(--text-pure);
+      line-height: 1.15;
+      letter-spacing: -0.015em;
+    }
+
+    .stage-title-zh {
+      font-size: clamp(1.1rem, 1.4vw, 1.35rem);
+      font-weight: 800;
+      color: var(--cyan-core);
+    }
+
+    .stage-channel-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.45rem;
+      padding: 0.25rem 0.8rem;
+      border-radius: 9999px;
+      background: rgba(239, 68, 68, 0.12);
+      border: 1px solid rgba(239, 68, 68, 0.3);
+      color: #ef4444;
+      font-size: 0.8rem;
+      font-weight: 800;
+      letter-spacing: 0.02em;
+    }
+    .stage-channel-pill svg {
+      width: 15px;
+      height: 15px;
+      fill: currentColor;
+    }
+
+    /* 雙欄主內容區：左側影片主體 (65%) + 右側步驟導覽 (35%) */
+    .workshop-grid {
+      flex: 1;
+      display: grid;
+      grid-template-columns: minmax(0, 1.85fr) minmax(360px, 1fr);
+      gap: clamp(0.8rem, 1.4vw, 1.5rem);
+      min-height: 0;
+      height: 100%;
+    }
+
+    /* 左側：影片播放器容器與專屬工具列 */
+    .video-column {
+      display: flex;
+      flex-direction: column;
+      gap: 0.75rem;
+      min-height: 0;
+      height: 100%;
+    }
+
+    .player-card {
+      flex: 1;
+      background: var(--player-bg);
+      border-radius: 20px;
+      border: 1.5px solid var(--border-light);
+      box-shadow: var(--shadow-card);
+      position: relative;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* 16:9 嚴謹自適應視訊外框 */
+    .video-responsive-wrap {
+      width: 100%;
+      height: 100%;
+      position: relative;
+      background: #000;
+    }
+
+    .video-responsive-wrap iframe {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      border: none;
+      display: block;
+    }
+
+    /* 離線或載入提示備用蓋板 (Overlay) */
+    .player-offline-hint {
+      position: absolute;
+      inset: 0;
+      display: none;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 1rem;
+      background: rgba(7, 10, 18, 0.95);
+      color: #fff;
+      padding: 2rem;
+      text-align: center;
+      z-index: 10;
+    }
+    .player-offline-hint.show {
+      display: flex;
+    }
+
+    /* 影片下方專屬教學快捷按鈕列 */
+    .video-toolbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 0.65rem 1.1rem;
+      background: var(--bg-card);
+      border: 1px solid var(--border-subtle);
+      border-radius: 14px;
+      flex-shrink: 0;
+      gap: 0.6rem;
+      flex-wrap: wrap;
+    }
+
+    .tb-group {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .tb-btn {
+      background: rgba(255, 255, 255, 0.08);
+      border: 1px solid var(--border-subtle);
+      color: var(--text-heading);
+      padding: 0.38rem 0.85rem;
+      border-radius: 8px;
+      font-size: 0.82rem;
+      font-weight: 700;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
+      transition: all 0.2s ease;
+    }
+    .tb-btn:hover {
+      background: var(--cyan-core);
+      color: #ffffff;
+      border-color: var(--cyan-core);
+    }
+    .tb-btn.active {
+      background: var(--cyan-core);
+      color: #ffffff;
+      border-color: var(--cyan-core);
+      box-shadow: 0 0 15px rgba(56, 189, 248, 0.4);
+    }
+    .tb-btn kbd {
+      font-family: var(--font-mono);
+      font-size: 0.72rem;
+      background: rgba(0, 0, 0, 0.3);
+      padding: 0.1rem 0.35rem;
+      border-radius: 4px;
+      opacity: 0.85;
+    }
+
+    /* 右側：章節導航清單與當前步驟提示板 */
+    .control-column {
+      display: flex;
+      flex-direction: column;
+      gap: 0.75rem;
+      min-height: 0;
+      height: 100%;
+    }
+
+    .panel-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding-bottom: 0.2rem;
+      flex-shrink: 0;
+    }
+    .panel-header-title {
+      font-family: var(--font-display);
+      font-size: 1.15rem;
+      font-weight: 800;
+      color: var(--text-pure);
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    .panel-header-hint {
+      font-size: 0.78rem;
+      color: var(--text-dim);
+      font-weight: 600;
+    }
+
+    /* 實作步驟章節卡片滾動區 */
+    .chapter-list {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 0.65rem;
+      overflow-y: auto;
+      padding-right: 0.3rem;
+      min-height: 0;
+    }
+    .chapter-list::-webkit-scrollbar {
+      width: 5px;
+    }
+    .chapter-list::-webkit-scrollbar-thumb {
+      background: var(--border-light);
+      border-radius: 999px;
+    }
+
+    /* 各步驟卡片 */
+    .chapter-card {
+      background: var(--bg-card);
+      border: 1.5px solid var(--border-subtle);
+      border-radius: 14px;
+      padding: 0.75rem 1rem;
+      cursor: pointer;
+      transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+      position: relative;
+      display: flex;
+      align-items: flex-start;
+      gap: 0.85rem;
+    }
+    .chapter-card:hover {
+      border-color: var(--cyan-core);
+      transform: translateX(4px);
+      background: var(--bg-card-hover);
+    }
+    .chapter-card.active {
+      background: var(--active-card-bg);
+      border-color: var(--active-card-border);
+      box-shadow: var(--shadow-glow);
+    }
+    .chapter-card.active .ch-num {
+      background: var(--cyan-core);
+      color: #ffffff;
+      box-shadow: 0 0 12px var(--cyan-core);
+    }
+
+    .ch-num {
+      width: 34px;
+      height: 34px;
+      border-radius: 10px;
+      background: rgba(255, 255, 255, 0.08);
+      border: 1px solid var(--border-subtle);
+      color: var(--text-heading);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: var(--font-mono);
+      font-size: 0.95rem;
+      font-weight: 900;
+      flex-shrink: 0;
+      transition: all 0.2s;
+    }
+
+    .ch-content {
+      flex: 1;
+      min-width: 0;
+    }
+
+    .ch-top-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      margin-bottom: 0.2rem;
+    }
+
+    .ch-title-en {
+      font-family: var(--font-display);
+      font-size: 1.02rem;
+      font-weight: 800;
+      color: var(--text-pure);
+      line-height: 1.25;
+    }
+
+    .ch-time-pill {
+      font-family: var(--font-mono);
+      font-size: 0.74rem;
+      font-weight: 700;
+      color: var(--cyan-core);
+      background: rgba(56, 189, 248, 0.12);
+      padding: 0.12rem 0.45rem;
+      border-radius: 999px;
+      border: 1px solid rgba(56, 189, 248, 0.25);
+    }
+
+    .ch-title-zh {
+      font-size: 0.86rem;
+      font-weight: 700;
+      color: var(--text-dim);
+      margin-bottom: 0.25rem;
+    }
+    .chapter-card.active .ch-title-zh {
+      color: var(--text-heading);
+    }
+
+    .ch-detail-hint {
+      font-size: 0.78rem;
+      color: var(--text-body);
+      line-height: 1.35;
+      padding-top: 0.25rem;
+      border-top: 1px dashed var(--border-subtle);
+    }
+
+    /* 下方即時動作看板 (Live Action Callout) */
+    .live-action-board {
+      background: var(--bg-card);
+      border: 1.8px solid var(--cyan-core);
+      border-radius: 16px;
+      padding: 0.85rem 1.15rem;
+      box-shadow: var(--shadow-glow);
+      flex-shrink: 0;
+      position: relative;
+      overflow: hidden;
+    }
+    .live-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
+      font-size: 0.7rem;
+      font-weight: 900;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--cyan-core);
+      margin-bottom: 0.35rem;
+    }
+    .live-pulse-dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: var(--cyan-core);
+      animation: pulseDot 1.4s infinite;
+    }
+    @keyframes pulseDot {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.3; transform: scale(1.4); }
+    }
+    .live-action-en {
+      font-family: var(--font-display);
+      font-size: 1.18rem;
+      font-weight: 900;
+      color: var(--text-pure);
+      line-height: 1.25;
+      margin-bottom: 0.2rem;
+    }
+    .live-action-zh {
+      font-size: 0.95rem;
+      font-weight: 800;
+      color: var(--cyan-core);
+      margin-bottom: 0.35rem;
+    }
+    .live-action-tip {
+      font-size: 0.82rem;
+      color: var(--text-body);
+      line-height: 1.35;
+    }
+  </style>
+</head>
+<body>
+  <!-- High-Tech Semiconductor Wafer Photographic Backdrop -->
+  <div class="tech-bg-wallpaper"></div>
+
+
+  <!-- 頂部獨立調校導覽列 -->
+  <header class="lab-bar">
+    <div class="lab-bar-left">
+      <a href="index.html" class="lab-btn" title="回到目錄">📋 簡報目錄</a>
+      <span class="lab-badge">SLIDE 10 / 12 &bull; VIDEO WORKSHOP</span>
+      <span style="color: var(--text-dim); font-size: 0.84rem; font-weight: 600;">閃亮聖誕燈製作 · 正負布局與銲接實作</span>
+    </div>
+
+    <div class="lab-bar-right">
+      <a href="slide09_solder_4steps.html" class="lab-btn">◀ 上一頁 (09 銲接口訣)</a>
+      <a href="slide11_student_assembly.html" class="lab-btn" style="border-color: var(--amber-gold); color: var(--amber-gold);">下一頁 (11 實作兩大鐵律) ▶</a>
+      <button class="lab-btn" onclick="toggleTheme()" title="切換深淺色 (T)">
+        <span id="themeIcon">☀️</span> 切換深淺
+      </button>
+    </div>
+  </header>
+
+  <!-- 主舞台版面 -->
+  <main class="workshop-stage">
+    
+    <!-- 頂部標題列 -->
+    <div class="stage-header">
+      <div class="stage-title-wrap">
+        <h1 class="stage-title-en">Hands-on Workshop: Polarity &amp; Soldering</h1>
+        <span class="stage-title-zh">實作示範：正負極布局與銲接實務</span>
+      </div>
+      <div class="stage-channel-pill" title="王董科技教室教學頻道">
+        <svg viewBox="0 0 24 24"><path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg>
+        <span>王董科技教室 · 原創實作示範</span>
+      </div>
+    </div>
+
+    <!-- 雙欄主舞台 -->
+    <div class="workshop-grid">
+      
+      <!-- 左欄：影片播放器與快捷工具列 -->
+      <section class="video-column">
+        <div class="player-card">
+          <div class="video-responsive-wrap">
+            <!-- 內嵌 YouTube 播放器 (啟用 JS API 支援跳轉與變速控制) -->
+            <iframe 
+              id="ytPlayerIframe"
+              src="https://www.youtube.com/embed/p8tu_2HXBVY?enablejsapi=1&rel=0&modestbranding=1&playsinline=1" 
+              title="閃亮聖誕燈製作-03正負布局及銲接" 
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
+              allowfullscreen>
+            </iframe>
+
+            <!-- 本地離線 HTML5 影片播放器 (支援 video.mp4 離線無網路即時播放) -->
+            <video 
+              id="localVideoPlayer" 
+              style="display:none; position:absolute; top:0; left:0; width:100%; height:100%; background:#000; object-fit:contain;"
+              playsinline 
+              controls 
+              src="video.mp4">
+            </video>
+
+            <!-- 離線備用提示 (若因直接以 file:/// 開啟缺少 Referer 導致 YouTube 阻擋時顯示) -->
+            <div class="player-offline-hint" id="offlineHint">
+              <h3 style="font-size:1.3rem; margin-bottom:0.4rem;">⚠️ YouTube 播放器無法直接於此環境嵌入</h3>
+              <p style="font-size:0.95rem; line-height:1.45; max-width:540px; margin-bottom:1.1rem; color:#cbd5e1;">
+                因直接以檔案協定（<code>file:///</code>）開啟時缺少網站網址來源，或學校網路有阻擋。<br>
+                建議以下列方式順暢播放：
+              </p>
+              <div style="display:flex; gap:0.8rem; flex-wrap:wrap; justify-content:center;">
+                <button class="lab-btn" onclick="switchToLocalVideo()" style="background:#0284c7; color:#fff; border-color:#38bdf8;">
+                  📁 切換播放本地影片 (video.mp4)
+                </button>
+                <a href="https://www.youtube.com/watch?v=p8tu_2HXBVY" target="_blank" class="lab-btn" style="background:#ef4444; color:#fff; border-color:#f87171;">
+                  🌐 在新分頁開啟原影片 (p8tu_2HXBVY)
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 播放器工具列 -->
+        <div class="video-toolbar">
+          <div class="tb-group">
+            <button class="tb-btn" onclick="togglePlayPause()" title="播放 / 暫停 (Space 或 K)">
+              <span id="playIcon">⏯️</span> <span id="playText">播放 / 暫停</span> <kbd>Space</kbd>
+            </button>
+            <button class="tb-btn" onclick="seekRelative(-5)" title="倒退 5 秒 (J 或 ←)">
+              <span>⏪</span> 倒退 5 秒 <kbd>J</kbd>
+            </button>
+            <button class="tb-btn" onclick="seekRelative(5)" title="快進 5 秒 (L 或 →)">
+              <span>⏩</span> 快進 5 秒 <kbd>L</kbd>
+            </button>
+          </div>
+
+          <div class="tb-group">
+            <button class="tb-btn" id="speedSlowBtn" onclick="setPlaybackSpeed(0.75)" title="以 0.75x 慢動作播放細緻銲接動作 (S)">
+              <span>🐢</span> 0.75x 慢動作 <kbd>S</kbd>
+            </button>
+            <button class="tb-btn active" id="speedNormalBtn" onclick="setPlaybackSpeed(1.0)" title="以正常速度播放">
+              <span>⚡</span> 1.0x 正常
+            </button>
+            <button class="tb-btn" onclick="togglePlayerSource()" id="toggleSourceBtn" title="切換 YouTube / 本地離線影片 (video.mp4)">
+              <span>📹</span> <span id="toggleSourceText">切換：本地 MP4</span>
+            </button>
+            <button class="tb-btn" onclick="requestVideoFullscreen()" title="全螢幕影院模式 (F)">
+              <span>⛶</span> 全螢幕 <kbd>F</kbd>
+            </button>
+          </div>
+        </div>
+      </section>
+
+      <!-- 右欄：章節步驟快速跳轉與即時提示 -->
+      <aside class="control-column">
+        <div class="panel-header">
+          <div class="panel-header-title">
+            <span>📋</span> 實作分段導航 (Chapters)
+          </div>
+          <div class="panel-header-hint">
+            按數字鍵 1~5 一鍵跳轉
+          </div>
+        </div>
+
+        <!-- 章節列表 (點選立即 seek 到該秒數並高亮) -->
+        <div class="chapter-list" id="chapterList">
+          
+          <!-- Step 1 -->
+          <div class="chapter-card active" onclick="jumpToChapter(0)" id="ch-card-0">
+            <div class="ch-num">1</div>
+            <div class="ch-content">
+              <div class="ch-top-row">
+                <span class="ch-title-en">Polarity &amp; Circuit Layout</span>
+                <span class="ch-time-pill">00:00</span>
+              </div>
+              <div class="ch-title-zh">零件極性辨識與電路板布局</div>
+              <div class="ch-detail-hint">長腳為正極（+）、短腳為負極（-），核對電路板絲印方向。</div>
+            </div>
+          </div>
+
+          <!-- Step 2 -->
+          <div class="chapter-card" onclick="jumpToChapter(1)" id="ch-card-1">
+            <div class="ch-num">2</div>
+            <div class="ch-content">
+              <div class="ch-top-row">
+                <span class="ch-title-en">Component Insertion &amp; Lead Bending</span>
+                <span class="ch-time-pill">00:45</span>
+              </div>
+              <div class="ch-title-zh">LED 插板穿孔與折腳定位</div>
+              <div class="ch-detail-hint">穿過焊孔後於背面微折 30~45 度，防止零件翻轉掉落。</div>
+            </div>
+          </div>
+
+          <!-- Step 3 -->
+          <div class="chapter-card" onclick="jumpToChapter(2)" id="ch-card-2">
+            <div class="ch-num">3</div>
+            <div class="ch-content">
+              <div class="ch-top-row">
+                <span class="ch-title-en">Cross Tweezers Clamping</span>
+                <span class="ch-time-pill">01:30</span>
+              </div>
+              <div class="ch-title-zh">逆向鑷子安全夾持接點</div>
+              <div class="ch-detail-hint">使用逆向鑷子自動夾緊引腳，絕不用手靠近焊點防燙傷！</div>
+            </div>
+          </div>
+
+          <!-- Step 4 -->
+          <div class="chapter-card" onclick="jumpToChapter(3)" id="ch-card-3">
+            <div class="ch-num">4</div>
+            <div class="ch-content">
+              <div class="ch-top-row">
+                <span class="ch-title-en">4-Step Soldering Execution</span>
+                <span class="ch-time-pill">02:15</span>
+              </div>
+              <div class="ch-title-zh">四步驟清熱餵離實務操作</div>
+              <div class="ch-detail-hint">預熱 2 秒 ➔ 餵錫形成圓錐火山形 ➔ 先移開錫絲 ➔ 最後移開烙鐵。</div>
+            </div>
+          </div>
+
+          <!-- Step 5 -->
+          <div class="chapter-card" onclick="jumpToChapter(4)" id="ch-card-4">
+            <div class="ch-num">5</div>
+            <div class="ch-content">
+              <div class="ch-top-row">
+                <span class="ch-title-en">Solder 1 &bull; Test 1!</span>
+                <span class="ch-time-pill">03:30</span>
+              </div>
+              <div class="ch-title-zh">每銲一顆立即通電測試！</div>
+              <div class="ch-detail-hint">實作品質鐵律：每完成一顆 LED 立即接電測試，確保百分之百亮燈！</div>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- 下方即時動作看板 -->
+        <div class="live-action-board" id="liveBoard">
+          <div class="live-badge">
+            <span class="live-pulse-dot"></span>
+            <span id="liveStepTag">CURRENT STEP 01</span>
+          </div>
+          <div class="live-action-en" id="liveActionEn">Check Polarity: Long Leg (+), Short Leg (-)</div>
+          <div class="live-action-zh" id="liveActionZh">長正短負 · 對齊電路板極性方向</div>
+          <div class="live-action-tip" id="liveActionTip">
+            請全班先拿起 LED，用手指觸摸確認長腳與缺口扁平面，再核對電路板上正極圓孔位置。
+          </div>
+        </div>
+
+      </aside>
+
+    </div>
+
+  </main>
+
+  <!-- YouTube IFrame API Script -->
+  <script src="https://www.youtube.com/iframe_api"></script>
+
+  <script>
+    /* ===================================================================
+       1. 實作章節資料設定 (包含時間秒數與雙語看板內容)
+       =================================================================== */
+    const chaptersData = [
+      {
+        index: 0,
+        seconds: 0,
+        timeStr: "00:00",
+        stepTag: "CURRENT STEP 01 • POLARITY",
+        en: "Check Polarity: Long Leg (+), Short Leg (-)",
+        zh: "長正短負 · 對齊電路板極性方向",
+        tip: "請全班先拿起 LED，確認長腳（正極）與短腳（負極），對齊聖誕燈電路板上的標示插放。"
+      },
+      {
+        index: 1,
+        seconds: 45,
+        timeStr: "00:45",
+        stepTag: "CURRENT STEP 02 • INSERTION",
+        en: "Insert Component & Slightly Bend Leads",
+        zh: "零件穿孔插板 · 輕折引腳固定防脫落",
+        tip: "將 LED 腳針穿過孔洞後，翻到背面輕折 30~45 度，防止反轉焊板時零件滑動掉落。"
+      },
+      {
+        index: 2,
+        seconds: 90,
+        timeStr: "01:30",
+        stepTag: "CURRENT STEP 03 • CLAMPING",
+        en: "Clamp Safely with Cross-Action Tweezers",
+        zh: "逆向鑷子夾持 · 絕不用手扶防燙傷",
+        tip: "利用逆向鑷子的彈簧自動咬合固定接點，手指保持在安全距離外，絕不直接用手扶持引腳！"
+      },
+      {
+        index: 3,
+        seconds: 135,
+        timeStr: "02:15",
+        stepTag: "CURRENT STEP 04 • SOLDERING",
+        en: "4 Steps: Clean ➔ Heat ➔ Feed ➔ Remove",
+        zh: "四步驟實作口訣：清 ➔ 熱 ➔ 餵 ➔ 離",
+        tip: "烙鐵尖端接觸接點預熱 2 秒，迅速餵入錫絲形成火山狀圓錐，先移錫絲，最後抽離電烙鐵。"
+      },
+      {
+        index: 4,
+        seconds: 210,
+        timeStr: "03:30",
+        stepTag: "CURRENT STEP 05 • TEST & VERIFY",
+        en: "Golden Rule: Solder 1, Test 1 Right Away!",
+        zh: "品質鐵律：每銲一顆立即通電測試！",
+        tip: "每銲好一顆 LED 立即插電驗證發光！不要等到全部銲完才發現第一顆極性接反難以除錫。"
+      }
+    ];
+
+    let currentChapterIndex = 0;
+    let ytPlayer = null;
+    let isPlaying = false;
+    let currentSpeed = 1.0;
+
+    // YouTube IFrame API Ready 回呼
+    function onYouTubeIframeAPIReady() {
+      ytPlayer = new YT.Player('ytPlayerIframe', {
+        events: {
+          'onReady': onPlayerReady,
+          'onStateChange': onPlayerStateChange,
+          'onError': onPlayerError
+        }
+      });
+    }
+
+    function onPlayerReady(event) {
+      console.log("YouTube Player Ready!");
+      if (ytPlayer && ytPlayer.setPlaybackRate) {
+        ytPlayer.setPlaybackRate(currentSpeed);
+      }
+    }
+
+    function onPlayerStateChange(event) {
+      if (event.data === YT.PlayerState.PLAYING) {
+        isPlaying = true;
+        document.getElementById('playIcon').textContent = '⏸️';
+        document.getElementById('playText').textContent = '暫停';
+      } else if (event.data === YT.PlayerState.PAUSED || event.data === YT.PlayerState.ENDED) {
+        isPlaying = false;
+        document.getElementById('playIcon').textContent = '▶️';
+        document.getElementById('playText').textContent = '播放';
+      }
+    }
+
+    function onPlayerError(event) {
+      console.warn("YouTube Player error:", event.data);
+      document.getElementById('offlineHint').classList.add('show');
+    }
+
+    let isLocalVideo = false;
+    const localVideo = document.getElementById('localVideoPlayer');
+
+    // 監聽本地影片播放事件
+    if (localVideo) {
+      localVideo.addEventListener('play', () => {
+        isPlaying = true;
+        document.getElementById('playIcon').textContent = '⏸️';
+        document.getElementById('playText').textContent = '暫停';
+      });
+      localVideo.addEventListener('pause', () => {
+        isPlaying = false;
+        document.getElementById('playIcon').textContent = '▶️';
+        document.getElementById('playText').textContent = '播放';
+      });
+      localVideo.addEventListener('ended', () => {
+        isPlaying = false;
+        document.getElementById('playIcon').textContent = '▶️';
+        document.getElementById('playText').textContent = '播放';
+      });
+    }
+
+    function switchToLocalVideo() {
+      isLocalVideo = true;
+      document.getElementById('ytPlayerIframe').style.display = 'none';
+      localVideo.style.display = 'block';
+      document.getElementById('offlineHint').classList.remove('show');
+      document.getElementById('toggleSourceText').textContent = '切換：線上 YouTube';
+      const ch = chaptersData[currentChapterIndex];
+      localVideo.currentTime = ch.seconds;
+      localVideo.playbackRate = currentSpeed;
+      localVideo.play().catch(e => console.log('Autoplay blocked:', e));
+    }
+
+    function switchToYouTube() {
+      isLocalVideo = false;
+      if (localVideo) localVideo.pause();
+      if (localVideo) localVideo.style.display = 'none';
+      document.getElementById('ytPlayerIframe').style.display = 'block';
+      document.getElementById('toggleSourceText').textContent = '切換：本地 MP4';
+      const ch = chaptersData[currentChapterIndex];
+      if (ytPlayer && ytPlayer.seekTo) {
+        try {
+          ytPlayer.seekTo(ch.seconds, true);
+          ytPlayer.playVideo();
+        } catch(e) {}
+      }
+    }
+
+    function togglePlayerSource() {
+      if (isLocalVideo) {
+        switchToYouTube();
+      } else {
+        switchToLocalVideo();
+      }
+    }
+
+    // 播放 / 暫停切換
+    function togglePlayPause() {
+      if (isLocalVideo && localVideo) {
+        if (localVideo.paused) {
+          localVideo.play();
+        } else {
+          localVideo.pause();
+        }
+      } else if (ytPlayer) {
+        try {
+          if (isPlaying) {
+            ytPlayer.pauseVideo();
+          } else {
+            ytPlayer.playVideo();
+          }
+        } catch (e) {
+          console.error(e);
+        }
+      }
+    }
+
+    // 前進 / 後退指定秒數
+    function seekRelative(deltaSeconds) {
+      if (isLocalVideo && localVideo) {
+        localVideo.currentTime = Math.max(0, localVideo.currentTime + deltaSeconds);
+      } else if (ytPlayer && ytPlayer.getCurrentTime) {
+        try {
+          const current = ytPlayer.getCurrentTime();
+          ytPlayer.seekTo(Math.max(0, current + deltaSeconds), true);
+        } catch (e) {
+          console.error(e);
+        }
+      }
+    }
+
+    // 切換播放速度 (0.75x 慢動作 / 1.0x 正常)
+    function setPlaybackSpeed(rate) {
+      currentSpeed = rate;
+      if (isLocalVideo && localVideo) {
+        localVideo.playbackRate = rate;
+      } else if (ytPlayer && ytPlayer.setPlaybackRate) {
+        try {
+          ytPlayer.setPlaybackRate(rate);
+        } catch (e) {
+          console.error(e);
+        }
+      }
+      document.getElementById('speedSlowBtn').classList.toggle('active', rate < 1.0);
+      document.getElementById('speedNormalBtn').classList.toggle('active', rate >= 1.0);
+    }
+
+    // 全螢幕切換
+    function requestVideoFullscreen() {
+      const target = isLocalVideo ? localVideo : document.getElementById('ytPlayerIframe');
+      if (target.requestFullscreen) {
+        target.requestFullscreen();
+      } else if (target.webkitRequestFullscreen) {
+        target.webkitRequestFullscreen();
+      }
+    }
+
+    // 一鍵跳轉章節
+    function jumpToChapter(index) {
+      currentChapterIndex = Math.max(0, Math.min(index, chaptersData.length - 1));
+      const ch = chaptersData[currentChapterIndex];
+
+      if (isLocalVideo && localVideo) {
+        localVideo.currentTime = ch.seconds;
+        localVideo.play().catch(e => {});
+      } else if (ytPlayer && ytPlayer.seekTo) {
+        try {
+          ytPlayer.seekTo(ch.seconds, true);
+          ytPlayer.playVideo();
+        } catch (e) {
+          console.error(e);
+        }
+      }
+
+      // 更新右側卡片高亮狀態
+      for (let i = 0; i < chaptersData.length; i++) {
+        const card = document.getElementById(`ch-card-${i}`);
+        if (card) {
+          card.classList.toggle('active', i === currentChapterIndex);
+        }
+      }
+
+      // 更新下方即時動作看板
+      document.getElementById('liveStepTag').textContent = ch.stepTag;
+      document.getElementById('liveActionEn').textContent = ch.en;
+      document.getElementById('liveActionZh').textContent = ch.zh;
+      document.getElementById('liveActionTip').textContent = ch.tip;
+    }
+
+    // 深淺色模式切換
+    function toggleTheme() {
+      const html = document.documentElement;
+      const current = html.getAttribute('data-theme') || 'dark';
+      const next = current === 'dark' ? 'light' : 'dark';
+      html.setAttribute('data-theme', next);
+      document.getElementById('themeIcon').textContent = next === 'dark' ? '☀️' : '🌙';
+    }
+
+    // 鍵盤快捷鍵操控
+    window.addEventListener('keydown', (e) => {
+      // 避免在輸入框觸發
+      if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') return;
+
+      const key = e.key;
+
+      if (key >= '1' && key <= '5') {
+        e.preventDefault();
+        jumpToChapter(parseInt(key) - 1);
+      } else if (key === ' ' || key === 'k' || key === 'K') {
+        e.preventDefault();
+        togglePlayPause();
+      } else if (key === 'j' || key === 'J' || key === 'ArrowLeft') {
+        e.preventDefault();
+        seekRelative(-5);
+      } else if (key === 'l' || key === 'L' || key === 'ArrowRight') {
+        e.preventDefault();
+        seekRelative(5);
+      } else if (key === 's' || key === 'S') {
+        e.preventDefault();
+        setPlaybackSpeed(currentSpeed === 1.0 ? 0.75 : 1.0);
+      } else if (key === 'f' || key === 'F') {
+        e.preventDefault();
+        requestVideoFullscreen();
+      } else if (key === 't' || key === 'T') {
+        e.preventDefault();
+        toggleTheme();
+      } else if (key === 'PageDown') {
+        window.location.href = 'slide11_student_assembly.html';
+      } else if (key === 'PageUp') {
+        window.location.href = 'slide09_solder_4steps.html';
+      }
+    });
+  </script>
+
+  
+
+  <!-- 4 大主題切換與播放器父子通訊橋接 -->
+  <script>
+    (function() {
+      const THEMES = ['cyber', 'clean', 'maker', 'titanium'];
+      function applyTheme(theme) {
+        if (!theme) theme = 'cyber';
+        document.documentElement.setAttribute('data-theme', theme);
+      }
+      try {
+        const savedTheme = localStorage.getItem('slides_theme') || 'cyber';
+        applyTheme(savedTheme);
+      } catch(e) {}
+
+      function cycleLocalTheme() {
+        const curr = document.documentElement.getAttribute('data-theme') || 'cyber';
+        let idx = THEMES.indexOf(curr);
+        if (idx === -1) idx = 0;
+        const next = THEMES[(idx + 1) % THEMES.length];
+        applyTheme(next);
+        try { localStorage.setItem('slides_theme', next); } catch(e) {}
+      }
+
+      window.addEventListener('keydown', function(e) {
+        if (window.parent && window.parent !== window) {
+          if (e.key === 'ArrowRight' || e.key === 'PageDown' || e.key === ' ') {
+            e.preventDefault();
+            window.parent.postMessage({ type: 'SLIDE_NAV', action: 'next' }, '*');
+          } else if (e.key === 'ArrowLeft' || e.key === 'PageUp') {
+            e.preventDefault();
+            window.parent.postMessage({ type: 'SLIDE_NAV', action: 'prev' }, '*');
+          } else if (e.key === 't' || e.key === 'T') {
+            window.parent.postMessage({ type: 'SLIDE_NAV', action: 'theme' }, '*');
+          }
+        } else {
+          // 獨立開啟時按 T 也能切換 4 種風格
+          if (e.key === 't' || e.key === 'T') {
+            cycleLocalTheme();
+          }
+        }
+      });
+    })();
+  </script>
+
+</body>
+</html>

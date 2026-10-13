@@ -1,0 +1,848 @@
+<!DOCTYPE html>
+<html lang="zh-TW" data-theme="dark">
+<head>
+  <link rel="stylesheet" href="slides_theme.css?v=20261013">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Slide 11: 學生實作兩大鐵律 | 生活科技雙語教學</title>
+  
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Outfit:wght@500;600;700;800;900&family=JetBrains+Mono:wght@600;700;800&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --font-display: 'Outfit', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, "Microsoft JhengHei", "PingFang TC", sans-serif;
+      --font-mono: 'JetBrains Mono', monospace;
+    }
+
+    /* 🌌 Theme: 深色主題 (Cyber Dark) - 預設 */
+    
+
+    /* ☀️ Theme: 亮色主題 (Light Tech) */
+    
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      user-select: none;
+    }
+
+    body {
+      font-family: var(--font-sans);
+      background-color: var(--bg-deep) !important;
+      background-image: var(--bg-gradient) !important;
+      color: var(--text-body);
+      height: 100vh;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      transition: background-color 0.3s ease, color 0.3s ease;
+    }
+
+    /* 頂部導覽列 (54px) */
+    .lab-bar {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 0.55rem 1.8rem;
+      background: var(--nav-bg);
+      backdrop-filter: blur(16px);
+      border-bottom: 1px solid var(--border-subtle);
+      height: 52px;
+      flex-shrink: 0;
+    }
+
+    .lab-bar-left, .lab-bar-right {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+
+    .lab-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      padding: 0.38rem 0.9rem;
+      border-radius: 9999px;
+      font-size: 0.82rem;
+      font-weight: 700;
+      text-decoration: none;
+      color: var(--text-heading);
+      background: rgba(255, 255, 255, 0.06);
+      border: 1px solid var(--border-subtle);
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+    .lab-btn:hover {
+      background: var(--cyan-core);
+      color: #000000 !important;
+      border-color: var(--cyan-core);
+      transform: translateY(-1px);
+    }
+
+    .lab-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
+      padding: 0.22rem 0.75rem;
+      border-radius: 9999px;
+      font-size: 0.76rem;
+      font-weight: 800;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      background: rgba(251, 191, 36, 0.14);
+      color: var(--amber-gold);
+      border: 1px solid rgba(251, 191, 36, 0.3);
+    }
+
+    /* 主舞台容器 (嚴格鎖定 100vh 零捲軸) */
+    .stage-container {
+      flex: 1;
+      width: 100%;
+      max-width: 1720px;
+      margin: 0 auto;
+      padding: clamp(0.4rem, 1vh, 0.85rem) clamp(1.2rem, 2.2vw, 2.2rem);
+      display: flex;
+      flex-direction: column;
+      gap: clamp(0.5rem, 1vh, 0.85rem);
+      height: calc(100vh - 52px);
+      min-height: 0;
+      box-sizing: border-box;
+      overflow: hidden;
+    }
+
+    /* 頂部標題區 */
+    .stage-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      flex-wrap: wrap;
+      gap: 0.6rem;
+      flex-shrink: 0;
+    }
+
+    .title-group {
+      display: flex;
+      align-items: baseline;
+      gap: 1.1rem;
+      flex-wrap: wrap;
+    }
+
+    .main-title-en {
+      font-family: var(--font-display);
+      font-size: clamp(2.1rem, 3.0vw, 3.0rem);
+      font-weight: 900;
+      color: var(--text-pure);
+      line-height: 1.15;
+      letter-spacing: -0.015em;
+    }
+
+    .main-title-zh {
+      font-size: clamp(1.15rem, 1.4vw, 1.4rem);
+      font-weight: 800;
+      color: var(--amber-gold);
+      letter-spacing: 0.02em;
+    }
+
+    .header-tip {
+      font-size: 0.85rem;
+      font-weight: 700;
+      color: var(--text-dim);
+      background: rgba(255, 255, 255, 0.05);
+      padding: 0.25rem 0.85rem;
+      border-radius: 999px;
+      border: 1px solid var(--border-subtle);
+    }
+
+    /* 雙大卡並列區 (50% / 50% 等高滿版) */
+    .rules-grid {
+      flex: 1;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: clamp(1rem, 1.8vw, 1.6rem);
+      min-height: 0;
+      height: 100%;
+    }
+
+    /* 核心卡片通用樣式 */
+    .rule-card {
+      background: var(--bg-card);
+      border-radius: 22px;
+      border: 2px solid var(--border-light);
+      box-shadow: var(--shadow-card);
+      padding: clamp(0.9rem, 1.4vh, 1.35rem) clamp(1.1rem, 1.5vw, 1.6rem);
+      display: flex;
+      flex-direction: column;
+      position: relative;
+      overflow: hidden;
+      min-height: 0;
+      transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .rule-card:hover {
+      transform: translateY(-3px);
+    }
+
+    /* 卡片 1：極性對齊主題（電光青色發光） */
+    .rule-card.polarity-card {
+      border-color: rgba(56, 189, 248, 0.4);
+      background: radial-gradient(circle at 10% 10%, rgba(56, 189, 248, 0.09) 0%, transparent 60%),
+                  var(--bg-card);
+    }
+    .rule-card.polarity-card:hover {
+      border-color: var(--cyan-core);
+      box-shadow: var(--shadow-glow-cyan);
+    }
+
+    /* 卡片 2：每銲必測主題（琥珀金/聖誕綠發光） */
+    .rule-card.test-card {
+      border-color: rgba(251, 191, 36, 0.4);
+      background: radial-gradient(circle at 90% 10%, rgba(251, 191, 36, 0.09) 0%, transparent 60%),
+                  var(--bg-card);
+    }
+    .rule-card.test-card:hover {
+      border-color: var(--amber-gold);
+      box-shadow: var(--shadow-glow-amber);
+    }
+
+    /* 卡片頂部標題 */
+    .card-top-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 0.5rem;
+      flex-shrink: 0;
+    }
+
+    .rule-tag {
+      font-family: var(--font-mono);
+      font-size: 0.78rem;
+      font-weight: 800;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      padding: 0.22rem 0.65rem;
+      border-radius: 999px;
+    }
+    .polarity-card .rule-tag {
+      background: rgba(56, 189, 248, 0.16);
+      color: var(--cyan-core);
+      border: 1px solid rgba(56, 189, 248, 0.35);
+    }
+    .test-card .rule-tag {
+      background: rgba(251, 191, 36, 0.16);
+      color: var(--amber-gold);
+      border: 1px solid rgba(251, 191, 36, 0.35);
+    }
+
+    .card-title-en {
+      font-family: var(--font-display);
+      font-size: clamp(1.3rem, 1.8vw, 1.7rem);
+      font-weight: 900;
+      color: var(--text-pure);
+      line-height: 1.15;
+    }
+
+    .card-title-zh {
+      font-size: clamp(1.05rem, 1.3vw, 1.25rem);
+      font-weight: 800;
+      margin-top: 0.15rem;
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+    }
+    .polarity-card .card-title-zh { color: var(--cyan-core); }
+    .test-card .card-title-zh { color: var(--amber-gold); }
+
+    /* 巨大圖示與向量視覺展示舞台 (佔據卡片核心 60% 空間) */
+    .card-visual-stage {
+      flex: 1;
+      min-height: 0;
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: rgba(0, 0, 0, 0.2);
+      border-radius: 16px;
+      border: 1px solid var(--border-subtle);
+      margin: 0.65rem 0;
+      padding: 0.75rem;
+      overflow: hidden;
+    }
+
+    /* SVG 繪圖滿版自適應 */
+    .diagram-svg {
+      width: 100%;
+      height: 100%;
+      max-height: 100%;
+      object-fit: contain;
+    }
+
+    /* 卡片底部重要提示與操作列 */
+    .card-bottom-info {
+      flex-shrink: 0;
+      display: flex;
+      flex-direction: column;
+      gap: 0.45rem;
+    }
+
+    .mantra-pill {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0.55rem 0.95rem;
+      border-radius: 12px;
+      font-weight: 700;
+      font-size: 0.88rem;
+    }
+    .polarity-card .mantra-pill {
+      background: rgba(56, 189, 248, 0.1);
+      border: 1px solid rgba(56, 189, 248, 0.25);
+      color: var(--text-pure);
+    }
+    .test-card .mantra-pill {
+      background: rgba(251, 191, 36, 0.1);
+      border: 1px solid rgba(251, 191, 36, 0.25);
+      color: var(--text-pure);
+    }
+
+    .card-interactive-action {
+      display: flex;
+      gap: 0.5rem;
+      align-items: center;
+    }
+
+    .interactive-btn {
+      flex: 1;
+      padding: 0.5rem 0.85rem;
+      border-radius: 10px;
+      border: 1.5px solid var(--border-light);
+      background: rgba(255, 255, 255, 0.08);
+      color: var(--text-heading);
+      font-family: var(--font-sans);
+      font-size: 0.85rem;
+      font-weight: 800;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.4rem;
+      transition: all 0.2s ease;
+    }
+    .interactive-btn:hover {
+      background: var(--cyan-core);
+      color: #ffffff;
+      border-color: var(--cyan-core);
+    }
+    .test-card .interactive-btn:hover {
+      background: var(--amber-gold);
+      color: #000000;
+      border-color: var(--amber-gold);
+    }
+
+    /* 底部全班守則常駐看板 */
+    .classroom-footer-banner {
+      flex-shrink: 0;
+      background: var(--mantra-bg);
+      border: 1.5px solid var(--border-light);
+      border-radius: 14px;
+      padding: 0.6rem 1.4rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 0.8rem;
+    }
+
+    .banner-left {
+      display: flex;
+      align-items: center;
+      gap: 0.8rem;
+      font-size: 0.95rem;
+      font-weight: 800;
+      color: var(--text-pure);
+    }
+    .banner-badge {
+      background: var(--cyan-core);
+      color: #000;
+      padding: 0.18rem 0.6rem;
+      border-radius: 6px;
+      font-size: 0.76rem;
+      font-weight: 900;
+      letter-spacing: 0.04em;
+    }
+
+    .banner-right {
+      display: flex;
+      align-items: center;
+      gap: 1.2rem;
+      font-family: var(--font-mono);
+      font-size: 0.8rem;
+      color: var(--text-dim);
+    }
+
+    /* 模擬互動動畫狀態 */
+    @keyframes pulseGlow {
+      0%, 100% { opacity: 0.85; filter: drop-shadow(0 0 12px #38bdf8); }
+      50% { opacity: 1; filter: drop-shadow(0 0 32px #00f2fe) drop-shadow(0 0 60px #38bdf8); }
+    }
+    .led-glowing {
+      animation: pulseGlow 1.2s infinite ease-in-out;
+    }
+
+    @keyframes testSpark {
+      0% { transform: scale(0.9); opacity: 0.2; }
+      50% { transform: scale(1.15); opacity: 1; }
+      100% { transform: scale(1); opacity: 0.9; }
+    }
+    .test-sparkling {
+      animation: testSpark 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    }
+
+    /* 音效/狀態通知徽章 */
+    .status-toast {
+      position: absolute;
+      top: 1rem;
+      right: 1rem;
+      padding: 0.35rem 0.85rem;
+      border-radius: 999px;
+      font-size: 0.78rem;
+      font-weight: 800;
+      background: rgba(16, 185, 129, 0.2);
+      border: 1px solid #10b981;
+      color: #34d399;
+      display: none;
+      align-items: center;
+      gap: 0.35rem;
+      z-index: 20;
+    }
+    .status-toast.show {
+      display: inline-flex;
+    }
+  </style>
+</head>
+<body>
+  <!-- High-Tech Semiconductor Wafer Photographic Backdrop -->
+  <div class="tech-bg-wallpaper"></div>
+
+
+  <!-- 頂部快速跳頁導覽列 -->
+  <header class="lab-bar">
+    <div class="lab-bar-left">
+      <a href="index.html" class="lab-btn">📋 簡報目錄</a>
+      <span class="lab-badge">SLIDE 11 / 12 • WORKSHOP RULES</span>
+      <span style="font-size: 0.84rem; color: var(--text-dim); font-weight: 700;">學生實作 · 兩大關鍵鐵律</span>
+    </div>
+    <div class="lab-bar-right">
+      <a href="slide10_polarity_alignment.html" class="lab-btn">◀ 上一頁 (10 影片示範)</a>
+      <a href="slide12_cleanup_packup.html" class="lab-btn" style="border-color: var(--amber-gold); color: var(--amber-gold);">下一頁 (12 收工整理) ▶</a>
+      <button class="lab-btn" onclick="toggleTheme()" id="themeBtn" title="切換深淺模式 (快速鍵: T)">☀️ 切換深淺</button>
+    </div>
+  </header>
+
+  <!-- 主舞台 -->
+  <main class="stage-container">
+
+    <!-- 頂部雙語大標題 -->
+    <section class="stage-header">
+      <div class="title-group">
+        <h1 class="main-title-en">Hands-on Assembly: 2 Golden Rules</h1>
+        <div class="main-title-zh">學生實作：兩大關鍵鐵律</div>
+      </div>
+      <div class="header-tip">
+        💡 全班牢記此二大原則，作品顆顆點亮！
+      </div>
+    </section>
+
+    <!-- 雙大卡並列區 (50% / 50%) -->
+    <section class="rules-grid">
+
+      <!-- ======================================================================
+           RULE 1: 正極接正極，負極接負極 (Polarity Alignment)
+           ====================================================================== -->
+      <article class="rule-card polarity-card">
+        <div class="card-top-bar">
+          <span class="rule-tag">RULE 01 • 極性對齊</span>
+          <span style="font-family: var(--font-mono); font-size: 0.85rem; font-weight: 800; color: var(--cyan-core);">Anode(+) / Cathode(-)</span>
+        </div>
+
+        <h2 class="card-title-en">Positive to Positive · Negative to Negative</h2>
+        <div class="card-title-zh">
+          <span>正接正 ➕ · 負接負 ➖</span>
+        </div>
+
+        <!-- 簡潔超大示意圖 (極性對齊) -->
+        <div class="card-visual-stage" id="polarityStage">
+          <div class="status-toast" id="polarityToast">✓ 長正(+) 短負(-)，方向正確對齊！</div>
+          
+          <svg class="diagram-svg" viewBox="0 0 600 340" xmlns="http://www.w3.org/2000/svg">
+            <defs>
+              <filter id="ledGlowCyan" x="-40%" y="-40%" width="180%" height="180%">
+                <feGaussianBlur stdDeviation="8" result="blur" />
+                <feMerge><feMergeNode in="blur" /><feMergeNode in="SourceGraphic" /></feMerge>
+              </filter>
+            </defs>
+
+            <!-- 左側：正極說明卡 -->
+            <g transform="translate(25, 40)">
+              <rect x="0" y="0" width="165" height="150" rx="14" fill="rgba(239, 68, 68, 0.15)" stroke="#ef4444" stroke-width="2.5"/>
+              <rect x="15" y="-14" width="135" height="30" rx="15" fill="#ef4444"/>
+              <text x="82" y="7" fill="#ffffff" font-family="var(--font-display)" font-size="16" font-weight="900" text-anchor="middle">➕ 正極 (Anode)</text>
+              <text x="82" y="55" fill="#fca5a5" font-family="var(--font-sans)" font-size="22" font-weight="900" text-anchor="middle">長腳</text>
+              <text x="82" y="85" fill="#fecdd3" font-family="var(--font-mono)" font-size="14" font-weight="700" text-anchor="middle">Long Pin</text>
+              <line x1="25" y1="102" x2="140" y2="102" stroke="rgba(239, 68, 68, 0.4)" stroke-width="2"/>
+              <text x="82" y="128" fill="#ffffff" font-family="var(--font-sans)" font-size="15" font-weight="800" text-anchor="middle">➔ 插 正極孔 (+)</text>
+            </g>
+
+            <!-- 中央：LED 與接腳 -->
+            <g transform="translate(300, 25)">
+              <!-- LED 本體外殼 (青藍色半透明) -->
+              <path d="M -42 95 L -42 45 A 42 42 0 0 1 42 45 L 42 95 Z" fill="#0284c7" stroke="#38bdf8" stroke-width="4" opacity="0.95"/>
+              <!-- 凸緣底部 -->
+              <rect x="-48" y="93" width="96" height="10" rx="4" fill="#0369a1" stroke="#38bdf8" stroke-width="2"/>
+              <!-- 內部發光核心 -->
+              <circle cx="0" cy="45" r="14" fill="#ffffff" filter="url(#ledGlowCyan)"/>
+              <text x="0" y="80" fill="#ffffff" font-family="var(--font-display)" font-size="18" font-weight="900" text-anchor="middle">LED</text>
+
+              <!-- 左接腳：長腳 (+) 紅色粗線 -->
+              <line x1="-35" y1="103" x2="-35" y2="225" stroke="#ef4444" stroke-width="10" stroke-linecap="round"/>
+              <text x="-60" y="175" fill="#ef4444" font-family="var(--font-display)" font-size="28" font-weight="900" text-anchor="middle">＋</text>
+
+              <!-- 右接腳：短腳 (-) 藍色粗線 -->
+              <line x1="35" y1="103" x2="35" y2="185" stroke="#38bdf8" stroke-width="10" stroke-linecap="round"/>
+              <text x="60" y="155" fill="#38bdf8" font-family="var(--font-display)" font-size="28" font-weight="900" text-anchor="middle">－</text>
+            </g>
+
+            <!-- 右側：負極說明卡 -->
+            <g transform="translate(410, 40)">
+              <rect x="0" y="0" width="165" height="150" rx="14" fill="rgba(56, 189, 248, 0.15)" stroke="#38bdf8" stroke-width="2.5"/>
+              <rect x="15" y="-14" width="135" height="30" rx="15" fill="#0284c7"/>
+              <text x="82" y="7" fill="#ffffff" font-family="var(--font-display)" font-size="16" font-weight="900" text-anchor="middle">➖ 負極 (Cathode)</text>
+              <text x="82" y="55" fill="#93c5fd" font-family="var(--font-sans)" font-size="22" font-weight="900" text-anchor="middle">短腳</text>
+              <text x="82" y="85" fill="#bfdbfe" font-family="var(--font-mono)" font-size="14" font-weight="700" text-anchor="middle">Short Pin</text>
+              <line x1="25" y1="102" x2="140" y2="102" stroke="rgba(56, 189, 248, 0.4)" stroke-width="2"/>
+              <text x="82" y="128" fill="#ffffff" font-family="var(--font-sans)" font-size="15" font-weight="800" text-anchor="middle">➔ 插 負極孔 (-)</text>
+            </g>
+
+            <!-- 底部：電路板 (PCB) 孔位底座 -->
+            <g transform="translate(80, 248)">
+              <!-- 電路板綠底 -->
+              <rect x="0" y="0" width="440" height="72" rx="14" fill="#064e3b" stroke="#10b981" stroke-width="3"/>
+              <text x="32" y="42" fill="#34d399" font-family="var(--font-mono)" font-size="14" font-weight="800">PCB BOARD</text>
+
+              <!-- 左焊孔：正極孔 (+) 對齊 x=265 (local 185) -->
+              <g transform="translate(185, 34)">
+                <circle cx="0" cy="0" r="20" fill="#7f1d1d" stroke="#ef4444" stroke-width="3.5"/>
+                <circle cx="0" cy="0" r="7" fill="#0f172a"/>
+                <text x="0" y="7" fill="#ffffff" font-family="var(--font-display)" font-size="20" font-weight="900" text-anchor="middle">+</text>
+              </g>
+              <text x="185" y="64" fill="#fca5a5" font-family="var(--font-sans)" font-size="12" font-weight="900" text-anchor="middle">正極孔 (+)</text>
+
+              <!-- 右焊孔：負極孔 (-) 對齊 x=335 (local 255) -->
+              <g transform="translate(255, 34)">
+                <circle cx="0" cy="0" r="20" fill="#0c4a6e" stroke="#38bdf8" stroke-width="3.5"/>
+                <circle cx="0" cy="0" r="7" fill="#0f172a"/>
+                <text x="0" y="6" fill="#ffffff" font-family="var(--font-display)" font-size="22" font-weight="900" text-anchor="middle">-</text>
+              </g>
+              <text x="255" y="64" fill="#93c5fd" font-family="var(--font-sans)" font-size="12" font-weight="900" text-anchor="middle">負極孔 (-)</text>
+
+              <!-- 對準虛線導引箭頭 -->
+              <path d="M 185 -16 L 185 8" stroke="#ef4444" stroke-width="3" stroke-dasharray="4 4"/>
+              <path d="M 255 -16 L 255 8" stroke="#38bdf8" stroke-width="3" stroke-dasharray="4 4"/>
+            </g>
+          </svg>
+        </div>
+
+        <!-- 底部口訣 -->
+        <div class="card-bottom-info">
+          <div class="mantra-pill" style="font-size: 1.1rem; justify-content: center; gap: 1.5rem; padding: 0.65rem 1rem;">
+            <span>🔴 <b>長腳接正極 (+)</b></span>
+            <span>⚡ 一一對齊 ⚡</span>
+            <span>🔵 <b>短腳接負極 (-)</b></span>
+          </div>
+          <div class="card-interactive-action">
+            <button class="interactive-btn" onclick="highlightPolarity()" id="btnPolarityDemo" style="font-size: 1rem; padding: 0.6rem 1rem;">
+              <span>🔍 點擊牢記：長正(+)、短負(-)，絕不接反！</span>
+            </button>
+          </div>
+        </div>
+      </article>
+
+      <!-- ======================================================================
+           RULE 2: 銲完一顆立即測試！(Solder 1, Test 1!)
+           ====================================================================== -->
+      <article class="rule-card test-card">
+        <div class="card-top-bar">
+          <span class="rule-tag">RULE 02 • 即時驗收</span>
+          <span style="font-family: var(--font-mono); font-size: 0.85rem; font-weight: 800; color: var(--amber-gold);">Solder 1 ➔ Test 1</span>
+        </div>
+
+        <h2 class="card-title-en">Solder 1 ➔ Test 1 ➔ Next One!</h2>
+        <div class="card-title-zh">
+          <span>銲接完立即測試 💡</span>
+        </div>
+
+        <!-- 簡潔超大示意圖 (銲1測1) -->
+        <div class="card-visual-stage" id="testStage">
+          <div class="status-toast" id="testToast" style="background: rgba(16, 185, 129, 0.25); border-color: #10b981; color: #34d399; font-size: 1.05rem;">
+            ⚡ 測試成功！LED 發光！會亮才做下一顆！✓
+          </div>
+
+          <svg class="diagram-svg" viewBox="0 0 600 340" xmlns="http://www.w3.org/2000/svg">
+            <defs>
+              <filter id="bulbBurstClean" x="-50%" y="-50%" width="200%" height="200%">
+                <feGaussianBlur stdDeviation="16" result="blur" />
+                <feMerge><feMergeNode in="blur" /><feMergeNode in="SourceGraphic" /></feMerge>
+              </filter>
+            </defs>
+
+            <!-- ===================== 左側：Step 1 銲好 1 顆 ===================== -->
+            <g transform="translate(30, 35)">
+              <!-- 步驟大標題卡 -->
+              <rect x="0" y="0" width="220" height="260" rx="16" fill="rgba(30, 41, 59, 0.5)" stroke="rgba(255, 255, 255, 0.12)" stroke-width="2"/>
+              <rect x="25" y="-14" width="170" height="32" rx="16" fill="#334155" stroke="#64748b" stroke-width="2"/>
+              <text x="110" y="7" fill="#ffffff" font-family="var(--font-display)" font-size="16" font-weight="900" text-anchor="middle">1. 銲好 1 顆 LED</text>
+
+              <!-- 銲接示意 (電烙鐵與焊點) -->
+              <g transform="translate(110, 100)">
+                <!-- 烙鐵筆身 -->
+                <g transform="rotate(-40)">
+                  <rect x="-10" y="10" width="20" height="70" rx="6" fill="#1e293b" stroke="#38bdf8" stroke-width="2.5"/>
+                  <rect x="-6" y="-30" width="12" height="40" rx="3" fill="#94a3b8"/>
+                  <polygon points="0,-52 -6,-30 6,-30" fill="#fbbf24"/>
+                  <circle cx="0" cy="-52" r="5" fill="#ef4444"/>
+                </g>
+                <!-- 錫點焊道 (銀色光澤圓錐) -->
+                <ellipse cx="-35" cy="40" rx="22" ry="12" fill="#cbd5e1" stroke="#94a3b8" stroke-width="2"/>
+                <polygon points="-35,22 -48,40 -22,40" fill="#e2e8f0"/>
+              </g>
+
+              <text x="110" y="200" fill="#94a3b8" font-family="var(--font-sans)" font-size="15" font-weight="800" text-anchor="middle">完成當前接點銲接</text>
+              <rect x="35" y="220" width="150" height="26" rx="6" fill="rgba(255, 255, 255, 0.06)"/>
+              <text x="110" y="238" fill="#cbd5e1" font-family="var(--font-mono)" font-size="12" font-weight="700" text-anchor="middle">Solder Current Pin</text>
+            </g>
+
+            <!-- ===================== 中間：大轉場箭頭 ===================== -->
+            <g transform="translate(262, 140)">
+              <polygon points="0,5 20,5 20,-10 42,15 20,40 20,25 0,25" fill="#fbbf24"/>
+              <text x="20" y="-18" fill="#fbbf24" font-family="var(--font-display)" font-size="15" font-weight="900" text-anchor="middle">立即</text>
+            </g>
+
+            <!-- ===================== 右側：Step 2 立即測試！===================== -->
+            <g transform="translate(315, 35)">
+              <!-- 步驟大標題卡 -->
+              <rect x="0" y="0" width="250" height="260" rx="16" fill="rgba(6, 95, 70, 0.15)" stroke="#10b981" stroke-width="2.5"/>
+              <rect x="25" y="-14" width="200" height="32" rx="16" fill="#065f46" stroke="#10b981" stroke-width="2"/>
+              <text x="125" y="7" fill="#34d399" font-family="var(--font-display)" font-size="16" font-weight="900" text-anchor="middle">2. 立即通電測試！⚡</text>
+
+              <!-- 發光 LED 燈泡 -->
+              <g transform="translate(125, 95)">
+                <!-- 放射狀光暈 -->
+                <circle id="lightAura" cx="0" cy="0" r="60" fill="#fbbf24" opacity="0.3" class="led-glowing"/>
+                <!-- 放射光芒線 -->
+                <g stroke="#fde047" stroke-width="3" stroke-linecap="round">
+                  <line x1="0" y1="-42" x2="0" y2="-58"/>
+                  <line x1="30" y1="-30" x2="42" y2="-42"/>
+                  <line x1="42" y1="0" x2="58" y2="0"/>
+                  <line x1="30" y1="30" x2="42" y2="42"/>
+                  <line x1="-30" y1="-30" x2="-42" y2="-42"/>
+                  <line x1="-42" y1="0" x2="-58" y2="0"/>
+                  <line x1="-30" y1="30" x2="-42" y2="42"/>
+                </g>
+                <!-- 燈泡主體 -->
+                <circle cx="0" cy="0" r="32" fill="#fbbf24" stroke="#ffffff" stroke-width="3.5" filter="url(#bulbBurstClean)"/>
+                <circle cx="0" cy="0" r="20" fill="#ffffff"/>
+                <text x="0" y="6" fill="#b45309" font-family="var(--font-display)" font-size="16" font-weight="900" text-anchor="middle">ON!</text>
+              </g>
+
+              <!-- 9V 測試標示 -->
+              <text x="125" y="180" fill="#fde047" font-family="var(--font-sans)" font-size="14" font-weight="800" text-anchor="middle">🔋 碰觸電池測試端點</text>
+
+              <!-- 關鍵綠色大徽章 -->
+              <rect x="20" y="202" width="210" height="42" rx="21" fill="#10b981"/>
+              <text x="125" y="228" fill="#ffffff" font-family="var(--font-sans)" font-size="15" font-weight="900" text-anchor="middle">✓ 會亮才做下一顆！</text>
+            </g>
+          </svg>
+        </div>
+
+        <!-- 底部口訣與切換控制 -->
+        <div class="card-bottom-info">
+          <div class="mantra-pill" style="font-size: 1.1rem; justify-content: center; gap: 1rem; padding: 0.65rem 1rem;">
+            <span>💡 <b>銲一顆、測一顆</b></span>
+            <span>➔</span>
+            <span><b>會亮才做下一顆！</b></span>
+          </div>
+          <div class="card-interactive-action">
+            <button class="interactive-btn" onclick="triggerLightTest()" id="btnLightTest" style="font-size: 1rem; padding: 0.6rem 1rem; background: var(--amber-gold); color: #000; border-color: var(--amber-gold);">
+              <span>⚡ 點擊模擬通電測試：點亮 LED！</span>
+            </button>
+            <button class="interactive-btn" onclick="resetLightTest()" style="max-width: 130px; font-size: 0.95rem; padding: 0.6rem 0.8rem;">
+              <span>🔄 熄滅重測</span>
+            </button>
+          </div>
+        </div>
+      </article>
+
+    </section>
+
+    <!-- 底部常駐雙語口訣條 -->
+    <footer class="classroom-footer-banner">
+      <div class="banner-left">
+        <span class="banner-badge">CLASS MANTRA</span>
+        <span>正極接正極，負極接負極；每銲一顆，立即測試；依序推進，人人成功點亮！</span>
+      </div>
+      <div class="banner-right">
+        <span>按鍵盤 [1] [2] 觸發兩側互動</span>
+        <span>[←] [→] 切換簡報</span>
+        <span>[T] 切換深淺模式</span>
+      </div>
+    </footer>
+
+  </main>
+
+  <!-- 互動腳本與鍵盤控制 -->
+  <script>
+    // 深淺模式切換
+    function toggleTheme() {
+      const html = document.documentElement;
+      const current = html.getAttribute('data-theme') || 'dark';
+      const next = current === 'dark' ? 'light' : 'dark';
+      html.setAttribute('data-theme', next);
+      const btn = document.getElementById('themeBtn');
+      if (btn) btn.textContent = next === 'dark' ? '☀️ 切換深淺' : '🌙 切換深淺';
+    }
+
+    // 提示通知浮條工具
+    function showToast(id, text, color) {
+      const toast = document.getElementById(id);
+      if (!toast) return;
+      if (text) toast.innerHTML = text;
+      toast.classList.add('show');
+      setTimeout(() => {
+        toast.classList.remove('show');
+      }, 3500);
+    }
+
+    // 互動 1：高亮極性
+    function highlightPolarity() {
+      showToast('polarityToast', '✓ 長腳為正(+)，短腳為負(-)，方向務必對齊！');
+      const stage = document.getElementById('polarityStage');
+      if (stage) {
+        stage.style.boxShadow = 'inset 0 0 40px rgba(56, 189, 248, 0.4)';
+        setTimeout(() => stage.style.boxShadow = 'none', 1500);
+      }
+    }
+
+    // 互動 1：反接警示
+    function testReverseWarning() {
+      showToast('polarityToast', '❌ 警告：正負接反將完全不亮，甚至損壞零件！', '#f43f5e');
+      const stage = document.getElementById('polarityStage');
+      if (stage) {
+        stage.style.boxShadow = 'inset 0 0 50px rgba(244, 63, 94, 0.5)';
+        setTimeout(() => stage.style.boxShadow = 'none', 1500);
+      }
+    }
+
+    // 互動 2：通電點亮測試
+    let testSuccess = false;
+    function triggerLightTest() {
+      testSuccess = true;
+      const aura = document.getElementById('lightAura');
+      const rays = document.getElementById('lightRays');
+      if (aura) {
+        aura.setAttribute('r', '170');
+        aura.setAttribute('opacity', '0.9');
+        aura.classList.add('test-sparkling');
+      }
+      if (rays) {
+        rays.setAttribute('opacity', '1');
+        rays.setAttribute('stroke-width', '5');
+      }
+      showToast('testToast', '🎉 通電點亮成功！PASS！請立刻進行下一顆！');
+    }
+
+    function resetLightTest() {
+      testSuccess = false;
+      const aura = document.getElementById('lightAura');
+      const rays = document.getElementById('lightRays');
+      if (aura) {
+        aura.setAttribute('r', '140');
+        aura.setAttribute('opacity', '0.35');
+        aura.classList.remove('test-sparkling');
+      }
+      if (rays) {
+        rays.setAttribute('opacity', '0.8');
+        rays.setAttribute('stroke-width', '3');
+      }
+      showToast('testToast', '🔄 準備進行下一顆通電測試...');
+    }
+
+    // 鍵盤快速鍵監聽
+    window.addEventListener('keydown', (e) => {
+      if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') return;
+
+      if (e.key === 't' || e.key === 'T') {
+        toggleTheme();
+      } else if (e.key === '1') {
+        highlightPolarity();
+      } else if (e.key === '2') {
+        triggerLightTest();
+      } else if (e.key === 'ArrowLeft' || e.key === 'PageUp') {
+        window.location.href = 'slide10_polarity_alignment.html';
+      } else if (e.key === 'ArrowRight' || e.key === 'PageDown' || e.key === ' ') {
+        window.location.href = 'slide12_cleanup_packup.html';
+      }
+    });
+  </script>
+
+  
+
+  <!-- 4 大主題切換與播放器父子通訊橋接 -->
+  <script>
+    (function() {
+      const THEMES = ['cyber', 'clean', 'maker', 'titanium'];
+      function applyTheme(theme) {
+        if (!theme) theme = 'cyber';
+        document.documentElement.setAttribute('data-theme', theme);
+      }
+      try {
+        const savedTheme = localStorage.getItem('slides_theme') || 'cyber';
+        applyTheme(savedTheme);
+      } catch(e) {}
+
+      function cycleLocalTheme() {
+        const curr = document.documentElement.getAttribute('data-theme') || 'cyber';
+        let idx = THEMES.indexOf(curr);
+        if (idx === -1) idx = 0;
+        const next = THEMES[(idx + 1) % THEMES.length];
+        applyTheme(next);
+        try { localStorage.setItem('slides_theme', next); } catch(e) {}
+      }
+
+      window.addEventListener('keydown', function(e) {
+        if (window.parent && window.parent !== window) {
+          if (e.key === 'ArrowRight' || e.key === 'PageDown' || e.key === ' ') {
+            e.preventDefault();
+            window.parent.postMessage({ type: 'SLIDE_NAV', action: 'next' }, '*');
+          } else if (e.key === 'ArrowLeft' || e.key === 'PageUp') {
+            e.preventDefault();
+            window.parent.postMessage({ type: 'SLIDE_NAV', action: 'prev' }, '*');
+          } else if (e.key === 't' || e.key === 'T') {
+            window.parent.postMessage({ type: 'SLIDE_NAV', action: 'theme' }, '*');
+          }
+        } else {
+          // 獨立開啟時按 T 也能切換 4 種風格
+          if (e.key === 't' || e.key === 'T') {
+            cycleLocalTheme();
+          }
+        }
+      });
+    })();
+  </script>
+
+</body>
+</html>

@@ -1,0 +1,797 @@
+<!DOCTYPE html>
+<html lang="zh-TW" data-theme="dark">
+<head>
+  <link rel="stylesheet" href="slides_theme.css?v=20261013">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Slide 05: 半導體四大核心能力 | 生活科技雙語教學</title>
+  
+  <!-- Google Fonts: Inter, Outfit, JetBrains Mono -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Outfit:wght@500;600;700;800;900&family=JetBrains+Mono:wght@600;700;800&display=swap" rel="stylesheet">
+
+  <style>
+    /* ===================================================================
+       1. Design Tokens & Visual Hierarchy
+       =================================================================== */
+    :root {
+      --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      --font-display: 'Outfit', var(--font-sans);
+      --font-mono: 'JetBrains Mono', monospace;
+    }
+
+    
+
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background-color: var(--bg-deep) !important;
+      background-image: var(--bg-gradient) !important;
+      transition: background-color 0.3s ease, color 0.3s ease;
+      user-select: none;
+    }
+
+    /* 頂部導覽列 */
+    .lab-bar {
+      width: 100%;
+      background: var(--nav-bg) !important;
+      backdrop-filter: blur(10px);
+      border-bottom: 1px solid var(--border-subtle) !important;
+      padding: 0.35rem 1.6rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      z-index: 999;
+      box-sizing: border-box;
+    }
+    .lab-btn {
+      background: rgba(255, 255, 255, 0.08);
+      border: 1px solid var(--border-subtle);
+      color: var(--text-heading);
+      padding: 0.28rem 0.75rem;
+      border-radius: 8px;
+      font-size: 0.82rem;
+      font-weight: 700;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
+      transition: all 0.2s ease;
+      text-decoration: none;
+    }
+    .lab-btn:hover {
+      background: rgba(56, 189, 248, 0.18);
+      border-color: var(--cyan-core);
+      color: var(--cyan-core);
+    }
+    .lab-btn.active {
+      background: var(--cyan-core);
+      color: #041226;
+      border-color: var(--cyan-core);
+    }
+
+    /* 主舞台 (1080p 零滾動自適應) */
+    .slide-stage {
+      width: 100%;
+      max-width: 1440px;
+      height: calc(100vh - 46px);
+      max-height: 864px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      padding: 0.8rem 1.8rem 1rem;
+      position: relative;
+    }
+
+    /* 標題區 */
+    .slide-header {
+      text-align: center;
+      margin-bottom: 0.3rem;
+    }
+    .slide-tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      font-family: var(--font-mono);
+      font-size: 0.82rem;
+      font-weight: 800;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--cyan-core);
+      background: rgba(56, 189, 248, 0.12);
+      border: 1px solid rgba(56, 189, 248, 0.3);
+      padding: 0.18rem 0.8rem;
+      border-radius: 9999px;
+      margin-bottom: 0.25rem;
+    }
+    .slide-title {
+      font-family: var(--font-display);
+      font-size: clamp(2.3rem, 3.4vw, 3.4rem);
+      font-weight: 900;
+      letter-spacing: -0.02em;
+      line-height: 1.15;
+      color: var(--text-pure);
+      margin-bottom: 0.15rem;
+    }
+    .slide-subtitle {
+      font-size: clamp(0.96rem, 1.25vw, 1.18rem);
+      color: var(--text-dim);
+      font-weight: 600;
+    }
+
+    /* ===================================================================
+       2. 4 大核心功能超大圖示卡片 (Grid-4 Layout)
+       =================================================================== */
+    .grid-4-functions {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: clamp(0.9rem, 1.4vw, 1.5rem);
+      width: 100%;
+      flex: 1;
+      margin-top: 0.4rem;
+      margin-bottom: 0.3rem;
+    }
+
+    .function-card {
+      background: var(--bg-card);
+      border: 2.5px solid var(--border-subtle);
+      border-radius: 22px;
+      padding: clamp(0.9rem, 1.4vh, 1.3rem) clamp(0.9rem, 1.2vw, 1.25rem);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-start;
+      text-align: center;
+      position: relative;
+      box-shadow: var(--shadow-card);
+      backdrop-filter: blur(14px);
+      transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+      overflow: hidden;
+      cursor: pointer;
+    }
+    .function-card:hover {
+      transform: translateY(-4px);
+      border-color: var(--border-light);
+    }
+    .function-card.revealed {
+      border-color: var(--cyan-core);
+      box-shadow: 0 16px 36px rgba(0, 0, 0, 0.4), var(--shadow-glow-cyan);
+    }
+
+    /* 水印編號 */
+    .func-watermark {
+      position: absolute;
+      top: 0.6rem;
+      right: 1rem;
+      font-family: var(--font-display);
+      font-size: 3.8rem;
+      font-weight: 900;
+      color: var(--border-light);
+      opacity: 0.12;
+      line-height: 1;
+      pointer-events: none;
+    }
+
+    /* 頂部標號與朗讀按鈕 */
+    .func-card-header {
+      width: 100%;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 0.2rem;
+      z-index: 2;
+    }
+    .func-index-tag {
+      font-family: var(--font-mono);
+      font-size: 0.8rem;
+      font-weight: 900;
+      letter-spacing: 0.08em;
+      padding: 0.15rem 0.55rem;
+      border-radius: 6px;
+      background: rgba(255, 255, 255, 0.08);
+      color: var(--text-dim);
+    }
+
+
+    /* ===================================================================
+       ★ 巨幅圖示專區 (永久最先出現，高度約 160px) ★
+       =================================================================== */
+    .func-visual-box {
+      width: 100%;
+      height: clamp(140px, 19vh, 175px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      margin: 0.2rem 0 0.5rem;
+      transition: all 0.35s ease;
+      flex-shrink: 0;
+    }
+    .func-svg {
+      width: 100%;
+      height: 100%;
+      max-height: 170px;
+      filter: drop-shadow(0 6px 14px rgba(0, 0, 0, 0.45));
+      transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .function-card:hover .func-svg {
+      transform: scale(1.05);
+    }
+    .function-card.revealed .func-svg {
+      filter: drop-shadow(0 8px 20px rgba(56, 189, 248, 0.5));
+    }
+
+    /* ===================================================================
+       ★ 文字逐點揭示容器 (依序點擊出現) ★
+       =================================================================== */
+    .func-details-block {
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+      opacity: 0;
+      transform: translateY(18px);
+      pointer-events: none;
+    }
+    .func-details-block.revealed {
+      opacity: 1;
+      transform: translateY(0);
+      pointer-events: auto;
+    }
+
+    /* 提示佔位框 (當文字尚未揭示時顯示輕柔提示) */
+    .func-placeholder-cue {
+      font-size: 0.84rem;
+      color: var(--text-dim);
+      border: 1.5px dashed var(--border-subtle);
+      border-radius: 12px;
+      padding: 0.6rem 0.8rem;
+      width: 100%;
+      margin-top: 0.5rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.4rem;
+      transition: all 0.3s ease;
+    }
+    .func-details-block.revealed + .func-placeholder-cue,
+    .function-card.revealed .func-placeholder-cue {
+      display: none;
+    }
+
+    /* ===================================================================
+       ★ 核心功能主標題：Computing 運算 (超大字級，極度醒目！) ★
+       =================================================================== */
+    .func-title-en {
+      font-family: var(--font-display);
+      font-size: clamp(2rem, 2.7vw, 2.9rem);
+      font-weight: 900;
+      color: var(--text-pure);
+      line-height: 1.15;
+      letter-spacing: -0.02em;
+      margin-bottom: 0.1rem;
+    }
+    .func-title-zh {
+      font-size: clamp(1.65rem, 2.2vw, 2.35rem);
+      font-weight: 900;
+      line-height: 1.25;
+      margin-bottom: 0.45rem;
+      letter-spacing: 0.02em;
+    }
+
+    /* ===================================================================
+       ★ 底下次要說明：小字階、輔助支撐 ★
+       =================================================================== */
+    .func-desc-box {
+      width: 100%;
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid var(--border-subtle);
+      border-radius: 12px;
+      padding: clamp(0.45rem, 0.7vh, 0.65rem) clamp(0.6rem, 1vw, 0.85rem);
+      font-size: clamp(0.8rem, 0.96vw, 0.92rem);
+      line-height: 1.42;
+      color: var(--text-dim);
+      font-weight: 500;
+      margin-top: 0.2rem;
+    }
+    .func-examples {
+      font-family: var(--font-mono);
+      font-size: 0.76rem;
+      color: var(--text-body);
+      margin-top: 0.25rem;
+      font-weight: 700;
+    }
+
+    /* ===================================================================
+       四大卡片個別主題配色強化
+       =================================================================== */
+    /* 1. Computing (Cyan) */
+    .function-card.card-computing.revealed {
+      border-color: var(--cyan-core);
+      box-shadow: 0 16px 36px rgba(0, 0, 0, 0.4), var(--shadow-glow-cyan);
+    }
+    .function-card.card-computing .func-title-zh {
+      color: var(--cyan-core);
+    }
+
+    /* 2. Sensing (Amber) */
+    .function-card.card-sensing.revealed {
+      border-color: var(--amber-warm);
+      box-shadow: 0 16px 36px rgba(0, 0, 0, 0.4), var(--shadow-glow-amber);
+    }
+    .function-card.card-sensing .func-title-zh {
+      color: var(--amber-warm);
+    }
+
+    /* 3. Control (Indigo/Violet) */
+    .function-card.card-control.revealed {
+      border-color: var(--indigo-glow);
+      box-shadow: 0 16px 36px rgba(0, 0, 0, 0.4), var(--shadow-glow-indigo);
+    }
+    .function-card.card-control .func-title-zh {
+      color: var(--indigo-glow);
+    }
+
+    /* 4. Lighting (Emerald Green / Gold - HERO CARD!) */
+    .function-card.card-lighting {
+      border-color: rgba(52, 211, 153, 0.35);
+      background: linear-gradient(175deg, rgba(52, 211, 153, 0.08) 0%, var(--bg-card) 100%);
+    }
+    .function-card.card-lighting.revealed {
+      border-color: var(--emerald-mint);
+      background: linear-gradient(175deg, rgba(52, 211, 153, 0.16) 0%, var(--bg-card) 100%);
+      box-shadow: 0 18px 42px rgba(52, 211, 153, 0.4), var(--shadow-glow-mint);
+    }
+    .function-card.card-lighting .func-title-zh {
+      color: var(--emerald-mint);
+    }
+    .hero-badge-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
+      font-size: 0.74rem;
+      font-weight: 900;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: #042f24;
+      background: var(--emerald-mint);
+      padding: 0.22rem 0.65rem;
+      border-radius: 9999px;
+      box-shadow: 0 0 14px rgba(52, 211, 153, 0.45);
+    }
+    .hero-hook-box {
+      margin-top: 0.3rem;
+      padding: 0.25rem 0.6rem;
+      border-radius: 9px;
+      background: rgba(52, 211, 153, 0.16);
+      border: 1.5px dashed var(--emerald-mint);
+      font-size: 0.8rem;
+      font-weight: 800;
+      color: var(--emerald-mint);
+      width: 100%;
+    }
+
+    /* 底部操作列 */
+    .lab-footer-tips {
+      margin-top: 0.35rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 0.82rem;
+      color: var(--text-dim);
+      font-weight: 600;
+      padding: 0.1rem 0.5rem;
+    }
+    .kbd-chip {
+      background: rgba(255, 255, 255, 0.1);
+      border: 1px solid var(--border-subtle);
+      padding: 0.15rem 0.45rem;
+      border-radius: 6px;
+      font-family: var(--font-mono);
+      color: var(--text-heading);
+      font-weight: 700;
+    }
+  </style>
+</head>
+<body>
+  <!-- High-Tech Semiconductor Wafer Photographic Backdrop -->
+  <div class="tech-bg-wallpaper"></div>
+
+
+  <!-- 頂部獨立調校導覽列 -->
+  <header class="lab-bar">
+    <div style="display: flex; align-items: center; gap: 0.8rem;">
+      <a href="index.html" class="lab-btn" style="text-decoration: none; color: var(--emerald-mint); font-weight: 800;">📋 簡報目錄</a>
+      <span style="font-family: var(--font-mono, monospace); font-weight: 900; color: var(--cyan-core); font-size: 0.88rem; background: rgba(56, 189, 248, 0.12); border: 1px solid rgba(56, 189, 248, 0.35); padding: 0.18rem 0.6rem; border-radius: 6px;">
+        SLIDE 05 / 12
+      </span>
+      <span style="color: var(--text-dim); font-size: 0.82rem; font-weight: 600;">| 半導體四大核心能力 (大圖示與文字逐點講解版)</span>
+    </div>
+
+    <div style="display: flex; align-items: center; gap: 0.5rem;">
+      <a href="slide04_semiconductor_switch.html" class="lab-btn" style="text-decoration: none;">◀ 上一頁 (04)</a>
+      <a href="slide06_sentence_frame.html" class="lab-btn" style="text-decoration: none;">下一頁 (06) ▶</a>
+      
+      <!-- 逐步揭示講解進度按鈕 -->
+      <button class="lab-btn active" id="modeStepBtn" onclick="revealNextCard()">
+        <span>🪜 點擊講解 (<span id="currStepNum">0</span>/4)</span>
+      </button>
+      <button class="lab-btn" id="modeShowAllBtn" onclick="showAllTexts()">
+        <span>👁️ 全部顯示</span>
+      </button>
+      <button class="lab-btn" onclick="resetSteps()" title="重置文字重新講解 (R)">
+        <span>🔄 重置 (清空文字)</span>
+      </button>
+
+      <!-- 主題切換 -->
+      <button class="lab-btn" onclick="toggleTheme()" title="切換主題 (T)">
+        <span id="themeIcon">☀️</span> 切換主題
+      </button>
+    </div>
+  </header>
+
+  <!-- 主舞台 -->
+  <main class="slide-stage" onclick="handleStageClick(event)">
+
+    <!-- 標題區 -->
+    <header class="slide-header">
+      <span class="slide-tag">Part 1 • Applications</span>
+      <h1 class="slide-title">4 Core Functions of Semiconductors</h1>
+      <p class="slide-subtitle">半導體在現代科技裝置中的四大核心功能 • 先觀察圖示，依序點擊講解</p>
+    </header>
+
+    <!-- 4 大核心功能卡片 (超大圖示永久先出，文字點擊依次顯現) -->
+    <section class="grid-4-functions">
+
+      <!-- ================= 1. Computing ================= -->
+      <article class="function-card card-computing" id="card-1" onclick="handleCardClick(1, event)">
+        <div class="func-watermark">01</div>
+        <div class="func-card-header">
+          <span class="func-index-tag">CORE 01</span>
+        </div>
+
+        <!-- 巨幅 CPU 運算晶片向量圖示 (永久顯示) -->
+        <div class="func-visual-box">
+          <svg class="func-svg" viewBox="0 0 160 160" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <rect x="20" y="20" width="120" height="120" rx="18" fill="#0f172a" stroke="#0284c7" stroke-width="3"/>
+            <g stroke="#38bdf8" stroke-width="3" stroke-linecap="round">
+              <line x1="36" y1="12" x2="36" y2="20"/><line x1="52" y1="12" x2="52" y2="20"/><line x1="68" y1="12" x2="68" y2="20"/>
+              <line x1="92" y1="12" x2="92" y2="20"/><line x1="108" y1="12" x2="108" y2="20"/><line x1="124" y1="12" x2="124" y2="20"/>
+              <line x1="36" y1="140" x2="36" y2="148"/><line x1="52" y1="140" x2="52" y2="148"/><line x1="68" y1="140" x2="68" y2="148"/>
+              <line x1="92" y1="140" x2="92" y2="148"/><line x1="108" y1="140" x2="108" y2="148"/><line x1="124" y1="140" x2="124" y2="148"/>
+              <line x1="12" y1="36" x2="20" y2="36"/><line x1="12" y1="52" x2="20" y2="52"/><line x1="12" y1="68" x2="20" y2="68"/>
+              <line x1="12" y1="92" x2="20" y2="92"/><line x1="12" y1="108" x2="20" y2="108"/><line x1="12" y1="124" x2="20" y2="124"/>
+              <line x1="140" y1="36" x2="148" y2="36"/><line x1="140" y1="52" x2="148" y2="52"/><line x1="140" y1="68" x2="148" y2="68"/>
+              <line x1="140" y1="92" x2="148" y2="92"/><line x1="140" y1="108" x2="148" y2="108"/><line x1="140" y1="124" x2="148" y2="124"/>
+            </g>
+            <rect x="36" y="36" width="88" height="88" rx="12" fill="#0284c7" stroke="#38bdf8" stroke-width="3" filter="drop-shadow(0 0 16px rgba(56,189,248,0.7))"/>
+            <path d="M 44 44 L 60 60 M 116 44 L 100 60 M 44 116 L 60 100 M 116 116 L 100 100" stroke="#38bdf8" stroke-width="2.5" stroke-linecap="round"/>
+            <rect x="54" y="54" width="52" height="52" rx="8" fill="#0b1329" stroke="#38bdf8" stroke-width="2"/>
+            <text x="80" y="85" text-anchor="middle" fill="#ffffff" font-family="'Outfit', sans-serif" font-weight="900" font-size="18" letter-spacing="1">CPU</text>
+            <circle cx="50" cy="50" r="3.5" fill="#fbbf24" filter="drop-shadow(0 0 4px #fbbf24)"/>
+            <circle cx="110" cy="50" r="3.5" fill="#34d399" filter="drop-shadow(0 0 4px #34d399)"/>
+            <circle cx="50" cy="110" r="3.5" fill="#38bdf8" filter="drop-shadow(0 0 4px #38bdf8)"/>
+            <circle cx="110" cy="110" r="3.5" fill="#fb7185" filter="drop-shadow(0 0 4px #fb7185)"/>
+          </svg>
+        </div>
+
+        <!-- 點擊後顯現的文字區塊 (超大標題 + 精巧說明) -->
+        <div class="func-details-block" id="details-1">
+          <div class="func-title-en">1. Computing</div>
+          <div class="func-title-zh">運算</div>
+          <div class="func-desc-box">
+            高速處理資料與執行邏輯指令
+            <div class="func-examples">CPU • GPU • 手機晶片</div>
+          </div>
+        </div>
+
+        <!-- 未揭示時的點擊提示 -->
+        <div class="func-placeholder-cue" id="cue-1">
+          <span>👆 點擊揭曉功能名稱</span>
+        </div>
+      </article>
+
+      <!-- ================= 2. Sensing ================= -->
+      <article class="function-card card-sensing" id="card-2" onclick="handleCardClick(2, event)">
+        <div class="func-watermark">02</div>
+        <div class="func-card-header">
+          <span class="func-index-tag">CORE 02</span>
+        </div>
+
+        <!-- 巨幅光電感測雷達波向量圖示 (永久顯示) -->
+        <div class="func-visual-box">
+          <svg class="func-svg" viewBox="0 0 160 160" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <rect x="45" y="85" width="70" height="45" rx="10" fill="#1e293b" stroke="#fbbf24" stroke-width="3"/>
+            <line x1="62" y1="130" x2="62" y2="148" stroke="#cbd5e1" stroke-width="4" stroke-linecap="round"/>
+            <line x1="98" y1="130" x2="98" y2="148" stroke="#cbd5e1" stroke-width="4" stroke-linecap="round"/>
+            <circle cx="80" cy="98" r="16" fill="#0f172a" stroke="#fbbf24" stroke-width="2.5"/>
+            <circle cx="80" cy="98" r="8" fill="#f59e0b" filter="drop-shadow(0 0 8px #f59e0b)"/>
+            <path d="M 58 70 Q 80 50 102 70" stroke="#fbbf24" stroke-width="3.5" stroke-linecap="round" fill="none" filter="drop-shadow(0 0 6px rgba(251,191,36,0.6))"/>
+            <path d="M 42 52 Q 80 26 118 52" stroke="#fbbf24" stroke-width="3.5" stroke-linecap="round" fill="none" opacity="0.85"/>
+            <path d="M 26 34 Q 80 2 134 34" stroke="#fbbf24" stroke-width="3.5" stroke-linecap="round" fill="none" opacity="0.55"/>
+            <circle cx="80" cy="18" r="4.5" fill="#ffffff" filter="drop-shadow(0 0 8px #fbbf24)"/>
+            <line x1="80" y1="28" x2="80" y2="40" stroke="#fbbf24" stroke-width="2.5" stroke-dasharray="2 3"/>
+          </svg>
+        </div>
+
+        <!-- 點擊後顯現的文字區塊 -->
+        <div class="func-details-block" id="details-2">
+          <div class="func-title-en">2. Sensing</div>
+          <div class="func-title-zh">感測</div>
+          <div class="func-desc-box">
+            偵測環境光線、溫度、距離變化
+            <div class="func-examples">光敏電阻 • 溫度感測 • 自動門</div>
+          </div>
+        </div>
+
+        <div class="func-placeholder-cue" id="cue-2">
+          <span>👆 點擊揭曉功能名稱</span>
+        </div>
+      </article>
+
+      <!-- ================= 3. Control ================= -->
+      <article class="function-card card-control" id="card-3" onclick="handleCardClick(3, event)">
+        <div class="func-watermark">03</div>
+        <div class="func-card-header">
+          <span class="func-index-tag">CORE 03</span>
+        </div>
+
+        <!-- 巨幅功率電晶體與高速開關控制向量圖示 (永久顯示) -->
+        <div class="func-visual-box">
+          <svg class="func-svg" viewBox="0 0 160 160" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M 48 24 L 112 24 C 116 24 120 28 120 32 L 120 48 L 40 48 L 40 32 C 40 28 44 24 48 24 Z" fill="#475569" stroke="#818cf8" stroke-width="2.5"/>
+            <circle cx="80" cy="36" r="6" fill="#0f172a" stroke="#818cf8" stroke-width="2"/>
+            <rect x="40" y="48" width="80" height="52" rx="4" fill="#0f172a" stroke="#818cf8" stroke-width="3" filter="drop-shadow(0 0 14px rgba(129,140,248,0.5))"/>
+            <circle cx="60" cy="74" r="3.5" fill="#38bdf8"/>
+            <circle cx="100" cy="74" r="3.5" fill="#38bdf8"/>
+            <line x1="60" y1="74" x2="94" y2="64" stroke="#34d399" stroke-width="3.5" stroke-linecap="round"/>
+            <text x="80" y="93" text-anchor="middle" fill="#818cf8" font-family="'JetBrains Mono', monospace" font-weight="800" font-size="10">SWITCH</text>
+            <line x1="56" y1="100" x2="56" y2="148" stroke="#cbd5e1" stroke-width="4.5" stroke-linecap="round"/>
+            <line x1="80" y1="100" x2="80" y2="148" stroke="#cbd5e1" stroke-width="4.5" stroke-linecap="round"/>
+            <line x1="104" y1="100" x2="104" y2="148" stroke="#cbd5e1" stroke-width="4.5" stroke-linecap="round"/>
+            <text x="56" y="142" text-anchor="middle" fill="#818cf8" font-family="'JetBrains Mono', monospace" font-weight="900" font-size="9">G</text>
+            <text x="80" y="142" text-anchor="middle" fill="#818cf8" font-family="'JetBrains Mono', monospace" font-weight="900" font-size="9">D</text>
+            <text x="104" y="142" text-anchor="middle" fill="#818cf8" font-family="'JetBrains Mono', monospace" font-weight="900" font-size="9">S</text>
+          </svg>
+        </div>
+
+        <!-- 點擊後顯現的文字區塊 -->
+        <div class="func-details-block" id="details-3">
+          <div class="func-title-en">3. Control</div>
+          <div class="func-title-zh">控制</div>
+          <div class="func-desc-box">
+            高速開關電流，驅動大功率負載
+            <div class="func-examples">電晶體 • 馬達驅動 • 無人機</div>
+          </div>
+        </div>
+
+        <div class="func-placeholder-cue" id="cue-3">
+          <span>👆 點擊揭曉功能名稱</span>
+        </div>
+      </article>
+
+      <!-- ================= 4. Lighting (HERO LED!) ================= -->
+      <article class="function-card card-lighting" id="card-4" onclick="handleCardClick(4, event)">
+        <div class="func-watermark">04</div>
+        <div class="func-card-header">
+          <span class="func-index-tag">CORE 04</span>
+          <span class="hero-badge-pill">🌟 TODAY'S HERO</span>
+        </div>
+
+        <!-- 巨幅 5mm LED 發光二極體向量圖示 (永久顯示) -->
+        <div class="func-visual-box">
+          <svg class="func-svg" viewBox="0 0 160 160" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="80" cy="55" r="42" fill="url(#ledHeroAura)" opacity="0.6"/>
+            <path d="M 52 75 C 52 35 108 35 108 75 L 108 82 L 52 82 Z" fill="url(#ledDomeGradient)" stroke="#34d399" stroke-width="2.5" filter="drop-shadow(0 0 14px rgba(52,211,153,0.8))"/>
+            <rect x="49" y="82" width="62" height="6" rx="2" fill="#042f24" stroke="#34d399" stroke-width="2"/>
+            <path d="M 82 82 L 82 66 L 94 58 L 94 82 Z" fill="#10b981" opacity="0.8"/>
+            <line x1="68" y1="82" x2="68" y2="62" stroke="#10b981" stroke-width="3.5" stroke-linecap="round"/>
+            <path d="M 68 62 Q 78 56 86 64" stroke="#fbbf24" stroke-width="2" fill="none"/>
+            <rect x="83" y="62" width="6" height="4" fill="#ffffff" filter="drop-shadow(0 0 8px #ffffff)"/>
+            <line x1="68" y1="88" x2="68" y2="150" stroke="#cbd5e1" stroke-width="4.5" stroke-linecap="round"/>
+            <text x="60" y="146" text-anchor="middle" fill="#34d399" font-family="'JetBrains Mono', monospace" font-weight="900" font-size="12">+</text>
+            <line x1="92" y1="88" x2="92" y2="134" stroke="#cbd5e1" stroke-width="4.5" stroke-linecap="round"/>
+            <text x="100" y="130" text-anchor="middle" fill="#fb7185" font-family="'JetBrains Mono', monospace" font-weight="900" font-size="14">-</text>
+            <line x1="80" y1="12" x2="80" y2="24" stroke="#34d399" stroke-width="3" stroke-linecap="round"/>
+            <line x1="50" y1="22" x2="58" y2="32" stroke="#34d399" stroke-width="3" stroke-linecap="round"/>
+            <line x1="110" y1="22" x2="102" y2="32" stroke="#34d399" stroke-width="3" stroke-linecap="round"/>
+            <line x1="32" y1="48" x2="44" y2="52" stroke="#fbbf24" stroke-width="3" stroke-linecap="round"/>
+            <line x1="128" y1="48" x2="116" y2="52" stroke="#fbbf24" stroke-width="3" stroke-linecap="round"/>
+            <defs>
+              <radialGradient id="ledHeroAura" cx="50%" cy="50%" r="50%">
+                <stop offset="0%" stop-color="#ffffff"/>
+                <stop offset="30%" stop-color="#34d399" stop-opacity="0.9"/>
+                <stop offset="70%" stop-color="#10b981" stop-opacity="0.4"/>
+                <stop offset="100%" stop-color="#10b981" stop-opacity="0"/>
+              </radialGradient>
+              <linearGradient id="ledDomeGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" stop-color="#059669" stop-opacity="0.4"/>
+                <stop offset="50%" stop-color="#34d399" stop-opacity="0.75"/>
+                <stop offset="100%" stop-color="#064e3b" stop-opacity="0.5"/>
+              </linearGradient>
+            </defs>
+          </svg>
+        </div>
+
+        <!-- 點擊後顯現的文字區塊 -->
+        <div class="func-details-block" id="details-4">
+          <div class="func-title-en" style="color: var(--emerald-mint);">4. Lighting</div>
+          <div class="func-title-zh">發光 (LED)</div>
+          <div class="func-desc-box" style="border-color: rgba(52, 211, 153, 0.4); background: rgba(52, 211, 153, 0.08);">
+            電能直接轉為光能，超省電長壽命！
+            <div class="func-examples" style="color: var(--emerald-mint);">發光二極體 • 今日主角</div>
+          </div>
+          <div class="hero-hook-box">
+            👉 接下來我們要親手焊接 LED！
+          </div>
+        </div>
+
+        <div class="func-placeholder-cue" id="cue-4">
+          <span>👆 點擊揭曉實作主角</span>
+        </div>
+      </article>
+
+    </section>
+
+    <!-- 底部操作提示 -->
+    <footer class="lab-footer-tips">
+      <div>
+        <span>💡 點擊畫面任意處或按 <span class="kbd-chip">Space / ➔</span> 依序揭示文字解說 | 亦可點選特定卡片直接揭示</span>
+      </div>
+      <div>
+        <span>快捷鍵：<span class="kbd-chip">1-4</span> 揭示指定卡片 | <span class="kbd-chip">R</span> 清空文字重新講解 | <span class="kbd-chip">T</span> 切換主題</span>
+      </div>
+    </footer>
+
+  </main>
+
+  <script>
+    // ===================================================================
+    // 3. Step-by-Step Interactive Reveal Logic (純視覺逐步揭示，無語音)
+    // ===================================================================
+    let revealedCount = 0; // 0: 所有文字隱藏，圖示先出；1~4 依次點擊出現
+
+    function updateVisualSteps() {
+      document.getElementById('currStepNum').textContent = revealedCount;
+
+      for (let i = 1; i <= 4; i++) {
+        const card = document.getElementById('card-' + i);
+        const details = document.getElementById('details-' + i);
+        const cue = document.getElementById('cue-' + i);
+
+        if (i <= revealedCount) {
+          details.classList.add('revealed');
+          card.classList.add('revealed');
+          if (cue) cue.style.display = 'none';
+        } else {
+          details.classList.remove('revealed');
+          card.classList.remove('revealed');
+          if (cue) cue.style.display = 'flex';
+        }
+      }
+    }
+
+    // 依序點擊揭曉下一個
+    function revealNextCard() {
+      if (revealedCount < 4) {
+        revealedCount++;
+        updateVisualSteps();
+      }
+    }
+
+    // 點擊卡片直接揭曉該卡片
+    function handleCardClick(id, event) {
+      if (event) event.stopPropagation();
+      if (id > revealedCount) {
+        revealedCount = id;
+      }
+      updateVisualSteps();
+    }
+
+    // 點擊整個舞台空白處順序揭曉
+    function handleStageClick(event) {
+      // 避免點擊頂部導覽按鈕觸發
+      if (event.target.closest('.lab-bar')) {
+        return;
+      }
+      revealNextCard();
+    }
+
+    function showAllTexts() {
+      revealedCount = 4;
+      updateVisualSteps();
+    }
+
+    function resetSteps() {
+      revealedCount = 0;
+      updateVisualSteps();
+    }
+
+    function toggleTheme() {
+      const html = document.documentElement;
+      const current = html.getAttribute('data-theme') || 'dark';
+      const next = current === 'dark' ? 'light' : 'dark';
+      html.setAttribute('data-theme', next);
+      document.getElementById('themeIcon').textContent = next === 'dark' ? '☀️' : '🌙';
+    }
+
+    // 鍵盤快捷鍵
+    window.addEventListener('keydown', (e) => {
+      if (e.key === 't' || e.key === 'T') {
+        toggleTheme();
+      } else if (e.key === 'r' || e.key === 'R') {
+        resetSteps();
+      } else if (e.key === ' ' || e.key === 'ArrowRight' || e.key === 'PageDown') {
+        e.preventDefault();
+        revealNextCard();
+      } else if (e.key === 'ArrowLeft' || e.key === 'PageUp') {
+        if (revealedCount > 0) {
+          e.preventDefault();
+          revealedCount--;
+          updateVisualSteps();
+        } else {
+          window.location.href = 'slide04_semiconductor_switch.html';
+        }
+      } else if (['1', '2', '3', '4'].includes(e.key)) {
+        revealedCount = parseInt(e.key);
+        updateVisualSteps();
+      }
+    });
+
+    // 初始化狀態：0 (圖示先出，文字尚未出現)
+    updateVisualSteps();
+  </script>
+
+  
+
+  <!-- 4 大主題切換與播放器父子通訊橋接 -->
+  <script>
+    (function() {
+      const THEMES = ['cyber', 'clean', 'maker', 'titanium'];
+      function applyTheme(theme) {
+        if (!theme) theme = 'cyber';
+        document.documentElement.setAttribute('data-theme', theme);
+      }
+      try {
+        const savedTheme = localStorage.getItem('slides_theme') || 'cyber';
+        applyTheme(savedTheme);
+      } catch(e) {}
+
+      function cycleLocalTheme() {
+        const curr = document.documentElement.getAttribute('data-theme') || 'cyber';
+        let idx = THEMES.indexOf(curr);
+        if (idx === -1) idx = 0;
+        const next = THEMES[(idx + 1) % THEMES.length];
+        applyTheme(next);
+        try { localStorage.setItem('slides_theme', next); } catch(e) {}
+      }
+
+      window.addEventListener('keydown', function(e) {
+        if (window.parent && window.parent !== window) {
+          if (e.key === 'ArrowRight' || e.key === 'PageDown' || e.key === ' ') {
+            e.preventDefault();
+            window.parent.postMessage({ type: 'SLIDE_NAV', action: 'next' }, '*');
+          } else if (e.key === 'ArrowLeft' || e.key === 'PageUp') {
+            e.preventDefault();
+            window.parent.postMessage({ type: 'SLIDE_NAV', action: 'prev' }, '*');
+          } else if (e.key === 't' || e.key === 'T') {
+            window.parent.postMessage({ type: 'SLIDE_NAV', action: 'theme' }, '*');
+          }
+        } else {
+          // 獨立開啟時按 T 也能切換 4 種風格
+          if (e.key === 't' || e.key === 'T') {
+            cycleLocalTheme();
+          }
+        }
+      });
+    })();
+  </script>
+
+</body>
+</html>

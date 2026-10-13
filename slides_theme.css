@@ -1,0 +1,555 @@
+/* ==========================================================================
+   ⚡ 雙語生活科技教學演示 — 全套課程共用視覺風格核心 (Design System)
+   檔案：正式簡報/slides_theme.css
+   說明：單一真理來源 (Single Source of Truth)
+         完整支援 5 種高對比教課主題、三大高科技晶圓背景層、排版與元件視覺！
+   ========================================================================== */
+
+/* 1. Google Web Fonts 引入 */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Outfit:wght@500;600;700;800;900&family=JetBrains+Mono:wght@600;700;800&family=Noto+Sans+TC:wght@400;500;700;900&family=Plus+Jakarta+Sans:wght@500;700;800;900&display=swap');
+
+/* ==========================================================================
+   🎨 5 Complete Professional Themes (可由界面或按 T 鍵即時無縫輪播)
+   ========================================================================== */
+
+/* 🌌 Theme 1: 鈦黑極光微客 (Titanium Cyber Dark) - 預設 */
+:root, [data-theme="dark"] {
+  --theme-name: 'dark';
+  --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Noto Sans TC", "Microsoft JhengHei", sans-serif;
+  --font-display: 'Outfit', var(--font-sans);
+  --font-mono: 'JetBrains Mono', "SFMono-Regular", Consolas, monospace;
+  --font-main: 'Plus Jakarta Sans', var(--font-sans);
+
+  /* 背景系統 */
+  --bg-deep: #070a12;
+  --bg-space: #070a12;
+  --bg-surface: #0f1523;
+  --bg-gradient: radial-gradient(circle at 15% 15%, rgba(56, 189, 248, 0.08) 0%, transparent 50%),
+                 radial-gradient(circle at 85% 85%, rgba(59, 130, 246, 0.07) 0%, transparent 50%),
+                 radial-gradient(circle at 50% 50%, rgba(15, 23, 42, 0.5) 0%, transparent 75%);
+  --bg-card: rgba(18, 26, 43, 0.85);
+  --bg-card-hover: rgba(26, 36, 60, 0.95);
+  --bg-input: rgba(30, 41, 59, 0.7);
+
+  /* 邊框線條 */
+  --border-subtle: rgba(255, 255, 255, 0.09);
+  --border-light: rgba(255, 255, 255, 0.18);
+  --border-glow: rgba(56, 189, 248, 0.45);
+
+  /* 核心文字 */
+  --text-pure: #ffffff;
+  --text-heading: #f1f5f9;
+  --text-body: #94a3b8;
+  --text-dim: #64748b;
+  --title-gradient: linear-gradient(180deg, #ffffff 40%, #cbd5e1 100%);
+
+  /* 亮點強調色票 (高對比教學專用) */
+  --cyan-core: #38bdf8;
+  --cyan-bright: #00f2fe;
+  --cyan-glow: rgba(56, 189, 248, 0.4);
+  --blue-electric: #3b82f6;
+  --amber-gold: #fbbf24;
+  --amber-warm: #fbbf24;
+  --amber-glow: rgba(251, 191, 36, 0.4);
+  --emerald-mint: #34d399;
+  --emerald-glow: rgba(52, 211, 153, 0.35);
+  --coral-rose: #f43f5e;
+  --coral-glow: rgba(244, 63, 94, 0.4);
+  --purple-accent: #a855f7;
+
+  /* 導航與特定面板 */
+  --watermark-color: rgba(255, 255, 255, 0.04);
+  --nav-bg: linear-gradient(180deg, rgba(7, 10, 18, 0.95) 0%, rgba(7, 10, 18, 0.9) 100%);
+  --footer-bg: linear-gradient(0deg, rgba(7, 10, 18, 0.95) 0%, rgba(7, 10, 18, 0.9) 100%);
+  --img-frame-bg: #0b101c;
+  --mantra-bg: linear-gradient(135deg, rgba(56, 189, 248, 0.12) 0%, rgba(15, 23, 42, 0.85) 100%);
+
+  /* 陰影與光暈 */
+  --shadow-card: 0 10px 30px -10px rgba(0, 0, 0, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.12);
+  --shadow-glow-cyan: 0 0 35px rgba(56, 189, 248, 0.25);
+  --shadow-glow-amber: 0 0 35px rgba(251, 191, 36, 0.25);
+  --shadow-glow-green: 0 0 35px rgba(52, 211, 153, 0.25);
+  --shadow-glow-coral: 0 0 35px rgba(244, 63, 94, 0.25);
+
+  /* 科技背景三大層配置 */
+  --grid-dot-color: rgba(56, 189, 248, 0.22);
+  --grid-line-color: rgba(255, 255, 255, 0.02);
+  --circuit-opacity: 0.42;
+  --circuit-cg-1: %2338bdf8;
+  --circuit-cg-2: %233b82f6;
+  --hud-cross-color: rgba(56, 189, 248, 0.28);
+  --tech-bg-opacity: 0.18;
+  --tech-bg-filter: contrast(1.2) brightness(0.9);
+  --silhouette-fill: #ffffff;
+  --icon-box-bg: rgba(255, 255, 255, 0.06);
+  --indigo-glow: rgba(99, 102, 241, 0.4);
+  --shadow-glow-indigo: 0 0 35px rgba(99, 102, 241, 0.3);
+  --shadow-glow-mint: 0 0 35px rgba(52, 211, 153, 0.25);
+  --shadow-glow-rose: 0 0 35px rgba(244, 63, 94, 0.25);
+  --active-card-bg: rgba(56, 189, 248, 0.12);
+  --active-card-border: #38bdf8;
+  --player-bg: #030712;
+  --shadow-glow: 0 0 30px rgba(56, 189, 248, 0.25);
+
+}
+
+/* ☀️ Theme 2: 俐落亮白科技 (Clean Light Tech) */
+[data-theme="light"] {
+  --theme-name: 'light';
+  --bg-deep: #f8fafc;
+  --bg-space: #f8fafc;
+  --bg-surface: #ffffff;
+  --bg-gradient: radial-gradient(circle at 12% 15%, rgba(2, 132, 199, 0.08) 0%, transparent 55%),
+                 radial-gradient(circle at 88% 85%, rgba(59, 130, 246, 0.06) 0%, transparent 55%),
+                 radial-gradient(circle at 50% 50%, #ffffff 0%, #f1f5f9 100%);
+  --bg-card: rgba(255, 255, 255, 0.94);
+  --bg-card-hover: #ffffff;
+  --bg-input: #e2e8f0;
+
+  --border-subtle: rgba(15, 23, 42, 0.09);
+  --border-light: rgba(15, 23, 42, 0.18);
+  --border-glow: rgba(2, 132, 199, 0.35);
+
+  --text-pure: #0f172a;
+  --text-heading: #0f172a;
+  --text-body: #475569;
+  --text-dim: #64748b;
+  --title-gradient: linear-gradient(180deg, #0f172a 35%, #334155 100%);
+
+  --cyan-core: #0284c7;
+  --cyan-bright: #0369a1;
+  --cyan-glow: rgba(2, 132, 199, 0.25);
+  --blue-electric: #2563eb;
+  --amber-gold: #d97706;
+  --amber-warm: #d97706;
+  --amber-glow: rgba(217, 119, 6, 0.25);
+  --emerald-mint: #059669;
+  --emerald-glow: rgba(5, 150, 105, 0.25);
+  --coral-rose: #e11d48;
+  --coral-glow: rgba(225, 29, 72, 0.25);
+  --purple-accent: #9333ea;
+
+  --watermark-color: rgba(15, 23, 42, 0.04);
+  --nav-bg: linear-gradient(180deg, rgba(248, 250, 252, 0.96) 0%, rgba(248, 250, 252, 0.88) 100%);
+  --footer-bg: linear-gradient(0deg, rgba(248, 250, 252, 0.96) 0%, rgba(248, 250, 252, 0.88) 100%);
+  --img-frame-bg: #e2e8f0;
+  --mantra-bg: linear-gradient(135deg, rgba(2, 132, 199, 0.08) 0%, rgba(255, 255, 255, 0.95) 100%);
+
+  --shadow-card: 0 12px 32px -8px rgba(15, 23, 42, 0.07), 0 2px 6px rgba(15, 23, 42, 0.04), inset 0 1px 0 rgba(255, 255, 255, 0.95);
+  --shadow-glow-cyan: 0 0 30px rgba(2, 132, 199, 0.15);
+  --shadow-glow-amber: 0 0 30px rgba(217, 119, 6, 0.15);
+  --shadow-glow-green: 0 0 30px rgba(5, 150, 105, 0.15);
+  --shadow-glow-coral: 0 0 30px rgba(225, 29, 72, 0.15);
+
+  --grid-dot-color: rgba(2, 132, 199, 0.16);
+  --grid-line-color: rgba(15, 23, 42, 0.035);
+  --circuit-opacity: 0.22;
+  --circuit-cg-1: %230284c7;
+  --circuit-cg-2: %232563eb;
+  --hud-cross-color: rgba(2, 132, 199, 0.35);
+  --tech-bg-opacity: 0.08;
+  --tech-bg-filter: contrast(1.1) brightness(1.05);
+  --silhouette-fill: #1e293b;
+  --icon-box-bg: rgba(15, 23, 42, 0.05);
+  --indigo-glow: rgba(79, 70, 229, 0.25);
+  --shadow-glow-indigo: 0 0 25px rgba(79, 70, 229, 0.2);
+  --shadow-glow-mint: 0 0 25px rgba(5, 150, 105, 0.2);
+  --shadow-glow-rose: 0 0 25px rgba(225, 29, 72, 0.2);
+  --active-card-bg: rgba(2, 132, 199, 0.1);
+  --active-card-border: #0284c7;
+  --player-bg: #090d16;
+  --shadow-glow: 0 0 25px rgba(2, 132, 199, 0.2);
+
+}
+
+/* 🌊 Theme 3: 沉穩海軍藍 (Deep Navy & Intel Blue) */
+[data-theme="navy"] {
+  --theme-name: 'navy';
+  --bg-deep: #090e24;
+  --bg-space: #090e24;
+  --bg-surface: #0f1738;
+  --bg-gradient: radial-gradient(circle at 20% 20%, rgba(56, 189, 248, 0.12) 0%, transparent 55%),
+                 radial-gradient(circle at 80% 80%, rgba(37, 99, 235, 0.12) 0%, transparent 55%),
+                 radial-gradient(circle at 50% 50%, #090e24 0%, #050816 100%);
+  --bg-card: rgba(15, 26, 61, 0.78);
+  --bg-card-hover: rgba(22, 37, 85, 0.92);
+  --bg-input: rgba(22, 37, 85, 0.7);
+
+  --border-subtle: rgba(56, 189, 248, 0.15);
+  --border-light: rgba(56, 189, 248, 0.28);
+  --border-glow: rgba(56, 189, 248, 0.5);
+
+  --text-pure: #ffffff;
+  --text-heading: #f8fafc;
+  --text-body: #93c5fd;
+  --text-dim: #60a5fa;
+  --title-gradient: linear-gradient(180deg, #ffffff 30%, #93c5fd 100%);
+
+  --cyan-core: #38bdf8;
+  --cyan-bright: #38bdf8;
+  --cyan-glow: rgba(56, 189, 248, 0.4);
+  --blue-electric: #60a5fa;
+  --amber-gold: #fbbf24;
+  --amber-warm: #fbbf24;
+  --amber-glow: rgba(251, 191, 36, 0.4);
+  --emerald-mint: #34d399;
+  --emerald-glow: rgba(52, 211, 153, 0.35);
+  --coral-rose: #f87171;
+  --coral-glow: rgba(248, 113, 113, 0.4);
+  --purple-accent: #a855f7;
+
+  --watermark-color: rgba(255, 255, 255, 0.04);
+  --nav-bg: linear-gradient(180deg, rgba(9, 14, 36, 0.95) 0%, rgba(9, 14, 36, 0.88) 100%);
+  --footer-bg: linear-gradient(0deg, rgba(9, 14, 36, 0.95) 0%, rgba(9, 14, 36, 0.88) 100%);
+  --img-frame-bg: #0d1533;
+  --mantra-bg: linear-gradient(135deg, rgba(56, 189, 248, 0.15) 0%, rgba(15, 26, 61, 0.8) 100%);
+
+  --shadow-card: 0 10px 30px -10px rgba(0, 0, 0, 0.6), inset 0 1px 0 rgba(255, 255, 255, 0.12);
+  --shadow-glow-cyan: 0 0 35px rgba(56, 189, 248, 0.3);
+  --shadow-glow-amber: 0 0 35px rgba(251, 191, 36, 0.3);
+  --shadow-glow-green: 0 0 35px rgba(52, 211, 153, 0.3);
+  --shadow-glow-coral: 0 0 35px rgba(248, 113, 113, 0.3);
+
+  --grid-dot-color: rgba(56, 189, 248, 0.25);
+  --grid-line-color: rgba(56, 189, 248, 0.04);
+  --circuit-opacity: 0.45;
+  --circuit-cg-1: %2338bdf8;
+  --circuit-cg-2: %233b82f6;
+  --hud-cross-color: rgba(56, 189, 248, 0.35);
+  --tech-bg-opacity: 0.18;
+  --tech-bg-filter: hue-rotate(200deg) contrast(1.2) brightness(0.85);
+  --silhouette-fill: #ffffff;
+  --icon-box-bg: rgba(56, 189, 248, 0.08);
+  --indigo-glow: rgba(129, 140, 248, 0.45);
+  --shadow-glow-indigo: 0 0 35px rgba(129, 140, 248, 0.35);
+  --shadow-glow-mint: 0 0 35px rgba(52, 211, 153, 0.3);
+  --shadow-glow-rose: 0 0 35px rgba(248, 113, 113, 0.3);
+  --active-card-bg: rgba(56, 189, 248, 0.16);
+  --active-card-border: #38bdf8;
+  --player-bg: #050816;
+  --shadow-glow: 0 0 30px rgba(56, 189, 248, 0.3);
+
+}
+
+/* 🧊 Theme 4: 冰晶天藍藍圖 (Ice Blueprint Tech) */
+[data-theme="ice"] {
+  --theme-name: 'ice';
+  --bg-deep: #f0f7ff;
+  --bg-space: #f0f7ff;
+  --bg-surface: #e0f0fe;
+  --bg-gradient: radial-gradient(circle at 15% 15%, rgba(14, 165, 233, 0.14) 0%, transparent 55%),
+                 radial-gradient(circle at 85% 85%, rgba(37, 99, 235, 0.10) 0%, transparent 55%),
+                 radial-gradient(circle at 50% 50%, #f0f7ff 0%, #e2eeff 100%);
+  --bg-card: rgba(255, 255, 255, 0.88);
+  --bg-card-hover: rgba(255, 255, 255, 0.98);
+  --bg-input: #dbeafe;
+
+  --border-subtle: rgba(14, 165, 233, 0.22);
+  --border-light: rgba(14, 165, 233, 0.38);
+  --border-glow: rgba(14, 165, 233, 0.65);
+
+  --text-pure: #032b4f;
+  --text-heading: #073866;
+  --text-body: #1e4b75;
+  --text-dim: #43719c;
+  --title-gradient: linear-gradient(180deg, #024177 30%, #0369a1 100%);
+
+  --cyan-core: #0284c7;
+  --cyan-bright: #0369a1;
+  --cyan-glow: rgba(14, 165, 233, 0.3);
+  --blue-electric: #0ea5e9;
+  --amber-gold: #d97706;
+  --amber-warm: #d97706;
+  --amber-glow: rgba(217, 119, 6, 0.25);
+  --emerald-mint: #059669;
+  --emerald-glow: rgba(5, 150, 105, 0.25);
+  --coral-rose: #e11d48;
+  --coral-glow: rgba(225, 29, 72, 0.25);
+  --purple-accent: #7c3aed;
+
+  --watermark-color: rgba(14, 165, 233, 0.05);
+  --nav-bg: linear-gradient(180deg, rgba(240, 247, 255, 0.96) 0%, rgba(240, 247, 255, 0.88) 100%);
+  --footer-bg: linear-gradient(0deg, rgba(240, 247, 255, 0.96) 0%, rgba(240, 247, 255, 0.88) 100%);
+  --img-frame-bg: #dbeafe;
+  --mantra-bg: linear-gradient(135deg, rgba(14, 165, 233, 0.12) 0%, rgba(255, 255, 255, 0.96) 100%);
+
+  --shadow-card: 0 12px 32px -8px rgba(2, 65, 119, 0.08), 0 2px 8px rgba(2, 65, 119, 0.05), inset 0 1px 0 rgba(255, 255, 255, 0.95);
+  --shadow-glow-cyan: 0 0 32px rgba(14, 165, 233, 0.22);
+  --shadow-glow-amber: 0 0 32px rgba(217, 119, 6, 0.18);
+  --shadow-glow-green: 0 0 32px rgba(5, 150, 105, 0.18);
+  --shadow-glow-coral: 0 0 32px rgba(225, 29, 72, 0.18);
+
+  --grid-dot-color: rgba(14, 165, 233, 0.22);
+  --grid-line-color: rgba(14, 165, 233, 0.05);
+  --circuit-opacity: 0.28;
+  --circuit-cg-1: %230ea5e9;
+  --circuit-cg-2: %230284c7;
+  --hud-cross-color: rgba(14, 165, 233, 0.4);
+  --tech-bg-opacity: 0.13;
+  --tech-bg-filter: hue-rotate(185deg) contrast(1.15) brightness(1.08);
+  --silhouette-fill: #032b4f;
+  --icon-box-bg: rgba(14, 165, 233, 0.08);
+  --indigo-glow: rgba(99, 102, 241, 0.3);
+  --shadow-glow-indigo: 0 0 32px rgba(99, 102, 241, 0.22);
+  --shadow-glow-mint: 0 0 32px rgba(5, 150, 105, 0.2);
+  --shadow-glow-rose: 0 0 32px rgba(225, 29, 72, 0.2);
+  --active-card-bg: rgba(14, 165, 233, 0.14);
+  --active-card-border: #0284c7;
+  --player-bg: #0b1528;
+  --shadow-glow: 0 0 30px rgba(14, 165, 233, 0.25);
+
+}
+
+/* 📐 Theme 5: 極簡石墨工程 (Minimalist Monochrome) */
+[data-theme="mono"] {
+  --theme-name: 'mono';
+  --bg-deep: #121214;
+  --bg-space: #121214;
+  --bg-surface: #18181b;
+  --bg-gradient: radial-gradient(circle at 50% 50%, #1c1c20 0%, #121214 100%);
+  --bg-card: rgba(24, 24, 27, 0.85);
+  --bg-card-hover: rgba(39, 39, 42, 0.95);
+  --bg-input: rgba(39, 39, 42, 0.7);
+
+  --border-subtle: rgba(255, 255, 255, 0.12);
+  --border-light: rgba(255, 255, 255, 0.24);
+  --border-glow: rgba(255, 255, 255, 0.35);
+
+  --text-pure: #ffffff;
+  --text-heading: #fafafa;
+  --text-body: #a1a1aa;
+  --text-dim: #71717a;
+  --title-gradient: linear-gradient(180deg, #ffffff 40%, #a1a1aa 100%);
+
+  --cyan-core: #f4f4f5;
+  --cyan-bright: #ffffff;
+  --cyan-glow: rgba(255, 255, 255, 0.3);
+  --blue-electric: #e4e4e7;
+  --amber-gold: #f59e0b;
+  --amber-warm: #f59e0b;
+  --amber-glow: rgba(245, 158, 11, 0.2);
+  --emerald-mint: #22c55e;
+  --emerald-glow: rgba(34, 197, 94, 0.2);
+  --coral-rose: #ef4444;
+  --coral-glow: rgba(239, 68, 68, 0.2);
+  --purple-accent: #d4d4d8;
+
+  --watermark-color: rgba(255, 255, 255, 0.03);
+  --nav-bg: linear-gradient(180deg, rgba(18, 18, 20, 0.95) 0%, rgba(18, 18, 20, 0.88) 100%);
+  --footer-bg: linear-gradient(0deg, rgba(18, 18, 20, 0.95) 0%, rgba(18, 18, 20, 0.88) 100%);
+  --img-frame-bg: #1f1f23;
+  --mantra-bg: linear-gradient(135deg, rgba(255, 255, 255, 0.06) 0%, rgba(24, 24, 27, 0.9) 100%);
+
+  --shadow-card: 0 10px 30px -10px rgba(0, 0, 0, 0.6), inset 0 1px 0 rgba(255, 255, 255, 0.15);
+  --shadow-glow-cyan: 0 0 25px rgba(255, 255, 255, 0.12);
+  --shadow-glow-amber: 0 0 25px rgba(245, 158, 11, 0.2);
+  --shadow-glow-green: 0 0 25px rgba(34, 197, 94, 0.2);
+  --shadow-glow-coral: 0 0 25px rgba(239, 68, 68, 0.2);
+
+  --grid-dot-color: rgba(255, 255, 255, 0.14);
+  --grid-line-color: rgba(255, 255, 255, 0.03);
+  --circuit-opacity: 0.25;
+  --circuit-cg-1: %23ffffff;
+  --tech-bg-opacity: 0.14;
+  --tech-bg-filter: grayscale(100%) contrast(1.2) brightness(0.85);
+  --silhouette-fill: #ffffff;
+  --icon-box-bg: rgba(255, 255, 255, 0.06);
+  --indigo-glow: rgba(255, 255, 255, 0.2);
+  --shadow-glow-indigo: 0 0 25px rgba(255, 255, 255, 0.15);
+  --shadow-glow-mint: 0 0 25px rgba(34, 197, 94, 0.2);
+  --shadow-glow-rose: 0 0 25px rgba(239, 68, 68, 0.2);
+  --active-card-bg: rgba(255, 255, 255, 0.12);
+  --active-card-border: #ffffff;
+  --player-bg: #0a0a0c;
+  --shadow-glow: 0 0 25px rgba(255, 255, 255, 0.15);
+
+}
+
+/* ==========================================================================
+   2. 全域基礎重設與平滑主題過渡
+   ========================================================================== */
+*, *::before, *::after {
+  box-sizing: border-box;
+}
+
+html, body {
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+  background-color: var(--bg-deep) !important;
+  background-image: var(--bg-gradient) !important;
+  color: var(--text-pure);
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+  transition: background-color 0.35s ease, color 0.35s ease;
+  display: flex !important;
+  flex-direction: column !important;
+  justify-content: space-between !important;
+}
+
+/* ==========================================================================
+   🌌 三大高科技晶圓背景層 (High-Tech Wafer & Circuit Backdrop Layers)
+   ========================================================================== */
+
+/* Layer 0: 晶圓攝影底圖 (Photographic Wafer Wallpaper) */
+.tech-bg-wallpaper {
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background-image: url('tech_bg.jpg');
+  background-size: cover;
+  background-position: center center;
+  background-repeat: no-repeat;
+  opacity: var(--tech-bg-opacity, 0.14);
+  filter: var(--tech-bg-filter, none);
+  pointer-events: none;
+  z-index: 0;
+  transition: opacity 0.35s ease, filter 0.35s ease;
+}
+
+/* Layer 1: 矽晶圓探針格點與 CAD 工程座標網格 (Probe Dots & Grid) */
+body::before {
+  content: '';
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background-image: 
+    radial-gradient(var(--grid-dot-color) 1.2px, transparent 1.2px),
+    linear-gradient(to right, var(--grid-line-color) 1px, transparent 1px),
+    linear-gradient(to bottom, var(--grid-line-color) 1px, transparent 1px);
+  background-size: 40px 40px, 40px 40px, 40px 40px;
+  background-position: 0 0, 0 0, 0 0;
+  pointer-events: none;
+  z-index: 1;
+  transition: all 0.35s ease;
+}
+
+/* Layer 2: 半導體 PCB 晶片走線與導通孔 (Circuit Traces & Micro-Vias) */
+body::after {
+  content: '';
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='240' height='240' viewBox='0 0 240 240'%3E%3Cdefs%3E%3ClinearGradient id='cg' x1='0%25' y1='0%25' x2='100%25' y2='100%25'%3E%3Cstop offset='0%25' stop-color='%2338bdf8' stop-opacity='0.28'/%3E%3Cstop offset='100%25' stop-color='%233b82f6' stop-opacity='0.14'/%3E%3C/linearGradient%3E%3C/defs%3E%3Cg fill='none' stroke='url(%23cg)' stroke-width='1.2'%3E%3Cpath d='M0 40 L60 40 L90 70 L170 70 L200 40 L240 40' /%3E%3Cpath d='M40 0 L40 60 L70 90 L70 170 L40 200 L40 240' /%3E%3Cpath d='M120 0 L120 40 L150 70 L210 70' /%3E%3Cpath d='M240 160 L180 160 L150 190 L70 190 L40 220 L0 220' /%3E%3Cpath d='M200 240 L200 180 L170 150 L170 110 L200 80' /%3E%3Cpath d='M80 240 L80 200 L110 170 L150 170' /%3E%3Ccircle cx='90' cy='70' r='2.5' fill='%2338bdf8' fill-opacity='0.45' /%3E%3Ccircle cx='170' cy='70' r='2.5' fill='%2338bdf8' fill-opacity='0.45' /%3E%3Ccircle cx='70' cy='90' r='2.5' fill='%2338bdf8' fill-opacity='0.45' /%3E%3Ccircle cx='70' cy='170' r='2.5' fill='%2338bdf8' fill-opacity='0.45' /%3E%3Ccircle cx='150' cy='190' r='2.5' fill='%2338bdf8' fill-opacity='0.45' /%3E%3Ccircle cx='170' cy='150' r='2.5' fill='%2338bdf8' fill-opacity='0.45' /%3E%3Ccircle cx='150' cy='70' r='2' fill='%2338bdf8' fill-opacity='0.35' /%3E%3Ccircle cx='110' cy='170' r='2' fill='%2338bdf8' fill-opacity='0.35' /%3E%3C/g%3E%3C/svg%3E");
+  background-repeat: repeat;
+  background-size: 320px 320px;
+  opacity: var(--circuit-opacity);
+  pointer-events: none;
+  z-index: 2;
+  mask-image: radial-gradient(ellipse at 50% 50%, rgba(0,0,0,0.9) 25%, rgba(0,0,0,0.35) 90%);
+  -webkit-mask-image: radial-gradient(ellipse at 50% 50%, rgba(0,0,0,0.9) 25%, rgba(0,0,0,0.35) 90%);
+  transition: opacity 0.35s ease;
+}
+
+/* 確保各頁面舞台主體置於上方中央，自適應剩餘高度 */
+.slide-viewport, .slide-stage, .stage-container, .deck-viewport, .workshop-stage, .standalone-viewport, main {
+  background-color: transparent !important;
+  position: relative;
+  z-index: 10;
+  order: 1 !important;
+  flex: 1 1 auto !important;
+  min-height: 0 !important;
+}
+
+/* ==========================================================================
+   3. 通用沉底導覽列 (Universal Bottom Navigation Bar - 專為教室大觸控屏人體工學打造)
+   ========================================================================== */
+.lab-bar, .lab-standalone-bar, header.slide-nav-bar {
+  width: 100%;
+  order: 99 !important;
+  flex-shrink: 0 !important;
+  position: relative !important;
+  bottom: 0 !important;
+  top: auto !important;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.45rem 1.6rem;
+  background: var(--nav-bg) !important;
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border-top: 1.5px solid var(--border-subtle) !important;
+  border-bottom: none !important;
+  box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.32) !important;
+  z-index: 100 !important;
+  transition: background 0.25s ease, border-color 0.25s ease;
+}
+
+.lab-badge, .lab-slide-badge {
+  font-family: var(--font-mono);
+  font-weight: 900;
+  color: var(--cyan-core);
+  font-size: 0.82rem;
+  background: rgba(56, 189, 248, 0.12);
+  border: 1px solid rgba(56, 189, 248, 0.32);
+  padding: 0.18rem 0.65rem;
+  border-radius: 6px;
+  letter-spacing: 0.04em;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+}
+
+.lab-btn, .lab-nav-btn {
+  background: var(--bg-card);
+  border: 1px solid var(--border-subtle);
+  color: var(--text-heading);
+  padding: 0.28rem 0.75rem;
+  border-radius: 8px;
+  font-size: 0.82rem;
+  font-weight: 700;
+  text-decoration: none;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  transition: all 0.2s ease;
+  font-family: var(--font-sans);
+  user-select: none;
+}
+
+.lab-btn:hover, .lab-nav-btn:hover {
+  background: var(--cyan-core);
+  color: #000000 !important;
+  border-color: var(--cyan-core);
+  transform: translateY(-1px);
+}
+
+.lab-btn.active, .lab-nav-btn.active {
+  background: var(--cyan-core);
+  color: #000000 !important;
+  border-color: var(--cyan-core);
+  font-weight: 900;
+}
+
+/* ==========================================================================
+   4. 通用底部狀態列與口訣條 (Universal Bottom Status Bar)
+   ========================================================================== */
+.status-bar, .bottom-mantra-bar {
+  background: var(--bg-card) !important;
+  border: 1px solid var(--border-subtle) !important;
+  border-radius: 12px;
+  color: var(--text-body) !important;
+  box-shadow: var(--shadow-card);
+  transition: background 0.25s ease, color 0.25s ease;
+}
+
+/* ==========================================================================
+   5. 通用標準字級縮放階層 (Classroom-Legible Typography Tokens)
+   ========================================================================== */
+.slide-title-standard {
+  font-family: var(--font-display);
+  font-size: clamp(2.2rem, 3.2vw, 3.4rem);
+  font-weight: 900;
+  line-height: 1.15;
+  letter-spacing: -0.02em;
+  background: var(--title-gradient);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.slide-subtitle-standard {
+  font-size: clamp(1.1rem, 1.45vw, 1.4rem);
+  font-weight: 500;
+  color: var(--text-body);
+  line-height: 1.35;
+}

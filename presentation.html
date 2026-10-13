@@ -1,0 +1,477 @@
+<!DOCTYPE html>
+<html lang="zh-TW" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>⚡ 雙語教學演示 — 全課堂無縫播放器 (12 頁演示模式)</title>
+  
+  <link rel="stylesheet" href="slides_theme.css">
+
+  <style>
+    html, body {
+      margin: 0;
+      padding: 0;
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+      background: var(--bg-space);
+      font-family: var(--font-sans);
+      color: var(--text-pure);
+      user-select: none;
+      -webkit-user-select: none;
+    }
+
+    /* 雙層平滑淡入淡出舞台 */
+    .viewport-stage {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      overflow: hidden;
+      background: #000000;
+    }
+
+    .slide-frame {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      border: none;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+      z-index: 1;
+    }
+
+    .slide-frame.active {
+      opacity: 1;
+      pointer-events: auto;
+      z-index: 2;
+    }
+
+    /* 頂部極簡進度條 */
+    .top-progress-bar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      height: 3.5px;
+      background: linear-gradient(90deg, var(--cyan-core), var(--emerald-mint));
+      z-index: 9999;
+      transition: width 0.3s ease;
+      box-shadow: 0 0 10px var(--cyan-core);
+    }
+
+    /* 浮動簡報控制列 (HUD Bar) - 支援自動淡出與多主題自適應 */
+    .hud-bar {
+      position: fixed;
+      bottom: 3.8rem;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+      padding: 0.45rem 0.85rem;
+      background: var(--bg-card);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border: 1.5px solid var(--border-light);
+      border-radius: 999px;
+      box-shadow: var(--shadow-card), 0 0 20px rgba(56, 189, 248, 0.2);
+      z-index: 9998;
+      transition: opacity 0.35s ease, transform 0.35s ease, background 0.25s ease;
+    }
+
+    .hud-bar.hidden {
+      opacity: 0;
+      pointer-events: none;
+      transform: translate(-50%, 25px);
+    }
+
+    .hud-btn {
+      background: var(--bg-surface);
+      border: 1px solid var(--border-subtle);
+      color: var(--text-pure);
+      padding: 0.35rem 0.75rem;
+      border-radius: 999px;
+      font-size: 0.84rem;
+      font-weight: 800;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
+      transition: all 0.2s ease;
+      font-family: var(--font-sans);
+      text-decoration: none;
+    }
+
+    .hud-btn:hover {
+      background: var(--cyan-core);
+      color: #000000 !important;
+      border-color: var(--cyan-core);
+      transform: translateY(-2px);
+    }
+
+    .hud-counter {
+      font-family: var(--font-mono);
+      font-size: 0.88rem;
+      font-weight: 900;
+      color: var(--cyan-core);
+      padding: 0 0.5rem;
+      letter-spacing: 0.05em;
+    }
+
+    .hud-title {
+      font-size: 0.84rem;
+      font-weight: 700;
+      color: var(--text-dim);
+      max-width: 260px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      padding: 0 0.4rem;
+      border-left: 1px solid var(--border-subtle);
+      border-right: 1px solid var(--border-subtle);
+    }
+
+    /* 12 頁快速總覽抽屜 (Drawer) */
+    .overview-drawer {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      background: rgba(7, 11, 20, 0.88);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      z-index: 10000;
+      display: flex;
+      flex-direction: column;
+      padding: 2.5rem 3.5rem;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.25s ease;
+    }
+
+    .overview-drawer.open {
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    .drawer-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 1.5rem;
+      padding-bottom: 1rem;
+      border-bottom: 1px solid var(--border-subtle);
+    }
+
+    .drawer-title {
+      font-family: var(--font-display);
+      font-size: 1.8rem;
+      font-weight: 900;
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+    }
+
+    .drawer-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 1.1rem;
+      overflow-y: auto;
+      padding-right: 0.5rem;
+      flex: 1;
+    }
+
+    .drawer-card {
+      background: rgba(15, 23, 42, 0.85);
+      border: 1.5px solid var(--border-subtle);
+      border-radius: 14px;
+      padding: 1rem 1.1rem;
+      cursor: pointer;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      transition: all 0.2s ease;
+      position: relative;
+    }
+
+    .drawer-card:hover {
+      border-color: var(--cyan-core);
+      transform: translateY(-4px);
+      box-shadow: 0 10px 24px rgba(56, 189, 248, 0.25);
+    }
+
+    .drawer-card.current {
+      border-color: var(--emerald-mint);
+      background: rgba(5, 150, 105, 0.15);
+      box-shadow: 0 0 20px rgba(52, 211, 153, 0.35);
+    }
+
+    .drawer-card-num {
+      font-family: var(--font-mono);
+      font-size: 0.78rem;
+      font-weight: 900;
+      color: var(--cyan-core);
+      margin-bottom: 0.3rem;
+    }
+
+    .drawer-card-title {
+      font-size: 0.96rem;
+      font-weight: 800;
+      line-height: 1.35;
+      color: var(--text-pure);
+    }
+  </style>
+</head>
+<body>
+
+  <!-- 頂部進度條 -->
+  <div class="top-progress-bar" id="progressBar" style="width: 8.33%;"></div>
+
+  <!-- 雙層 iframe 無縫平滑切換舞台 -->
+  <div class="viewport-stage">
+    <iframe class="slide-frame active" id="frameA" src="slide01_cover.html"></iframe>
+    <iframe class="slide-frame" id="frameB" src="about:blank"></iframe>
+  </div>
+
+  <!-- 浮動簡報工具列 (HUD) -->
+  <nav class="hud-bar" id="hudBar">
+    <a href="index.html" class="hud-btn" title="回到完整卡片目錄">📋 目錄</a>
+    <button class="hud-btn" onclick="prevSlide()" title="上一頁 (快捷鍵: ← 或 PageUp)">◀ 上一頁</button>
+    <div class="hud-counter" id="hudCounter">01 / 12</div>
+    <div class="hud-title" id="hudTitle">半導體基礎與電子銲接實作</div>
+    <button class="hud-btn" onclick="nextSlide()" title="下一頁 (快捷鍵: → 或 PageDown、空白鍵)">下一頁 ▶</button>
+    <button class="hud-btn" onclick="toggleDrawer()" title="開啟 12 頁縮圖抽屜 (快捷鍵: Esc)">📑 總覽</button>
+    <button class="hud-btn" id="themeBtn" onclick="toggleTheme()" title="切換教學主題 (快捷鍵: T)">🌙 鈦黑科技</button>
+    <button class="hud-btn" onclick="toggleFullscreen()" title="切換全螢幕 (快捷鍵: F 或 F11)">⛶ 全螢幕</button>
+  </nav>
+
+  <!-- 12 頁縮圖快速跳頁抽屜 -->
+  <aside class="overview-drawer" id="overviewDrawer" onclick="if(event.target === this) toggleDrawer()">
+    <div class="drawer-header">
+      <div class="drawer-title">
+        <span>📑 全課堂 12 頁即時切換導航</span>
+        <span style="font-size: 0.9rem; font-weight: 600; color: var(--text-dim);">點選任一卡片即可毫秒直達</span>
+      </div>
+      <button class="hud-btn" onclick="toggleDrawer()">✕ 關閉 (Esc)</button>
+    </div>
+    <div class="drawer-grid" id="drawerGrid"></div>
+  </aside>
+
+  <script>
+    // 12 頁標準課程清單
+    const SLIDES = [
+      { id: '01', file: 'slide01_cover.html', title: '半導體基礎與電子銲接實作 (封面)' },
+      { id: '02', file: 'slide02_tsmc_hook.html', title: '為什麼全世界都在談台灣與半導體？' },
+      { id: '03', file: 'slide03_conductor_insulator.html', title: '導電特性檢驗：導體 vs 絕緣體' },
+      { id: '04', file: 'slide04_semiconductor_switch.html', title: '半導體雙重性：光控路燈與垂直調光' },
+      { id: '05', file: 'slide05_core_functions.html', title: '半導體四大核心能力 (運算・感測・控制・發光)' },
+      { id: '06', file: 'slide06_sentence_frame.html', title: '雙語句型表達與生活科技應用' },
+      { id: '07', file: 'slide07_tools_workspace.html', title: '工具認識與工作桌定位佈局' },
+      { id: '08', file: 'slide08_safety_rules.html', title: '插電前六大安全守則 (圖示卡片版)' },
+      { id: '09', file: 'slide09_solder_4steps.html', title: '銲接四步驟口訣節奏：清、熱、餵、離' },
+      { id: '10', file: 'slide10_polarity_alignment.html', title: '閃亮聖誕燈製作：正負布局與銲接示範' },
+      { id: '11', file: 'slide11_student_assembly.html', title: '學生實作：兩大關鍵鐵律 (正接正負接負 / 銲完即測)' },
+      { id: '12', file: 'slide12_cleanup_packup.html', title: '收工整頓：下課安全三部曲 (拔電源 / 還工具 / 肥皂洗手)' }
+    ];
+
+    let currentIndex = 0;
+    let activeFrameId = 'frameA';
+    let isTransitioning = false;
+
+    const frameA = document.getElementById('frameA');
+    const frameB = document.getElementById('frameB');
+    const progressBar = document.getElementById('progressBar');
+    const hudCounter = document.getElementById('hudCounter');
+    const hudTitle = document.getElementById('hudTitle');
+    const hudBar = document.getElementById('hudBar');
+    const drawerGrid = document.getElementById('drawerGrid');
+    const overviewDrawer = document.getElementById('overviewDrawer');
+
+    // 建立抽屜縮圖卡片
+    function buildDrawer() {
+      drawerGrid.innerHTML = SLIDES.map((s, idx) => `
+        <div class="drawer-card ${idx === currentIndex ? 'current' : ''}" onclick="goToSlide(${idx}); toggleDrawer();">
+          <div class="drawer-card-num">SLIDE ${s.id}</div>
+          <div class="drawer-card-title">${s.title}</div>
+        </div>
+      `).join('');
+    }
+
+    // 換頁核心邏輯 (雙層 iframe 交叉平滑淡入，完全不閃爍)
+    function goToSlide(index, updateHash = true) {
+      if (index < 0 || index >= SLIDES.length) return;
+      if (index === currentIndex && isTransitioning) return;
+
+      currentIndex = index;
+      const targetSlide = SLIDES[currentIndex];
+
+      // 更新進度條與文字
+      progressBar.style.width = `${((currentIndex + 1) / SLIDES.length) * 100}%`;
+      hudCounter.textContent = `${targetSlide.id} / ${SLIDES.length.toString().padStart(2, '0')}`;
+      hudTitle.textContent = targetSlide.title;
+
+      if (updateHash) {
+        window.location.hash = `slide${currentIndex + 1}`;
+      }
+
+      // 決定當前與下一層 frame
+      const currentFrame = activeFrameId === 'frameA' ? frameA : frameB;
+      const nextFrame = activeFrameId === 'frameA' ? frameB : frameA;
+      activeFrameId = activeFrameId === 'frameA' ? 'frameB' : 'frameA';
+
+      isTransitioning = true;
+      nextFrame.src = targetSlide.file + '?t=' + Date.now();
+
+      nextFrame.onload = () => {
+        // 同步深淺主題到新 frame
+        syncThemeToFrame(nextFrame);
+        // 切換 active 樣式 (平滑淡入)
+        nextFrame.classList.add('active');
+        currentFrame.classList.remove('active');
+        isTransitioning = false;
+        // 傳遞鍵盤焦點
+        try { nextFrame.contentWindow.focus(); } catch(e) {}
+      };
+
+      buildDrawer();
+    }
+
+    function nextSlide() {
+      if (currentIndex < SLIDES.length - 1) {
+        goToSlide(currentIndex + 1);
+      }
+    }
+
+    function prevSlide() {
+      if (currentIndex > 0) {
+        goToSlide(currentIndex - 1);
+      }
+    }
+
+    // 全螢幕切換
+    function toggleFullscreen() {
+      if (!document.fullscreenElement) {
+        document.documentElement.requestFullscreen().catch(err => alert("全螢幕請求失敗"));
+      } else {
+        document.exitFullscreen();
+      }
+    }
+
+    // 抽屜總覽切換
+    function toggleDrawer() {
+      overviewDrawer.classList.toggle('open');
+    }
+
+    // 🎨 5 大專業教學主題庫
+    const THEMES = [
+      { id: 'dark', label: '🌙 鈦黑科技' },
+      { id: 'light', label: '☀️ 俐落亮白' },
+      { id: 'navy', label: '🌊 海軍深藍' },
+      { id: 'ice', label: '🧊 冰晶天藍' },
+      { id: 'mono', label: '📐 極簡石墨' }
+    ];
+
+    function updateThemeBtn(themeId) {
+      const themeBtn = document.getElementById('themeBtn');
+      const found = THEMES.find(t => t.id === themeId) || THEMES[0];
+      if (themeBtn) {
+        themeBtn.textContent = found.label;
+      }
+    }
+
+    // 教學主題切換 (輪播切換 5 大高對比主題)
+    function toggleTheme() {
+      const html = document.documentElement;
+      const current = html.getAttribute('data-theme') || 'dark';
+      const curIdx = THEMES.findIndex(t => t.id === current);
+      const nextIdx = (curIdx + 1) % THEMES.length;
+      const nextTheme = THEMES[nextIdx].id;
+
+      html.setAttribute('data-theme', nextTheme);
+      localStorage.setItem('slides_theme', nextTheme);
+      updateThemeBtn(nextTheme);
+
+      // 同步到目前活動的 iframe
+      syncThemeToFrame(frameA);
+      syncThemeToFrame(frameB);
+    }
+
+    function syncThemeToFrame(frame) {
+      try {
+        const theme = document.documentElement.getAttribute('data-theme') || 'dark';
+        if (frame.contentDocument) {
+          frame.contentDocument.documentElement.setAttribute('data-theme', theme);
+        }
+      } catch (e) {}
+    }
+
+    // 全域鍵盤與簡報筆監聽 (PageUp / PageDown / 左右箭頭 / 空白鍵)
+    window.addEventListener('keydown', (e) => {
+      if (overviewDrawer.classList.contains('open')) {
+        if (e.key === 'Escape') toggleDrawer();
+        return;
+      }
+
+      if (e.key === 'ArrowRight' || e.key === 'PageDown' || e.key === ' ' || e.key === 'Enter') {
+        e.preventDefault();
+        nextSlide();
+      } else if (e.key === 'ArrowLeft' || e.key === 'PageUp' || e.key === 'Backspace') {
+        e.preventDefault();
+        prevSlide();
+      } else if (e.key === 'f' || e.key === 'F') {
+        toggleFullscreen();
+      } else if (e.key === 't' || e.key === 'T') {
+        toggleTheme();
+      } else if (e.key === 'Escape') {
+        toggleDrawer();
+      }
+    });
+
+    // 接收子 iframe 內部傳遞出來的鍵盤事件 (支援簡報筆點擊在 iframe 內時也能翻頁)
+    window.addEventListener('message', (e) => {
+      if (e.data && e.data.type === 'SLIDE_NAV') {
+        if (e.data.action === 'next') nextSlide();
+        if (e.data.action === 'prev') prevSlide();
+        if (e.data.action === 'theme') toggleTheme();
+      }
+    });
+
+    // HUD 工具列自動隱藏 (靜止 3.5 秒淡出，滑鼠移動立即顯示)
+    let hideTimer = null;
+    function resetHudTimer() {
+      hudBar.classList.remove('hidden');
+      clearTimeout(hideTimer);
+      hideTimer = setTimeout(() => {
+        if (!overviewDrawer.classList.contains('open')) {
+          hudBar.classList.add('hidden');
+        }
+      }, 3500);
+    }
+    window.addEventListener('mousemove', resetHudTimer);
+    resetHudTimer();
+
+    // 讀取 URL Hash 與主題初始化頁面
+    window.addEventListener('DOMContentLoaded', () => {
+      buildDrawer();
+      const savedTheme = localStorage.getItem('slides_theme') || 'dark';
+      document.documentElement.setAttribute('data-theme', savedTheme);
+      updateThemeBtn(savedTheme);
+
+      const hashMatch = window.location.hash.match(/slide(\d+)/);
+      if (hashMatch) {
+        const idx = parseInt(hashMatch[1], 10) - 1;
+        if (idx >= 0 && idx < SLIDES.length) {
+          goToSlide(idx, false);
+          return;
+        }
+      }
+      goToSlide(0, false);
+    });
+  </script>
+</body>
+</html>

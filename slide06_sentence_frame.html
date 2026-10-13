@@ -1,0 +1,902 @@
+<!DOCTYPE html>
+<html lang="zh-TW" data-theme="dark">
+<head>
+  <link rel="stylesheet" href="slides_theme.css?v=20261013">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Slide 06: 雙語句型表達與生活科技應用 | 生活科技雙語教學</title>
+  
+  <!-- Google Fonts: Inter, Outfit, JetBrains Mono -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Outfit:wght@500;600;700;800;900&family=JetBrains+Mono:wght@600;700;800&display=swap" rel="stylesheet">
+
+  <style>
+    /* ===================================================================
+       1. Design Tokens & Visual Hierarchy
+       =================================================================== */
+    :root {
+      --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      --font-display: 'Outfit', var(--font-sans);
+      --font-mono: 'JetBrains Mono', monospace;
+    }
+
+    
+
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background-color: var(--bg-deep) !important;
+      background-image: var(--bg-gradient) !important;
+      transition: background-color 0.3s ease, color 0.3s ease;
+      user-select: none;
+    }
+
+    /* 頂部導覽列 */
+    .lab-bar {
+      width: 100%;
+      background: var(--nav-bg) !important;
+      backdrop-filter: blur(10px);
+      border-bottom: 1px solid var(--border-subtle) !important;
+      padding: 0.35rem 1.6rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      z-index: 100;
+    }
+    .lab-btn {
+      background: rgba(255, 255, 255, 0.08);
+      border: 1px solid var(--border-subtle);
+      color: var(--text-heading);
+      padding: 0.28rem 0.75rem;
+      border-radius: 8px;
+      font-size: 0.82rem;
+      font-weight: 700;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
+      transition: all 0.2s ease;
+      text-decoration: none;
+    }
+    .lab-btn:hover {
+      background: rgba(56, 189, 248, 0.18);
+      border-color: var(--cyan-core);
+      color: var(--cyan-core);
+    }
+    .lab-btn.active {
+      background: var(--cyan-core);
+      color: #041226;
+      border-color: var(--cyan-core);
+    }
+
+    /* 主舞台 (1080p 零捲動自適應) */
+    .slide-stage {
+      width: 100%;
+      max-width: 1440px;
+      height: calc(100vh - 46px);
+      max-height: 864px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      align-items: center;
+      padding: 0.7rem 2rem 0.9rem;
+      position: relative;
+    }
+
+    /* 頂部標題區 */
+    .slide-header {
+      text-align: center;
+      margin-bottom: 0.2rem;
+    }
+    .slide-tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      font-family: var(--font-mono);
+      font-size: 0.78rem;
+      font-weight: 800;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--cyan-core);
+      background: rgba(56, 189, 248, 0.12);
+      border: 1px solid rgba(56, 189, 248, 0.3);
+      padding: 0.16rem 0.75rem;
+      border-radius: 9999px;
+      margin-bottom: 0.2rem;
+    }
+    .slide-title {
+      font-family: var(--font-display);
+      font-size: clamp(2.2rem, 3.2vw, 3.1rem);
+      font-weight: 900;
+      letter-spacing: -0.02em;
+      line-height: 1.15;
+      color: var(--text-pure);
+      margin-bottom: 0.15rem;
+    }
+    .slide-subtitle {
+      font-size: clamp(0.96rem, 1.25vw, 1.18rem);
+      color: var(--text-dim);
+      font-weight: 600;
+    }
+
+    /* ===================================================================
+       2. 四大功能單字庫 (Word Bank Pills) - 位於中央句型正上方
+       =================================================================== */
+    .word-bank-container {
+      width: 100%;
+      max-width: 1200px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.4rem;
+      margin-top: 0.35rem;
+    }
+    .word-bank-header {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-family: var(--font-mono);
+      font-size: 0.78rem;
+      font-weight: 800;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--text-dim);
+    }
+    .word-bank-row {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: clamp(0.7rem, 1.2vw, 1.2rem);
+      width: 100%;
+    }
+    .function-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: clamp(0.4rem, 0.8vh, 0.6rem) clamp(1rem, 1.5vw, 1.4rem);
+      border-radius: 9999px;
+      font-family: var(--font-display);
+      font-size: clamp(1.05rem, 1.4vw, 1.3rem);
+      font-weight: 800;
+      border: 2px solid;
+      background: var(--bg-card);
+      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.25);
+      backdrop-filter: blur(10px);
+      transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+      cursor: pointer;
+    }
+    .function-pill:hover {
+      transform: translateY(-2px) scale(1.04);
+    }
+    .pill-num {
+      font-family: var(--font-mono);
+      font-size: 0.78rem;
+      font-weight: 900;
+      padding: 0.1rem 0.45rem;
+      border-radius: 6px;
+      background: rgba(255, 255, 255, 0.12);
+    }
+    .function-pill.pill-computing {
+      border-color: var(--cyan-core);
+      color: var(--cyan-core);
+      background: rgba(56, 189, 248, 0.1);
+    }
+    .function-pill.pill-computing:hover {
+      box-shadow: var(--shadow-glow-cyan);
+    }
+    .function-pill.pill-sensing {
+      border-color: var(--amber-warm);
+      color: var(--amber-warm);
+      background: rgba(251, 191, 36, 0.1);
+    }
+    .function-pill.pill-sensing:hover {
+      box-shadow: var(--shadow-glow-amber);
+    }
+    .function-pill.pill-control {
+      border-color: var(--indigo-glow);
+      color: var(--indigo-glow);
+      background: rgba(129, 140, 248, 0.1);
+    }
+    .function-pill.pill-control:hover {
+      box-shadow: var(--shadow-glow-indigo);
+    }
+    .function-pill.pill-lighting {
+      border-color: var(--emerald-mint);
+      color: var(--emerald-mint);
+      background: rgba(52, 211, 153, 0.12);
+    }
+    .function-pill.pill-lighting:hover {
+      box-shadow: var(--shadow-glow-mint);
+    }
+
+
+    /* ===================================================================
+       3. 核心句型區 (正中央，焦點大幅放大、外框高度加高)
+       =================================================================== */
+    .sentence-hero-card {
+      width: 100%;
+      max-width: 1360px;
+      min-height: clamp(185px, 25vh, 235px);
+      background: linear-gradient(135deg, rgba(15, 23, 42, 0.94) 0%, rgba(30, 41, 59, 0.9) 100%);
+      border: 3px solid rgba(56, 189, 248, 0.4);
+      border-radius: 26px;
+      padding: clamp(2.2rem, 3.8vh, 3rem) clamp(1.6rem, 2.8vw, 3.4rem);
+      box-shadow: 0 20px 48px -10px rgba(0, 0, 0, 0.75), 0 0 40px rgba(56, 189, 248, 0.3);
+      backdrop-filter: blur(16px);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      margin: 0.35rem 0 0.5rem;
+      position: relative;
+      transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .sentence-hero-card:hover {
+      border-color: var(--cyan-core);
+      box-shadow: 0 24px 56px -10px rgba(0, 0, 0, 0.85), var(--shadow-glow-cyan);
+    }
+    .sentence-badge-tag {
+      position: absolute;
+      top: -13px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: linear-gradient(90deg, #0284c7, #38bdf8);
+      color: #041226;
+      font-family: var(--font-mono);
+      font-size: 0.82rem;
+      font-weight: 900;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      padding: 0.28rem 1.15rem;
+      border-radius: 9999px;
+      box-shadow: 0 4px 16px rgba(56, 189, 248, 0.45);
+    }
+    .sentence-frame-text {
+      font-family: var(--font-display);
+      font-size: clamp(1.85rem, 2.6vw, 2.85rem);
+      font-weight: 900;
+      color: var(--text-pure);
+      line-height: 1.35;
+      letter-spacing: -0.01em;
+      margin-top: 0.2rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      white-space: nowrap;
+      gap: 0.45rem 0.65rem;
+    }
+    .article-highlight {
+      color: var(--amber-warm);
+      font-weight: 900;
+    }
+    .slot-pill {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 0.18rem 1.1rem;
+      border-radius: 16px;
+      font-weight: 900;
+      border: 3px solid;
+      background: rgba(255, 255, 255, 0.05);
+      transition: all 0.25s ease;
+      letter-spacing: 0;
+    }
+    .slot-pill.slot-product {
+      color: var(--cyan-core);
+      border-color: var(--cyan-core);
+      background: rgba(56, 189, 248, 0.15);
+      box-shadow: 0 0 20px rgba(56, 189, 248, 0.3);
+    }
+    .slot-pill.slot-function {
+      color: var(--emerald-mint);
+      border-color: var(--emerald-mint);
+      background: rgba(52, 211, 153, 0.15);
+      box-shadow: 0 0 20px rgba(52, 211, 153, 0.3);
+    }
+    .sentence-helper-zh {
+      font-size: clamp(0.92rem, 1.15vw, 1.1rem);
+      font-weight: 600;
+      color: var(--text-dim);
+      margin-top: 0.7rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    .sentence-helper-zh strong {
+      color: var(--text-heading);
+    }
+
+    /* ===================================================================
+       4. 科技產品視覺提示區 (Visual Prompts) - 橫向 8 個日常生活科技產品
+       =================================================================== */
+    .prompts-section {
+      width: 100%;
+      max-width: 1380px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.35rem;
+      margin-bottom: 0.15rem;
+    }
+    .prompts-header-row {
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+      font-family: var(--font-mono);
+      font-size: 0.75rem;
+      font-weight: 800;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--text-dim);
+    }
+    .products-grid-8 {
+      display: grid;
+      grid-template-columns: repeat(8, 1fr);
+      gap: clamp(0.45rem, 0.75vw, 0.85rem);
+      width: 100%;
+    }
+    .product-icon-card {
+      background: var(--bg-card);
+      border: 2px solid var(--border-subtle);
+      border-radius: 18px;
+      padding: clamp(0.5rem, 0.85vh, 0.75rem) 0.35rem;
+      height: clamp(120px, 15vh, 145px);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      cursor: pointer;
+      box-shadow: var(--shadow-card);
+      backdrop-filter: blur(12px);
+      transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+      overflow: hidden;
+    }
+    .product-icon-card:hover {
+      transform: translateY(-5px) scale(1.04);
+      border-color: var(--cyan-core);
+      box-shadow: 0 16px 32px rgba(0, 0, 0, 0.45), var(--shadow-glow-cyan);
+    }
+    .product-icon-card.active-focus {
+      border-color: var(--cyan-core);
+      background: linear-gradient(160deg, rgba(56, 189, 248, 0.22) 0%, var(--bg-card) 100%);
+      box-shadow: 0 0 35px rgba(56, 189, 248, 0.65), 0 14px 28px rgba(0, 0, 0, 0.5);
+      transform: translateY(-4px) scale(1.05);
+    }
+    .product-icon-card.active-focus.lamp-card {
+      border-color: var(--emerald-mint);
+      background: linear-gradient(160deg, rgba(52, 211, 153, 0.22) 0%, var(--bg-card) 100%);
+      box-shadow: 0 0 38px rgba(52, 211, 153, 0.7), 0 14px 28px rgba(0, 0, 0, 0.5);
+    }
+    .product-icon-card.active-focus.traffic-card {
+      border-color: var(--amber-warm);
+      background: linear-gradient(160deg, rgba(251, 191, 36, 0.22) 0%, var(--bg-card) 100%);
+      box-shadow: 0 0 38px rgba(251, 191, 36, 0.7), 0 14px 28px rgba(0, 0, 0, 0.5);
+    }
+    .card-index-watermark {
+      position: absolute;
+      top: 0.35rem;
+      left: 0.55rem;
+      font-family: var(--font-mono);
+      font-size: 0.72rem;
+      font-weight: 900;
+      color: var(--text-dim);
+      opacity: 0.55;
+    }
+    .product-svg {
+      width: 100%;
+      height: 100%;
+      max-width: 95px;
+      max-height: 95px;
+      filter: drop-shadow(0 6px 14px rgba(0, 0, 0, 0.5));
+      transition: all 0.3s ease;
+    }
+    .product-icon-card:hover .product-svg,
+    .product-icon-card.active-focus .product-svg {
+      transform: scale(1.08);
+      filter: drop-shadow(0 8px 18px rgba(56, 189, 248, 0.45));
+    }
+    .product-icon-card.active-focus.lamp-card .product-svg {
+      filter: drop-shadow(0 8px 20px rgba(52, 211, 153, 0.65));
+    }
+
+    /* 底部操作提示列 */
+    .lab-footer-tips {
+      margin-top: 0.2rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 0.82rem;
+      color: var(--text-dim);
+      font-weight: 600;
+      width: 100%;
+      max-width: 1360px;
+      padding: 0.1rem 0.5rem;
+    }
+    .kbd-chip {
+      background: rgba(255, 255, 255, 0.1);
+      border: 1px solid var(--border-subtle);
+      padding: 0.15rem 0.45rem;
+      border-radius: 6px;
+      font-family: var(--font-mono);
+      color: var(--text-heading);
+      font-weight: 700;
+    }
+  </style>
+</head>
+<body>
+  <!-- High-Tech Semiconductor Wafer Photographic Backdrop -->
+  <div class="tech-bg-wallpaper"></div>
+
+
+  <!-- 頂部獨立調校導覽列 -->
+  <header class="lab-bar">
+    <div style="display: flex; align-items: center; gap: 0.8rem;">
+      <a href="index.html" class="lab-btn" style="text-decoration: none; color: var(--emerald-mint); font-weight: 800;">📋 簡報目錄</a>
+      <span style="font-family: var(--font-mono, monospace); font-weight: 900; color: var(--cyan-core); font-size: 0.88rem; background: rgba(56, 189, 248, 0.12); border: 1px solid rgba(56, 189, 248, 0.35); padding: 0.18rem 0.6rem; border-radius: 6px;">
+        SLIDE 06 / 12
+      </span>
+      <span style="color: var(--text-dim); font-size: 0.82rem; font-weight: 600;">| 口語練習鷹架 (Speaking Practice Scaffold)</span>
+    </div>
+
+    <div style="display: flex; align-items: center; gap: 0.5rem;">
+      <a href="slide05_core_functions.html" class="lab-btn" style="text-decoration: none;">◀ 上一頁 (05)</a>
+      <a href="slide07_tools_workspace.html" class="lab-btn" style="text-decoration: none;">下一頁 (07) ▶</a>
+      <button class="lab-btn" onclick="clearFocus()" title="清除聚焦選取">🔄 清除高亮</button>
+      <button class="lab-btn" onclick="toggleTheme()" title="切換主題 (T)">
+        <span id="themeIcon">☀️</span> 切換主題
+      </button>
+    </div>
+  </header>
+
+  <!-- 主舞台 -->
+  <main class="slide-stage">
+
+    <!-- 1. 頂部標題區 -->
+    <header class="slide-header">
+      <span class="slide-tag">Speaking Practice Scaffold</span>
+      <h1 class="slide-title">Semiconductors in Daily Life</h1>
+      <p class="slide-subtitle">說出身邊科技產品的半導體核心能力</p>
+    </header>
+
+    <!-- 2. 四大功能單字庫 (Word Bank Pills) - 抬頭對照 -->
+    <section class="word-bank-container">
+      <div class="word-bank-header">
+        <span>📚 Word Bank • 4 Core Functions</span>
+      </div>
+      <div class="word-bank-row">
+        <div class="function-pill pill-computing" onclick="highlightFunction('Computing')">
+          <span class="pill-num">1</span>
+          <span>Computing</span>
+        </div>
+        <div class="function-pill pill-sensing" onclick="highlightFunction('Sensing')">
+          <span class="pill-num">2</span>
+          <span>Sensing</span>
+        </div>
+        <div class="function-pill pill-control" onclick="highlightFunction('Control')">
+          <span class="pill-num">3</span>
+          <span>Control</span>
+        </div>
+        <div class="function-pill pill-lighting" onclick="highlightFunction('Lighting')">
+          <span class="pill-num">4</span>
+          <span>Lighting</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- 3. 核心句型區 (正中央，焦點放大) -->
+    <section class="sentence-hero-card" id="sentenceHero">
+      <span class="sentence-badge-tag">🎯 Speaking Scaffold • 核心句型</span>
+      
+      <div class="sentence-frame-text">
+        <span class="article-highlight" id="slotArticle">A</span>
+        <span class="slot-pill slot-product" id="slotProduct">[ 科技產品 ]</span>
+        <span>uses semiconductors for</span>
+        <span class="slot-pill slot-function" id="slotFunction">[ Function ]</span>
+        <span>.</span>
+      </div>
+
+      <div class="sentence-helper-zh" id="sentenceHelperZh">
+        💡 <strong>「科技產品」</strong> 使用半導體來進行 <strong>「核心功能」</strong>
+      </div>
+    </section>
+
+    <!-- 4. 科技產品視覺提示區 (Visual Prompts) - 橫向 6 個產品純圖示 (無任何文字) -->
+    <section class="prompts-section">
+      <div class="prompts-header-row">
+        <span>🔍 Visual Prompts • 觀察生活中的科技產品（點擊圖示高亮聚焦）</span>
+      </div>
+
+      <div class="products-grid-8">
+
+        <!-- 1. 智慧型手機 (Smartphone) -->
+        <article class="product-icon-card" id="card-1" onclick="toggleCardFocus(1)" title="科技產品 1">
+          <span class="card-index-watermark">#1</span>
+          <svg class="product-svg" viewBox="0 0 120 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <!-- 手機外殼 -->
+            <rect x="30" y="8" width="60" height="104" rx="14" fill="#0f172a" stroke="#38bdf8" stroke-width="3"/>
+            <!-- 螢幕底色 -->
+            <rect x="35" y="16" width="50" height="88" rx="8" fill="#1e293b"/>
+            <!-- 頂部聽筒與鏡頭 -->
+            <rect x="48" y="11" width="18" height="3" rx="1.5" fill="#64748b"/>
+            <circle cx="70" cy="12.5" r="1.5" fill="#38bdf8"/>
+            <!-- 螢幕上方彩色彩繪 App 圖示網格 (鮮明亮麗，一眼看出智慧型手機) -->
+            <rect x="40" y="24" width="10" height="10" rx="3" fill="#ef4444"/>
+            <rect x="55" y="24" width="10" height="10" rx="3" fill="#10b981"/>
+            <rect x="70" y="24" width="10" height="10" rx="3" fill="#3b82f6"/>
+            <rect x="40" y="39" width="10" height="10" rx="3" fill="#f59e0b"/>
+            <rect x="55" y="39" width="10" height="10" rx="3" fill="#8b5cf6"/>
+            <rect x="70" y="39" width="10" height="10" rx="3" fill="#06b6d4"/>
+            <rect x="40" y="54" width="10" height="10" rx="3" fill="#ec4899"/>
+            <rect x="55" y="54" width="10" height="10" rx="3" fill="#38bdf8"/>
+            <rect x="70" y="54" width="10" height="10" rx="3" fill="#84cc16"/>
+            <!-- 底部 Dock 欄與小白條 -->
+            <rect x="38" y="78" width="44" height="14" rx="4" fill="rgba(255,255,255,0.12)"/>
+            <circle cx="45" cy="85" r="3.5" fill="#38bdf8"/>
+            <circle cx="60" cy="85" r="3.5" fill="#10b981"/>
+            <circle cx="75" cy="85" r="3.5" fill="#f59e0b"/>
+            <rect x="50" y="99" width="20" height="2" rx="1" fill="#cbd5e1"/>
+          </svg>
+        </article>
+
+        <!-- 2. 筆記型電腦 (Laptop) -->
+        <article class="product-icon-card" id="card-2" onclick="toggleCardFocus(2)" title="科技產品 2">
+          <span class="card-index-watermark">#2</span>
+          <svg class="product-svg" viewBox="0 0 120 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <!-- 筆電螢幕外框 -->
+            <rect x="22" y="18" width="76" height="52" rx="6" fill="#0f172a" stroke="#38bdf8" stroke-width="2.5"/>
+            <!-- 螢幕視窗內容 -->
+            <rect x="26" y="22" width="68" height="44" rx="3" fill="#1e293b"/>
+            <!-- 視窗標題列三色點 -->
+            <circle cx="32" cy="27" r="1.8" fill="#ef4444"/>
+            <circle cx="37" cy="27" r="1.8" fill="#f59e0b"/>
+            <circle cx="42" cy="27" r="1.8" fill="#10b981"/>
+            <line x1="26" y1="32" x2="94" y2="32" stroke="#334155" stroke-width="1.2"/>
+            <!-- 螢幕彩色程式碼/圖表亮彩線條 -->
+            <rect x="32" y="37" width="24" height="4" rx="1.5" fill="#38bdf8"/>
+            <rect x="32" y="44" width="38" height="3" rx="1" fill="#34d399"/>
+            <rect x="32" y="50" width="18" height="3" rx="1" fill="#fbbf24"/>
+            <rect x="32" y="56" width="30" height="3" rx="1" fill="#818cf8"/>
+            <rect x="68" y="37" width="20" height="22" rx="3" fill="#0284c7" opacity="0.6"/>
+            <!-- 下半部鍵盤基座 -->
+            <path d="M 12 73 L 108 73 L 98 94 L 22 94 Z" fill="#334155" stroke="#38bdf8" stroke-width="2"/>
+            <!-- 鍵盤區域 -->
+            <rect x="28" y="75" width="64" height="10" rx="2" fill="#0f172a"/>
+            <line x1="32" y1="78" x2="88" y2="78" stroke="#64748b" stroke-width="1.2" stroke-dasharray="3 2"/>
+            <line x1="32" y1="82" x2="88" y2="82" stroke="#64748b" stroke-width="1.2" stroke-dasharray="3 2"/>
+            <!-- 觸控板 -->
+            <rect x="50" y="87" width="20" height="5" rx="1.5" fill="#1e293b" stroke="#475569" stroke-width="1"/>
+          </svg>
+        </article>
+
+        <!-- 3. 感應自動門 (Automatic Door) -->
+        <article class="product-icon-card" id="card-3" onclick="toggleCardFocus(3)" title="科技產品 3">
+          <span class="card-index-watermark">#3</span>
+          <svg class="product-svg" viewBox="0 0 120 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <!-- 門框外圍結構 -->
+            <rect x="14" y="22" width="92" height="88" rx="6" fill="#0b1329" stroke="#64748b" stroke-width="2.5"/>
+            <!-- 頂部大型黃金感測盒 -->
+            <rect x="42" y="14" width="36" height="14" rx="5" fill="#1e293b" stroke="#fbbf24" stroke-width="2.5"/>
+            <circle cx="60" cy="21" r="3.5" fill="#fbbf24" filter="drop-shadow(0 0 6px #fbbf24)"/>
+            <!-- 黃色放射雷達波 (超鮮明) -->
+            <path d="M 40 34 Q 60 46 80 34" stroke="#fbbf24" stroke-width="2.8" stroke-linecap="round" fill="none"/>
+            <path d="M 32 43 Q 60 58 88 43" stroke="#fbbf24" stroke-width="2.2" stroke-linecap="round" fill="none" opacity="0.8"/>
+            <!-- 左玻璃門 (亮青藍半透光) -->
+            <rect x="20" y="42" width="37" height="64" rx="4" fill="rgba(56,189,248,0.22)" stroke="#38bdf8" stroke-width="2.2"/>
+            <line x1="28" y1="46" x2="28" y2="102" stroke="#38bdf8" stroke-width="1" stroke-dasharray="4 4" opacity="0.5"/>
+            <!-- 右玻璃門 -->
+            <rect x="63" y="42" width="37" height="64" rx="4" fill="rgba(56,189,248,0.22)" stroke="#38bdf8" stroke-width="2.2"/>
+            <line x1="92" y1="46" x2="92" y2="102" stroke="#38bdf8" stroke-width="1" stroke-dasharray="4 4" opacity="0.5"/>
+            <!-- 雙向開門綠色箭頭 -->
+            <path d="M 46 72 L 32 72 M 36 66 L 30 72 L 36 78" stroke="#34d399" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+            <path d="M 74 72 L 88 72 M 84 66 L 90 72 L 84 78" stroke="#34d399" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </article>
+
+        <!-- 4. 智慧手錶 (Smartwatch) -->
+        <article class="product-icon-card" id="card-4" onclick="toggleCardFocus(4)" title="科技產品 4">
+          <span class="card-index-watermark">#4</span>
+          <svg class="product-svg" viewBox="0 0 120 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <!-- 錶帶上下段 -->
+            <rect x="46" y="6" width="28" height="26" rx="6" fill="#334155" stroke="#475569" stroke-width="2"/>
+            <rect x="46" y="88" width="28" height="26" rx="6" fill="#334155" stroke="#475569" stroke-width="2"/>
+            <!-- 錶身外框 -->
+            <rect x="33" y="24" width="54" height="72" rx="16" fill="#0f172a" stroke="#38bdf8" stroke-width="3"/>
+            <rect x="87" y="44" width="5" height="14" rx="2.5" fill="#38bdf8"/>
+            <!-- 錶面螢幕 -->
+            <rect x="39" y="30" width="42" height="60" rx="10" fill="#1e293b"/>
+            <!-- 數字時鐘 -->
+            <text x="60" y="48" text-anchor="middle" fill="#38bdf8" font-family="'JetBrains Mono', monospace" font-weight="900" font-size="14">10:09</text>
+            <!-- 活動彩色同心環 -->
+            <circle cx="60" cy="62" r="8" stroke="#ef4444" stroke-width="2.5" fill="none"/>
+            <circle cx="60" cy="62" r="5" stroke="#10b981" stroke-width="2" fill="none"/>
+            <!-- 心率折線 -->
+            <path d="M 43 78 L 51 78 L 54 71 L 58 84 L 62 74 L 66 80 L 77 80" stroke="#fb7185" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+            <circle cx="77" cy="80" r="1.8" fill="#fb7185"/>
+          </svg>
+        </article>
+
+        <!-- 5. 檯燈 (Desk Lamp) -->
+        <article class="product-icon-card lamp-card" id="card-5" onclick="toggleCardFocus(5)" title="科技產品 5">
+          <span class="card-index-watermark">#5</span>
+          <svg class="product-svg" viewBox="0 0 120 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <!-- 底座 -->
+            <ellipse cx="40" cy="102" rx="24" ry="7" fill="#0f172a" stroke="#34d399" stroke-width="2.8"/>
+            <circle cx="40" cy="101" r="3.5" fill="#34d399"/>
+            <!-- 彎曲鵝頸燈臂 -->
+            <path d="M 40 98 C 40 55 76 56 76 36" stroke="#34d399" stroke-width="4" stroke-linecap="round" fill="none"/>
+            <!-- 燈頭罩 -->
+            <path d="M 64 32 L 92 23 C 95 22 98 25 97 28 L 89 45 C 88 47 85 48 82 47 L 64 40 Z" fill="#064e3b" stroke="#34d399" stroke-width="2.5"/>
+            <!-- 亮白 LED 發光源 -->
+            <circle cx="80" cy="40" r="6" fill="#ffffff" filter="drop-shadow(0 0 12px #34d399)"/>
+            <!-- 強烈放射光錐 (超明顯) -->
+            <polygon points="78,43 32,106 108,106" fill="url(#lampGlowBeam)" opacity="0.6"/>
+            <line x1="72" y1="48" x2="48" y2="88" stroke="#34d399" stroke-width="2" stroke-dasharray="3 3"/>
+            <line x1="88" y1="46" x2="100" y2="88" stroke="#34d399" stroke-width="2" stroke-dasharray="3 3"/>
+            <defs>
+              <linearGradient id="lampGlowBeam" x1="0%" y1="0%" x2="0%" y2="100%">
+                <stop offset="0%" stop-color="#34d399" stop-opacity="0.9"/>
+                <stop offset="100%" stop-color="#34d399" stop-opacity="0"/>
+              </linearGradient>
+            </defs>
+          </svg>
+        </article>
+
+        <!-- 6. 冷氣遙控器 (Remote Control) -->
+        <article class="product-icon-card" id="card-6" onclick="toggleCardFocus(6)" title="科技產品 6">
+          <span class="card-index-watermark">#6</span>
+          <svg class="product-svg" viewBox="0 0 120 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <!-- 遙控器長條機身 -->
+            <rect x="36" y="12" width="48" height="98" rx="14" fill="#0f172a" stroke="#818cf8" stroke-width="2.8"/>
+            <!-- 頂部紅外線發射管 -->
+            <rect x="55" y="6" width="10" height="7" rx="3" fill="#818cf8"/>
+            <circle cx="60" cy="5" r="3" fill="#fb7185" filter="drop-shadow(0 0 6px #fb7185)"/>
+            <!-- 綠色 LCD 溫度面板 -->
+            <rect x="42" y="22" width="36" height="24" rx="4" fill="#064e3b" stroke="#34d399" stroke-width="1.8"/>
+            <text x="60" y="39" text-anchor="middle" fill="#34d399" font-family="'JetBrains Mono', monospace" font-weight="900" font-size="13">26°C</text>
+            <!-- 電源紅按鈕與藍模式鈕 -->
+            <circle cx="49" cy="56" r="5" fill="#ef4444" filter="drop-shadow(0 0 4px #ef4444)"/>
+            <circle cx="71" cy="56" r="5" fill="#38bdf8"/>
+            <!-- 圓形方向調節鍵盤 -->
+            <circle cx="60" cy="78" r="14" fill="#1e293b" stroke="#818cf8" stroke-width="2"/>
+            <text x="60" y="70" text-anchor="middle" fill="#818cf8" font-size="9" font-weight="900">▲</text>
+            <text x="60" y="90" text-anchor="middle" fill="#818cf8" font-size="9" font-weight="900">▼</text>
+            <circle cx="60" cy="78" r="4.5" fill="#818cf8"/>
+            <!-- 底部條紋 -->
+            <rect x="46" y="97" width="28" height="3" rx="1.5" fill="#334155"/>
+          </svg>
+        </article>
+
+        <!-- 7. 微波爐 (Microwave Oven) -->
+        <article class="product-icon-card" id="card-7" onclick="toggleCardFocus(7)" title="科技產品 7">
+          <span class="card-index-watermark">#7</span>
+          <svg class="product-svg" viewBox="0 0 120 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <!-- 微波爐金屬外箱 -->
+            <rect x="15" y="24" width="90" height="72" rx="10" fill="#0f172a" stroke="#fbbf24" stroke-width="2.8"/>
+            <rect x="18" y="27" width="84" height="66" rx="8" fill="#1e293b"/>
+            <!-- 左側大玻璃門 -->
+            <rect x="22" y="32" width="56" height="56" rx="6" fill="#0b1329" stroke="#475569" stroke-width="2"/>
+            <!-- 爐內溫熱暖光與圓盤 -->
+            <rect x="25" y="35" width="50" height="50" rx="4" fill="url(#microHeat)"/>
+            <ellipse cx="50" cy="72" rx="18" ry="5" fill="#475569" stroke="#94a3b8" stroke-width="1.5"/>
+            <path d="M 44 60 Q 50 52 56 60" stroke="#f59e0b" stroke-width="2" stroke-linecap="round" fill="none"/>
+            <!-- 右側面板與電子定時鐘 -->
+            <rect x="81" y="34" width="18" height="12" rx="3" fill="#064e3b" stroke="#34d399" stroke-width="1.5"/>
+            <text x="90" y="43" text-anchor="middle" fill="#34d399" font-family="'JetBrains Mono', monospace" font-weight="900" font-size="7">12:00</text>
+            <!-- 旋鈕與開關鍵 -->
+            <circle cx="90" cy="54" r="4" fill="#fbbf24"/>
+            <circle cx="90" cy="65" r="4" fill="#ef4444"/>
+            <!-- 門把手 -->
+            <rect x="74" y="44" width="3" height="32" rx="1.5" fill="#cbd5e1"/>
+            <defs>
+              <radialGradient id="microHeat" cx="50%" cy="50%" r="50%">
+                <stop offset="0%" stop-color="#f59e0b" stop-opacity="0.35"/>
+                <stop offset="100%" stop-color="#0f172a" stop-opacity="0.9"/>
+              </radialGradient>
+            </defs>
+          </svg>
+        </article>
+
+        <!-- 8. 交通紅綠燈 (Traffic Light) -->
+        <article class="product-icon-card traffic-card" id="card-8" onclick="toggleCardFocus(8)" title="科技產品 8">
+          <span class="card-index-watermark">#8</span>
+          <svg class="product-svg" viewBox="0 0 120 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <!-- 底座支撐桿 -->
+            <rect x="56" y="94" width="8" height="22" fill="#475569" stroke="#64748b" stroke-width="1.5"/>
+            <!-- 交通號誌黑色箱體 -->
+            <rect x="36" y="10" width="48" height="86" rx="10" fill="#0f172a" stroke="#fbbf24" stroke-width="2.5"/>
+            <!-- 左右裝飾背板翼片 (經典紅綠燈輪廓) -->
+            <path d="M 36 24 L 28 30 L 28 76 L 36 82" stroke="#fbbf24" stroke-width="2" fill="#1e293b"/>
+            <path d="M 84 24 L 92 30 L 92 76 L 84 82" stroke="#fbbf24" stroke-width="2" fill="#1e293b"/>
+            <!-- 🔴 紅燈 (含上方遮陽罩) -->
+            <path d="M 48 18 Q 60 12 72 18" stroke="#475569" stroke-width="2.5" stroke-linecap="round" fill="none"/>
+            <circle cx="60" cy="26" r="10" fill="#ef4444" stroke="#fca5a5" stroke-width="2" filter="drop-shadow(0 0 8px #ef4444)"/>
+            <!-- 🟡 黃燈 -->
+            <path d="M 48 44 Q 60 38 72 44" stroke="#475569" stroke-width="2.5" stroke-linecap="round" fill="none"/>
+            <circle cx="60" cy="52" r="10" fill="#f59e0b" stroke="#fde68a" stroke-width="2" filter="drop-shadow(0 0 8px #f59e0b)"/>
+            <!-- 🟢 綠燈 -->
+            <path d="M 48 70 Q 60 64 72 70" stroke="#475569" stroke-width="2.5" stroke-linecap="round" fill="none"/>
+            <circle cx="60" cy="78" r="10" fill="#10b981" stroke="#a7f3d0" stroke-width="2" filter="drop-shadow(0 0 8px #10b981)"/>
+          </svg>
+        </article>
+
+      </div>
+    </section>
+
+    <!-- 5. 底部操作提示 -->
+    <footer class="lab-footer-tips">
+      <div>
+        <span>💡 <strong>口說引導：</strong>點選下方科技產品圖示高亮聚焦，請全班或個別同學思考英文單字並套入句型說出！</span>
+      </div>
+      <div>
+        <span>快捷鍵：<span class="kbd-chip">1-8</span> 聚焦產品 | <span class="kbd-chip">Esc</span> 清除選取 | <span class="kbd-chip">T</span> 切換主題</span>
+      </div>
+    </footer>
+
+  </main>
+
+  <script>
+    // ===================================================================
+    // 互動控制邏輯：點選科技產品圖示，句子立即填入該產品英文單字
+    // ===================================================================
+    let activeCardId = null;
+
+    const productsData = {
+      1: { en: 'smartphone', zh: '智慧型手機', article: 'A', defaultFunc: 'Computing' },
+      2: { en: 'laptop', zh: '筆記型電腦', article: 'A', defaultFunc: 'Computing' },
+      3: { en: 'automatic door', zh: '感應自動門', article: 'An', defaultFunc: 'Sensing' },
+      4: { en: 'smartwatch', zh: '智慧手錶', article: 'A', defaultFunc: 'Sensing' },
+      5: { en: 'desk lamp', zh: '檯燈', article: 'A', defaultFunc: 'Lighting' },
+      6: { en: 'remote control', zh: '冷氣遙控器', article: 'A', defaultFunc: 'Control' },
+      7: { en: 'microwave oven', zh: '微波爐', article: 'A', defaultFunc: 'Control' },
+      8: { en: 'traffic light', zh: '交通號誌燈', article: 'A', defaultFunc: 'Lighting' }
+    };
+
+    function toggleCardFocus(id) {
+      if (activeCardId === id) {
+        clearFocus();
+      } else {
+        clearFocus();
+        activeCardId = id;
+        const card = document.getElementById('card-' + id);
+        if (card) {
+          card.classList.add('active-focus');
+        }
+
+        const data = productsData[id];
+        if (data) {
+          const slotArt = document.getElementById('slotArticle');
+          const slotProd = document.getElementById('slotProduct');
+          const helperZh = document.getElementById('sentenceHelperZh');
+
+          if (slotArt) slotArt.textContent = data.article;
+          if (slotProd) {
+            slotProd.textContent = data.en;
+            slotProd.style.transform = 'scale(1.12)';
+            slotProd.style.boxShadow = '0 0 28px rgba(56, 189, 248, 0.85)';
+            setTimeout(() => {
+              slotProd.style.transform = 'scale(1)';
+              slotProd.style.boxShadow = '0 0 20px rgba(56, 189, 248, 0.3)';
+            }, 320);
+          }
+          if (helperZh) {
+            helperZh.innerHTML = `💡 <strong>「${data.zh}」</strong> 使用半導體來進行 <strong>「核心功能」</strong>`;
+          }
+        }
+      }
+    }
+
+    function clearFocus() {
+      activeCardId = null;
+      for (let i = 1; i <= 8; i++) {
+        const c = document.getElementById('card-' + i);
+        if (c) c.classList.remove('active-focus');
+      }
+      const slotArt = document.getElementById('slotArticle');
+      const slotProd = document.getElementById('slotProduct');
+      const helperZh = document.getElementById('sentenceHelperZh');
+      if (slotArt) slotArt.textContent = 'A';
+      if (slotProd) {
+        slotProd.textContent = '[ 科技產品 ]';
+        slotProd.style.transform = 'scale(1)';
+      }
+      if (helperZh) {
+        helperZh.innerHTML = '💡 <strong>「科技產品」</strong> 使用半導體來進行 <strong>「核心功能」</strong>';
+      }
+      const slotFunc = document.getElementById('slotFunction');
+      if (slotFunc) slotFunc.style.transform = 'scale(1)';
+    }
+
+    // 點擊 Word Bank 功能標籤時，讓句型右側 [ Function ] 槽位產生微光脈衝反饋
+    function highlightFunction(name) {
+      const slotFunc = document.getElementById('slotFunction');
+      slotFunc.textContent = name;
+      slotFunc.style.transform = 'scale(1.12)';
+      slotFunc.style.boxShadow = '0 0 25px rgba(52, 211, 153, 0.7)';
+      
+      setTimeout(() => {
+        slotFunc.style.transform = 'scale(1)';
+        slotFunc.style.boxShadow = '0 0 16px rgba(52, 211, 153, 0.25)';
+      }, 900);
+    }
+
+    function toggleTheme() {
+      const html = document.documentElement;
+      const current = html.getAttribute('data-theme') || 'dark';
+      const next = current === 'dark' ? 'light' : 'dark';
+      html.setAttribute('data-theme', next);
+      document.getElementById('themeIcon').textContent = next === 'dark' ? '☀️' : '🌙';
+    }
+
+    // 鍵盤操作快捷鍵
+    window.addEventListener('keydown', (e) => {
+      if (e.key === 't' || e.key === 'T') {
+        toggleTheme();
+      } else if (e.key === 'Escape' || e.key === 'r' || e.key === 'R') {
+        clearFocus();
+        document.getElementById('slotProduct').textContent = '[ 科技產品 ]';
+        document.getElementById('slotFunction').textContent = '[ Function ]';
+      } else if (['1', '2', '3', '4', '5', '6', '7', '8'].includes(e.key)) {
+        toggleCardFocus(parseInt(e.key));
+      } else if (e.key === 'ArrowRight' || e.key === 'PageDown') {
+        window.location.href = 'slide07_tools_workspace.html';
+      } else if (e.key === 'ArrowLeft' || e.key === 'PageUp') {
+        window.location.href = 'slide05_core_functions.html';
+      }
+    });
+  </script>
+
+  
+
+  <!-- 4 大主題切換與播放器父子通訊橋接 -->
+  <script>
+    (function() {
+      const THEMES = ['cyber', 'clean', 'maker', 'titanium'];
+      function applyTheme(theme) {
+        if (!theme) theme = 'cyber';
+        document.documentElement.setAttribute('data-theme', theme);
+      }
+      try {
+        const savedTheme = localStorage.getItem('slides_theme') || 'cyber';
+        applyTheme(savedTheme);
+      } catch(e) {}
+
+      function cycleLocalTheme() {
+        const curr = document.documentElement.getAttribute('data-theme') || 'cyber';
+        let idx = THEMES.indexOf(curr);
+        if (idx === -1) idx = 0;
+        const next = THEMES[(idx + 1) % THEMES.length];
+        applyTheme(next);
+        try { localStorage.setItem('slides_theme', next); } catch(e) {}
+      }
+
+      window.addEventListener('keydown', function(e) {
+        if (window.parent && window.parent !== window) {
+          if (e.key === 'ArrowRight' || e.key === 'PageDown' || e.key === ' ') {
+            e.preventDefault();
+            window.parent.postMessage({ type: 'SLIDE_NAV', action: 'next' }, '*');
+          } else if (e.key === 'ArrowLeft' || e.key === 'PageUp') {
+            e.preventDefault();
+            window.parent.postMessage({ type: 'SLIDE_NAV', action: 'prev' }, '*');
+          } else if (e.key === 't' || e.key === 'T') {
+            window.parent.postMessage({ type: 'SLIDE_NAV', action: 'theme' }, '*');
+          }
+        } else {
+          // 獨立開啟時按 T 也能切換 4 種風格
+          if (e.key === 't' || e.key === 'T') {
+            cycleLocalTheme();
+          }
+        }
+      });
+    })();
+  </script>
+
+</body>
+</html>
