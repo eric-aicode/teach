@@ -82,17 +82,18 @@
     /* 頁首標題 */
     .header-box {
       border-bottom: 2.5px solid #0284c7;
-      padding-bottom: 5px;
+      padding-bottom: 6px;
       display: flex;
-      justify-content: space-between;
-      align-items: flex-end;
-      gap: 12px;
+      flex-direction: column;
+      gap: 4px;
       flex-shrink: 0;
     }
 
-    .title-left {
-      flex: 1;
-      min-width: 0;
+    .header-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
     }
 
     .title-main {
@@ -111,7 +112,7 @@
       font-size: 13px;
       font-weight: 700;
       color: #0284c7;
-      margin-top: 2px;
+      margin: 0;
       white-space: nowrap;
     }
 
@@ -156,7 +157,7 @@
     /* 1. 重要單字庫 雙欄寬敞網格 */
     .vocab-grid {
       display: grid;
-      grid-template-columns: 1fr 1fr;
+      grid-template-columns: 1.05fr 0.95fr;
       gap: 12px;
     }
 
@@ -182,7 +183,7 @@
     .vocab-list {
       display: flex;
       flex-direction: column;
-      gap: 6px;
+      gap: 5.5px;
     }
 
     .vocab-item {
@@ -193,6 +194,7 @@
       line-height: 1.25;
       padding-bottom: 1px;
       border-bottom: 1px solid rgba(226, 232, 240, 0.6);
+      white-space: nowrap;
     }
 
     .vocab-item:last-child {
@@ -411,15 +413,15 @@
 
     <!-- 頁首標題與班級座號 -->
     <header class="header-box">
-      <div class="title-left">
+      <div class="header-top">
         <h1 class="title-main">⚡ 生活科技雙語課堂互動小秘笈</h1>
-        <div class="title-sub">Semiconductors & Soldering • 重要單字・核心句型・銲接步驟</div>
+        <div class="student-info">
+          <span>班級：<strong>八年_____班</strong></span>
+          <span>座號：<strong>_____</strong></span>
+          <span>姓名：<strong>_____________</strong></span>
+        </div>
       </div>
-      <div class="student-info">
-        <span>班級：<strong>八年_____班</strong></span>
-        <span>座號：<strong>_____</strong></span>
-        <span>姓名：<strong>_____________</strong></span>
-      </div>
+      <div class="title-sub">Semiconductors & Soldering • 重要單字・核心句型・銲接步驟</div>
     </header>
 
     <!-- 1. 上課重要單字 (Key Vocabulary) -->
@@ -428,31 +430,32 @@
       <div class="vocab-grid">
         <!-- 左欄：半導體概念與生活經濟 -->
         <div class="vocab-category">
-          <div class="vocab-cat-title">💡【半導體核心與生活經濟】</div>
+          <div class="vocab-cat-title">💡【半導體核心與四大能力】</div>
           <div class="vocab-list">
             <div class="vocab-item"><span class="vocab-en">Semiconductor</span><span class="vocab-zh">半導體</span></div>
             <div class="vocab-item"><span class="vocab-en">Salary (High Salaries)</span><span class="vocab-zh">薪水 (高薪資)</span></div>
             <div class="vocab-item"><span class="vocab-en">Stock (Stock Market)</span><span class="vocab-zh">股票 (股票市場)</span></div>
             <div class="vocab-item"><span class="vocab-en">Conductor / Insulator</span><span class="vocab-zh">導體 / 絕緣體</span></div>
-            <div class="vocab-item"><span class="vocab-en">LED</span><span class="vocab-zh">發光二極體 (半導體元件)</span></div>
+            <div class="vocab-item"><span class="vocab-en">Computing / Sensing</span><span class="vocab-zh">運算處理 / 感測環境</span></div>
+            <div class="vocab-item"><span class="vocab-en">Control / Lighting</span><span class="vocab-zh">控制開關 / 發光顯示</span></div>
           </div>
         </div>
 
-        <!-- 右欄：四大核心功能與銲接工具 -->
+        <!-- 右欄：LED 與銲接工具 -->
         <div class="vocab-category">
-          <div class="vocab-cat-title">🛠️【晶片四大功能與銲接工具】</div>
+          <div class="vocab-cat-title">🛠️【LED 與銲接核心工具】</div>
           <div class="vocab-list">
-            <div class="vocab-item"><span class="vocab-en">Computing / Sensing</span><span class="vocab-zh">運算處理 / 感測環境</span></div>
-            <div class="vocab-item"><span class="vocab-en">Control / Lighting</span><span class="vocab-zh">控制開關 / 發光顯示</span></div>
+            <div class="vocab-item"><span class="vocab-en">LED</span><span class="vocab-zh">發光二極體</span></div>
             <div class="vocab-item"><span class="vocab-en">Soldering Iron</span><span class="vocab-zh">電烙鐵 (產生高溫工具)</span></div>
+            <div class="vocab-item"><span class="vocab-en">Soldering Stand</span><span class="vocab-zh">烙鐵架 (安全置放防燙)</span></div>
             <div class="vocab-item"><span class="vocab-en">Solder Wire</span><span class="vocab-zh">銲錫絲 (低熔點金屬)</span></div>
-            <div class="vocab-item"><span class="vocab-en">Soldering Stand / Sponge</span><span class="vocab-zh">烙鐵架 / 清潔海綿</span></div>
+            <div class="vocab-item"><span class="vocab-en">Cleaning Ball</span><span class="vocab-zh">清潔鋼絲球 (清烙鐵錫渣)</span></div>
           </div>
         </div>
       </div>
     </section>
 
-    <!-- 2. 上課重要句型 -->
+    <!-- 2. 上課重要句型 (Sentence Pattern) -->
     <section class="section-card">
       <div class="section-badge">🎯 2. 上課會用到的重要句型 (Sentence Pattern)</div>
       <div class="sentence-hero-box">
