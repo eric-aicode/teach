@@ -1,0 +1,738 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>🖨️ 講義與投影片多頁合併列印中心 | 生活科技雙語教學演示</title>
+  <link rel="stylesheet" href="slides_theme.css">
+  <style>
+    :root {
+      --bg-preview: #e2e8f0;
+      --paper-bg: #ffffff;
+      --paper-border: #cbd5e1;
+      --paper-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1);
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html, body {
+      overflow-x: hidden !important;
+      overflow-y: auto !important;
+      height: auto !important;
+      min-height: 100vh !important;
+    }
+
+    body {
+      margin: 0;
+      padding: 0;
+      background: var(--bg-preview);
+      font-family: var(--font-sans);
+      color: #0f172a;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* 頂部固定列印控制列 (列印時自動隱藏) */
+    .print-toolbar {
+      position: sticky;
+      top: 0;
+      left: 0;
+      width: 100%;
+      background: #0f172a;
+      color: #ffffff;
+      padding: 0.75rem 1.5rem;
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
+      z-index: 1000;
+    }
+
+    .toolbar-brand {
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+      font-weight: 800;
+      font-size: 1.05rem;
+      letter-spacing: -0.01em;
+    }
+
+    .toolbar-brand span {
+      color: var(--cyan-core);
+    }
+
+    .toolbar-group {
+      display: flex;
+      align-items: center;
+      gap: 0.85rem;
+      flex-wrap: wrap;
+    }
+
+    .toolbar-item {
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+      font-size: 0.86rem;
+      font-weight: 600;
+    }
+
+    .toolbar-item label {
+      color: #94a3b8;
+    }
+
+    .toolbar-select {
+      background: #1e293b;
+      border: 1px solid #334155;
+      color: #ffffff;
+      padding: 0.38rem 0.65rem;
+      border-radius: 6px;
+      font-size: 0.86rem;
+      font-weight: 700;
+      cursor: pointer;
+      outline: none;
+      transition: border-color 0.2s ease;
+    }
+
+    .toolbar-select:focus {
+      border-color: var(--cyan-core);
+    }
+
+    .btn-action {
+      background: var(--cyan-core);
+      color: #000000;
+      border: none;
+      padding: 0.45rem 1.1rem;
+      border-radius: 6px;
+      font-size: 0.9rem;
+      font-weight: 800;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      box-shadow: 0 2px 6px rgba(56, 189, 248, 0.4);
+      transition: all 0.2s ease;
+      text-decoration: none;
+    }
+
+    .btn-action:hover {
+      background: #0284c7;
+      color: #ffffff;
+      transform: translateY(-1px);
+    }
+
+    .btn-secondary {
+      background: #334155;
+      color: #ffffff;
+      box-shadow: none;
+    }
+
+    .btn-secondary:hover {
+      background: #475569;
+      color: #ffffff;
+    }
+
+    /* 列印工作畫布 (預覽與印表機輸出區) */
+    .print-canvas {
+      flex: 1;
+      padding: 2rem 1rem 4rem 1rem;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 2.5rem;
+    }
+
+    /* 模擬一張 A4 紙張 */
+    .print-sheet {
+      background: var(--paper-bg);
+      border: 1px solid var(--paper-border);
+      box-shadow: var(--paper-shadow);
+      border-radius: 4px;
+      box-sizing: border-box;
+      position: relative;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      transition: width 0.2s ease, height 0.2s ease;
+    }
+
+    /* 橫向 A4 尺寸 (比例 297mm x 210mm) */
+    .print-sheet.landscape {
+      width: 1080px;
+      height: 763px;
+      padding: 24px;
+    }
+
+    /* 直向 A4 尺寸 (比例 210mm x 297mm) */
+    .print-sheet.portrait {
+      width: 763px;
+      height: 1080px;
+      padding: 28px;
+    }
+
+    /* 紙張頁尾資訊 */
+    .sheet-footer {
+      margin-top: auto;
+      padding-top: 8px;
+      border-top: 1px solid #e2e8f0;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 0.72rem;
+      font-weight: 700;
+      color: #64748b;
+    }
+
+    /* 投影片容器格線排版 */
+    .slide-grid {
+      flex: 1;
+      display: grid;
+      gap: 16px;
+      width: 100%;
+      height: 100%;
+      align-content: stretch;
+    }
+
+    /* 1 頁 1 張 (全版) */
+    .layout-1 .slide-grid {
+      grid-template-columns: 1fr;
+      grid-template-rows: 1fr;
+    }
+
+    /* 1 頁 2 張 (附聽課筆記線) */
+    .layout-2 .slide-grid {
+      grid-template-columns: 1fr;
+      grid-template-rows: repeat(2, 1fr);
+      gap: 20px;
+    }
+
+    .slide-card-2up {
+      display: flex;
+      gap: 18px;
+      width: 100%;
+      height: 100%;
+      border: 1px solid #cbd5e1;
+      border-radius: 8px;
+      padding: 12px;
+      background: #ffffff;
+    }
+
+    .slide-box-2up {
+      flex: 1.35;
+      aspect-ratio: 16 / 9;
+      position: relative;
+      border: 1px solid #cbd5e1;
+      border-radius: 6px;
+      overflow: hidden;
+      background: #f8fafc;
+    }
+
+    .notes-box-2up {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      padding: 6px 10px;
+    }
+
+    .notes-title {
+      font-size: 0.8rem;
+      font-weight: 800;
+      color: #334155;
+      display: flex;
+      align-items: center;
+      gap: 0.35rem;
+    }
+
+    .notes-lines {
+      flex: 1;
+      margin-top: 8px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-around;
+    }
+
+    .note-line {
+      border-bottom: 1px dashed #cbd5e1;
+      height: 22px;
+    }
+
+    /* 1 頁 4 張 (2x2 經典講義) */
+    .layout-4 .slide-grid {
+      grid-template-columns: repeat(2, 1fr);
+      grid-template-rows: repeat(2, 1fr);
+      gap: 16px;
+    }
+
+    /* 1 頁 6 張 (2x3 密集速查) */
+    .layout-6 .slide-grid {
+      grid-template-columns: repeat(3, 1fr);
+      grid-template-rows: repeat(2, 1fr);
+      gap: 12px;
+    }
+
+    /* 單張投影片卡片 */
+    .slide-item-card {
+      display: flex;
+      flex-direction: column;
+      border: 1px solid #cbd5e1;
+      border-radius: 8px;
+      overflow: hidden;
+      background: #ffffff;
+      position: relative;
+    }
+
+    .slide-item-header {
+      background: #f8fafc;
+      border-bottom: 1px solid #e2e8f0;
+      padding: 4px 8px;
+      font-size: 0.72rem;
+      font-weight: 800;
+      color: #334155;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      white-space: nowrap;
+      overflow: hidden;
+    }
+
+    .slide-item-title {
+      text-overflow: ellipsis;
+      overflow: hidden;
+      max-width: 80%;
+    }
+
+    .slide-iframe-wrap {
+      flex: 1;
+      position: relative;
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+      background: #ffffff;
+    }
+
+    /* 16:9 投影片高畫質縮放 iframe (相容 1-Up, 2-Up, 4-Up, 6-Up) */
+    .slide-box-2up iframe,
+    .slide-iframe-wrap iframe {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 1920px !important;
+      height: 1080px !important;
+      border: none;
+      transform-origin: top left;
+      pointer-events: none; /* 預覽時不觸發滑鼠誤觸 */
+    }
+
+    /* 提示訊息橫條 */
+    .print-tip-bar {
+      width: 100%;
+      max-width: 1080px;
+      background: #eff6ff;
+      border: 1px solid #bfdbfe;
+      border-radius: 8px;
+      padding: 0.75rem 1.2rem;
+      font-size: 0.85rem;
+      color: #1e3a8a;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+    }
+
+    /* ==========================================================================
+       🖨️ 實體紙張列印樣式 (@media print)
+       ========================================================================== */
+    @media print {
+      /* 自動設定實體印表機頁面方向與邊距 */
+      @page {
+        margin: 6mm;
+      }
+
+      body {
+        background: #ffffff !important;
+        color: #000000 !important;
+        padding: 0 !important;
+        margin: 0 !important;
+      }
+
+      .print-toolbar, .print-tip-bar {
+        display: none !important;
+      }
+
+      .print-canvas {
+        padding: 0 !important;
+        margin: 0 !important;
+        gap: 0 !important;
+        display: block !important;
+      }
+
+      .print-sheet {
+        box-shadow: none !important;
+        border: none !important;
+        border-radius: 0 !important;
+        margin: 0 !important;
+        page-break-after: always !important;
+        break-after: page !important;
+        page-break-inside: avoid !important;
+        break-inside: avoid !important;
+      }
+
+      .print-sheet.landscape {
+        width: 100vw !important;
+        height: 98vh !important;
+        padding: 4mm !important;
+      }
+
+      .print-sheet.portrait {
+        width: 100vw !important;
+        height: 98vh !important;
+        padding: 4mm !important;
+      }
+
+      .slide-item-card {
+        border: 1px solid #94a3b8 !important;
+      }
+
+      .slide-card-2up {
+        border: 1px solid #94a3b8 !important;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- 頂部操作工具列 (列印時隱藏) -->
+  <header class="print-toolbar">
+    <div class="toolbar-brand">
+      <span>🖨️ 講義與投影片列印中心</span>
+      <span style="font-size: 0.78rem; font-weight: 500; color: #94a3b8;">生活科技雙語教學演示</span>
+    </div>
+
+    <div class="toolbar-group">
+      <!-- 列印範圍 -->
+      <div class="toolbar-item">
+        <label for="scopeSelect">列印範圍：</label>
+        <select id="scopeSelect" class="toolbar-select" onchange="renderHandouts()">
+          <option value="all">📚 全套 12 頁完整講義</option>
+          <option value="current">📄 僅當前單頁</option>
+          <option value="1">Slide 01: 半導體基礎與電子銲接實作 (封面)</option>
+          <option value="2">Slide 02: 為什麼全世界都在談台灣與半導體？</option>
+          <option value="3">Slide 03: 導電特性檢驗：導體 vs 絕緣體</option>
+          <option value="4">Slide 04: 半導體雙重性：光控路燈與垂直調光</option>
+          <option value="5">Slide 05: 半導體四大核心能力</option>
+          <option value="6">Slide 06: 雙語句型表達與生活科技應用</option>
+          <option value="7">Slide 07: 工具認識與工作桌定位佈局</option>
+          <option value="8">Slide 08: 插電前六大安全守則</option>
+          <option value="9">Slide 09: 銲接四步驟口訣：清、熱、餵、離</option>
+          <option value="10">Slide 10: 閃亮聖誕燈製作：正負布局</option>
+          <option value="11">Slide 11: 學生實作兩大鐵律</option>
+          <option value="12">Slide 12: 收工整頓下課三部曲</option>
+        </select>
+      </div>
+
+      <!-- 每頁合併張數 -->
+      <div class="toolbar-item">
+        <label for="layoutSelect">合併版面：</label>
+        <select id="layoutSelect" class="toolbar-select" onchange="handleLayoutChange()">
+          <option value="4" selected>📑 1 頁 4 張 (2×2 經典學生講義)</option>
+          <option value="2">📝 1 頁 2 張 (附聽課筆記線)</option>
+          <option value="1">🔲 1 頁 1 張 (高畫質全版投影片)</option>
+          <option value="6">📋 1 頁 6 張 (2×3 密集速查)</option>
+        </select>
+      </div>
+
+      <!-- 紙張方向 -->
+      <div class="toolbar-item">
+        <label for="orientationSelect">方向：</label>
+        <select id="orientationSelect" class="toolbar-select" onchange="renderHandouts()">
+          <option value="landscape" selected>橫向 (Landscape)</option>
+          <option value="portrait">直向 (Portrait)</option>
+        </select>
+      </div>
+
+      <!-- 色彩省墨模式 -->
+      <div class="toolbar-item">
+        <label for="colorModeSelect">色彩模式：</label>
+        <select id="colorModeSelect" class="toolbar-select" onchange="updateColorMode()">
+          <option value="clean" selected>🖨️ 省墨白底清晰版 (去黑底・極致省墨)</option>
+          <option value="original">🎨 原版深色色彩</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="toolbar-group">
+      <button class="btn-action" onclick="window.print()" title="開啟瀏覽器列印視窗或另存為 PDF">
+        🖨️ 立即列印 / 存為 PDF
+      </button>
+      <a href="presentation.html" class="btn-action btn-secondary" title="返回主簡報播放器">
+        ◀ 返回簡報
+      </a>
+    </div>
+  </header>
+
+  <!-- 提示橫條 -->
+  <main class="print-canvas">
+    <div class="print-tip-bar">
+      <div>
+        💡 <strong>列印提示：</strong>已為您自動套用<strong>「白底省墨與高對比文字修復」</strong>，點擊<strong>「🖨️ 立即列印」</strong>時請在瀏覽器列印視窗勾選「<strong>背景圖形</strong> (Background graphics)」以完整呈現圖示與線條。
+      </div>
+      <div id="pageSummary" style="font-weight: 800; white-space: nowrap;">共 12 頁投影片 • 需 3 張 A4</div>
+    </div>
+
+    <!-- 動態講義紙張容器 -->
+    <div id="sheetContainer" style="display: flex; flex-direction: column; gap: 2.5rem; align-items: center; width: 100%;">
+      <!-- JS 動態生成 .print-sheet -->
+    </div>
+  </main>
+
+  <script>
+    // 12 頁完整課程資料
+    const ALL_SLIDES = [
+      { id: '01', file: 'slide01_cover.html', title: '半導體基礎與電子銲接實作 (封面)' },
+      { id: '02', file: 'slide02_tsmc_hook.html', title: '為什麼全世界都在談台灣與半導體？' },
+      { id: '03', file: 'slide03_conductor_insulator.html', title: '導電特性檢驗：導體 vs 絕緣體' },
+      { id: '04', file: 'slide04_semiconductor_switch.html', title: '半導體雙重性：光控路燈與垂直調光' },
+      { id: '05', file: 'slide05_core_functions.html', title: '半導體四大核心能力 (運算・感測・控制・發光)' },
+      { id: '06', file: 'slide06_sentence_frame.html', title: '雙語句型表達與生活科技應用' },
+      { id: '07', file: 'slide07_tools_workspace.html', title: '工具認識與工作桌定位佈局' },
+      { id: '08', file: 'slide08_safety_rules.html', title: '插電前六大安全守則 (圖示卡片版)' },
+      { id: '09', file: 'slide09_solder_4steps.html', title: '銲接四步驟口訣節奏：清、熱、餵、離' },
+      { id: '10', file: 'slide10_polarity_alignment.html', title: '閃亮聖誕燈製作：正負布局與銲接示範' },
+      { id: '11', file: 'slide11_student_assembly.html', title: '學生實作：兩大關鍵鐵律 (正接正負接負 / 銲完即測)' },
+      { id: '12', file: 'slide12_cleanup_packup.html', title: '收工整頓：下課安全三部曲 (拔電源 / 還工具 / 肥皂洗手)' }
+    ];
+
+    const scopeSelect = document.getElementById('scopeSelect');
+    const layoutSelect = document.getElementById('layoutSelect');
+    const orientationSelect = document.getElementById('orientationSelect');
+    const colorModeSelect = document.getElementById('colorModeSelect');
+    const sheetContainer = document.getElementById('sheetContainer');
+    const pageSummary = document.getElementById('pageSummary');
+
+    // 依版面自動建議最佳紙張方向
+    function handleLayoutChange() {
+      const layout = parseInt(layoutSelect.value, 10);
+      if (layout === 2) {
+        orientationSelect.value = 'portrait';
+      } else {
+        orientationSelect.value = 'landscape';
+      }
+      renderHandouts();
+    }
+
+    // 渲染講義紙張
+    function renderHandouts() {
+      const scope = scopeSelect.value;
+      const layout = parseInt(layoutSelect.value, 10);
+      const orientation = orientationSelect.value;
+      const isCleanMode = colorModeSelect.value === 'clean';
+
+      // 篩選要列印的投影片
+      let targetSlides = [];
+      if (scope === 'all') {
+        targetSlides = [...ALL_SLIDES];
+      } else if (scope === 'current') {
+        // 從 URL 參數或 localStorage 取得當前頁
+        const urlParams = new URLSearchParams(window.location.search);
+        const cur = parseInt(urlParams.get('slide') || '1', 10);
+        targetSlides = [ALL_SLIDES[Math.max(0, Math.min(cur - 1, ALL_SLIDES.length - 1))]];
+      } else {
+        const slideIdx = parseInt(scope, 10) - 1;
+        targetSlides = [ALL_SLIDES[slideIdx]];
+      }
+
+      // 計算總紙張頁數
+      const totalSheets = Math.ceil(targetSlides.length / layout);
+      pageSummary.textContent = `共 ${targetSlides.length} 頁投影片 • 需 ${totalSheets} 張 A4 紙`;
+
+      sheetContainer.innerHTML = '';
+
+      for (let sheetIdx = 0; sheetIdx < totalSheets; sheetIdx++) {
+        const sheetSlides = targetSlides.slice(sheetIdx * layout, (sheetIdx + 1) * layout);
+        const sheetEl = document.createElement('div');
+        sheetEl.className = `print-sheet ${orientation} layout-${layout}`;
+
+        let gridHtml = '';
+
+        if (layout === 2) {
+          // 2-Up 版面 (含筆記線)
+          gridHtml = `
+            <div class="slide-grid">
+              ${sheetSlides.map(slide => `
+                <div class="slide-card-2up">
+                  <div class="slide-box-2up">
+                    <iframe src="${slide.file}" data-id="${slide.id}" loading="eager" onload="handleIframeLoaded(this)"></iframe>
+                  </div>
+                  <div class="notes-box-2up">
+                    <div class="notes-title">
+                      <span>SLIDE ${slide.id} • ${slide.title}</span>
+                    </div>
+                    <div style="font-size: 0.72rem; color: #64748b; margin-top: 4px;">📝 學生聽課與實作紀錄筆記：</div>
+                    <div class="notes-lines">
+                      <div class="note-line"></div>
+                      <div class="note-line"></div>
+                      <div class="note-line"></div>
+                      <div class="note-line"></div>
+                      <div class="note-line"></div>
+                    </div>
+                  </div>
+                </div>
+              `).join('')}
+            </div>
+          `;
+        } else {
+          // 1-Up, 4-Up, 6-Up 版面
+          gridHtml = `
+            <div class="slide-grid">
+              ${sheetSlides.map(slide => `
+                <div class="slide-item-card">
+                  <div class="slide-item-header">
+                    <span style="color: var(--cyan-core); font-family: var(--font-mono);">SLIDE ${slide.id}</span>
+                    <span class="slide-item-title">${slide.title}</span>
+                    <span style="color: #94a3b8; font-size: 0.65rem;">生活科技</span>
+                  </div>
+                  <div class="slide-iframe-wrap">
+                    <iframe src="${slide.file}" data-id="${slide.id}" loading="eager" onload="handleIframeLoaded(this)"></iframe>
+                  </div>
+                </div>
+              `).join('')}
+            </div>
+          `;
+        }
+
+        sheetEl.innerHTML = gridHtml + `
+          <div class="sheet-footer">
+            <span>高雄市立福山國中 • 115 生活科技雙語教學演示講義</span>
+            <span>半導體基礎與電子銲接實作</span>
+            <span>第 ${sheetIdx + 1} 頁 / 共 ${totalSheets} 頁</span>
+          </div>
+        `;
+
+        sheetContainer.appendChild(sheetEl);
+      }
+
+      // 等待 DOM 插入後重新計算 iframe 縮放比例
+      requestAnimationFrame(() => {
+        scaleAllIframes();
+        updateColorMode();
+      });
+    }
+
+    // 當單一 iframe 載入完成時，立即套用白底省墨與高對比
+    function handleIframeLoaded(iframe) {
+      try {
+        const doc = iframe.contentDocument;
+        if (!doc) return;
+        const isClean = colorModeSelect.value === 'clean';
+
+        if (isClean) {
+          doc.documentElement.setAttribute('data-theme', 'light');
+          doc.body.classList.add('print-clean-mode');
+
+          // 動態注入加強型白底省墨樣式（保證去除畫布、點陣與導覽列）
+          let st = doc.getElementById('handout-preview-style');
+          if (!st) {
+            st = doc.createElement('style');
+            st.id = 'handout-preview-style';
+            doc.head.appendChild(st);
+          }
+          st.textContent = `
+            html, body {
+              background: #ffffff !important;
+              background-image: none !important;
+              color: #0f172a !important;
+            }
+            .tech-circuit-canvas, .tech-grid-overlay, .tech-vignette {
+              display: none !important;
+            }
+            .lab-bar, .slide-nav-fixed, .bottom-nav-bar, .bottom-nav-wrap,
+            .hud-bar, .top-progress-bar, .overview-drawer, button {
+              display: none !important;
+            }
+            /* 修復淺色與白色 SVG 文字 */
+            svg text[fill="#ffffff"], svg text[fill="white"], svg text[fill="#fff"] {
+              fill: #0f172a !important;
+            }
+            svg text[fill="#fca5a5"], svg text[fill="#fecdd3"] {
+              fill: #b91c1c !important;
+              font-weight: 900 !important;
+            }
+            svg text[fill="#93c5fd"], svg text[fill="#bfdbfe"] {
+              fill: #1d4ed8 !important;
+              font-weight: 900 !important;
+            }
+            svg rect[fill="#ef4444"] ~ text[y="7"],
+            svg rect[fill="#0284c7"] ~ text[y="7"] {
+              fill: #ffffff !important;
+            }
+          `;
+        } else {
+          doc.documentElement.setAttribute('data-theme', 'dark');
+          doc.body.classList.remove('print-clean-mode');
+          const st = doc.getElementById('handout-preview-style');
+          if (st) st.remove();
+        }
+      } catch(e) {}
+    }
+
+    // 計算所有 iframe 的精準 CSS scale 縮放 (保持 1920x1080 投影片不變形、不模糊)
+    function scaleAllIframes() {
+      const iframes = document.querySelectorAll('.print-sheet iframe');
+      iframes.forEach(iframe => {
+        const wrap = iframe.parentElement;
+        if (!wrap) return;
+        const w = wrap.clientWidth;
+        const h = wrap.clientHeight;
+        const scaleX = w / 1920;
+        const scaleY = h / 1080;
+        const scale = Math.min(scaleX, scaleY);
+
+        iframe.style.transform = `scale(${scale})`;
+        iframe.style.left = `${(w - 1920 * scale) / 2}px`;
+        iframe.style.top = `${(h - 1080 * scale) / 2}px`;
+      });
+    }
+
+    // 更新色彩模式 (省墨白底 vs 原色)
+    function updateColorMode() {
+      const iframes = document.querySelectorAll('.print-sheet iframe');
+      iframes.forEach(handleIframeLoaded);
+    }
+
+    // 視窗縮放時自適應調整
+    window.addEventListener('resize', () => {
+      scaleAllIframes();
+    });
+
+    // 監聽 iframe onload 事件以注入主題
+    window.addEventListener('load', () => {
+      // 讀取網址參數 (如 ?slide=3&layout=4)
+      const urlParams = new URLSearchParams(window.location.search);
+      const sParam = urlParams.get('slide');
+      const lParam = urlParams.get('layout');
+
+      if (sParam) {
+        scopeSelect.value = sParam;
+      }
+      if (lParam) {
+        layoutSelect.value = lParam;
+      }
+
+      renderHandouts();
+
+      // 每隔 400ms 確認 iframe 是否加載完畢並套用色彩
+      let checkCount = 0;
+      const interval = setInterval(() => {
+        scaleAllIframes();
+        updateColorMode();
+        checkCount++;
+        if (checkCount > 5) clearInterval(interval);
+      }, 400);
+    });
+  </script>
+</body>
+</html>

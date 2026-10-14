@@ -225,6 +225,105 @@
       line-height: 1.35;
       color: var(--text-pure);
     }
+
+    /* 🖨️ 講義與投影片列印引導對話框 (Print Modal) */
+    .print-modal-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      background: rgba(7, 11, 20, 0.86);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      z-index: 10001;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 1.5rem;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.22s ease;
+    }
+
+    .print-modal-overlay.open {
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    .print-modal-box {
+      background: var(--bg-surface);
+      border: 1.5px solid var(--border-glow);
+      box-shadow: 0 24px 50px rgba(0, 0, 0, 0.6), 0 0 35px rgba(56, 189, 248, 0.25);
+      border-radius: 16px;
+      width: 100%;
+      max-width: 580px;
+      padding: 1.8rem;
+    }
+
+    .print-modal-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 1.2rem;
+      padding-bottom: 0.8rem;
+      border-bottom: 1px solid var(--border-subtle);
+    }
+
+    .print-choice-grid {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+      margin-top: 1rem;
+    }
+
+    .print-choice-card {
+      display: flex;
+      align-items: center;
+      gap: 1.2rem;
+      padding: 1.15rem 1.3rem;
+      background: var(--bg-card);
+      border: 1.5px solid var(--border-subtle);
+      border-radius: 12px;
+      cursor: pointer;
+      text-decoration: none;
+      color: inherit;
+      transition: all 0.2s ease;
+    }
+
+    .print-choice-card:hover {
+      border-color: var(--cyan-core);
+      background: var(--bg-card-hover);
+      transform: translateY(-2px);
+      box-shadow: 0 8px 24px rgba(56, 189, 248, 0.25);
+    }
+
+    .print-choice-card.highlight {
+      border-color: var(--cyan-core);
+      background: rgba(2, 132, 199, 0.1);
+    }
+
+    .print-choice-icon {
+      font-size: 2.2rem;
+      flex-shrink: 0;
+    }
+
+    .print-choice-info {
+      flex: 1;
+    }
+
+    .print-choice-title {
+      font-size: 1.05rem;
+      font-weight: 900;
+      color: var(--text-pure);
+      margin-bottom: 0.3rem;
+    }
+
+    .print-choice-desc {
+      font-size: 0.82rem;
+      color: var(--text-dim);
+      line-height: 1.45;
+    }
   </style>
 </head>
 <body>
@@ -247,8 +346,46 @@
     <button class="hud-btn" onclick="nextSlide()" title="下一頁 (快捷鍵: → 或 PageDown、空白鍵)">下一頁 ▶</button>
     <button class="hud-btn" onclick="toggleDrawer()" title="開啟 12 頁縮圖抽屜 (快捷鍵: Esc)">📑 總覽</button>
     <button class="hud-btn" id="themeBtn" onclick="toggleTheme()" title="切換教學主題 (快捷鍵: T)">🌙 鈦黑科技</button>
+    <button class="hud-btn" onclick="openPrintModal()" title="講義與投影片多頁合併列印 (快捷鍵: P)">🖨️ 列印講義</button>
     <button class="hud-btn" onclick="toggleFullscreen()" title="切換全螢幕 (快捷鍵: F 或 F11)">⛶ 全螢幕</button>
   </nav>
+
+  <!-- 🖨️ 列印與講義引導對話框 (Print Modal) -->
+  <div class="print-modal-overlay" id="printModal" onclick="if(event.target === this) closePrintModal()">
+    <div class="print-modal-box">
+      <div class="print-modal-header">
+        <div style="font-size: 1.25rem; font-weight: 900; display: flex; align-items: center; gap: 0.5rem; color: var(--text-pure);">
+          <span>🖨️ 講義與投影片列印選項</span>
+        </div>
+        <button class="hud-btn" onclick="closePrintModal()">✕ 關閉 (Esc)</button>
+      </div>
+      <div class="print-modal-body">
+        <p style="color: var(--text-dim); font-size: 0.88rem; margin: 0 0 1rem 0;">
+          已自動啟用<strong>「純白省墨與高對比文字防消失修復」</strong>，請選擇輸出方式：
+        </p>
+        
+        <div class="print-choice-grid">
+          <!-- 選項 1：僅列印目前這頁 -->
+          <div class="print-choice-card" onclick="printCurrentSlideDirectly()">
+            <div class="print-choice-icon">📄</div>
+            <div class="print-choice-info">
+              <div class="print-choice-title">直接列印當前頁 (Slide <span id="modalCurrentSlideNum">01</span>)</div>
+              <div class="print-choice-desc">自動轉換為純白底色、高對比文字，以 A4 橫向滿版快速列印此張投影片。</div>
+            </div>
+          </div>
+
+          <!-- 選項 2：多頁合併講義中心 -->
+          <a class="print-choice-card highlight" id="openHandoutLink" href="print_handout.html" target="_blank" onclick="closePrintModal()">
+            <div class="print-choice-icon">📑</div>
+            <div class="print-choice-info">
+              <div class="print-choice-title">開啟講義與多頁合併列印中心 ➔</div>
+              <div class="print-choice-desc">自由切換 <strong>1頁4張</strong> (2×2 學生講義)、<strong>1頁2張</strong> (含聽課筆記線)、<strong>1頁6張</strong>，或一次輸出全套 12 頁！</div>
+            </div>
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
 
   <!-- 12 頁縮圖快速跳頁抽屜 -->
   <aside class="overview-drawer" id="overviewDrawer" onclick="if(event.target === this) toggleDrawer()">
@@ -302,6 +439,45 @@
       `).join('');
     }
 
+    // 🖨️ 列印對話框與直接列印功能
+    const printModal = document.getElementById('printModal');
+    const modalCurrentSlideNum = document.getElementById('modalCurrentSlideNum');
+    const openHandoutLink = document.getElementById('openHandoutLink');
+
+    function openPrintModal() {
+      if (modalCurrentSlideNum) {
+        modalCurrentSlideNum.textContent = (currentIndex + 1).toString().padStart(2, '0');
+      }
+      if (openHandoutLink) {
+        openHandoutLink.href = `print_handout.html?slide=${currentIndex + 1}&layout=4`;
+      }
+      printModal.classList.add('open');
+    }
+
+    function closePrintModal() {
+      printModal.classList.remove('open');
+    }
+
+    // 直接列印當前頁（自動以純白省墨與高對比文字輸出）
+    function printCurrentSlideDirectly() {
+      closePrintModal();
+      const currentFrame = activeFrameId === 'frameA' ? frameA : frameB;
+      if (currentFrame && currentFrame.contentWindow) {
+        try {
+          const doc = currentFrame.contentDocument;
+          if (doc) {
+            doc.documentElement.setAttribute('data-theme', 'light');
+            doc.body.classList.add('print-clean-mode');
+          }
+          setTimeout(() => {
+            currentFrame.contentWindow.print();
+          }, 120);
+        } catch(e) {
+          window.open(`print_handout.html?slide=${currentIndex + 1}&layout=1`, '_blank');
+        }
+      }
+    }
+
     // 換頁核心邏輯 (雙層 iframe 交叉平滑淡入，完全不閃爍)
     function goToSlide(index, updateHash = true) {
       if (index < 0 || index >= SLIDES.length) return;
@@ -314,6 +490,12 @@
       progressBar.style.width = `${((currentIndex + 1) / SLIDES.length) * 100}%`;
       hudCounter.textContent = `${targetSlide.id} / ${SLIDES.length.toString().padStart(2, '0')}`;
       hudTitle.textContent = targetSlide.title;
+      if (modalCurrentSlideNum) {
+        modalCurrentSlideNum.textContent = targetSlide.id;
+      }
+      if (openHandoutLink) {
+        openHandoutLink.href = `print_handout.html?slide=${currentIndex + 1}&layout=4`;
+      }
 
       if (updateHash) {
         window.location.hash = `slide${currentIndex + 1}`;
@@ -410,8 +592,20 @@
       } catch (e) {}
     }
 
-    // 全域鍵盤與簡報筆監聽 (PageUp / PageDown / 左右箭頭 / 空白鍵)
+    // 全域鍵盤與簡報筆監聽 (PageUp / PageDown / 左右箭頭 / 空白鍵 / P 列印)
     window.addEventListener('keydown', (e) => {
+      // 攔截 Ctrl+P / Cmd+P 優先開啟專業列印引導
+      if ((e.ctrlKey || e.metaKey) && (e.key === 'p' || e.key === 'P')) {
+        e.preventDefault();
+        openPrintModal();
+        return;
+      }
+
+      if (printModal && printModal.classList.contains('open')) {
+        if (e.key === 'Escape') closePrintModal();
+        return;
+      }
+
       if (overviewDrawer.classList.contains('open')) {
         if (e.key === 'Escape') toggleDrawer();
         return;
@@ -427,17 +621,20 @@
         toggleFullscreen();
       } else if (e.key === 't' || e.key === 'T') {
         toggleTheme();
+      } else if (e.key === 'p' || e.key === 'P') {
+        openPrintModal();
       } else if (e.key === 'Escape') {
         toggleDrawer();
       }
     });
 
-    // 接收子 iframe 內部傳遞出來的鍵盤事件 (支援簡報筆點擊在 iframe 內時也能翻頁)
+    // 接收子 iframe 內部傳遞出來的鍵盤事件 (支援簡報筆點擊在 iframe 內時也能翻頁或列印)
     window.addEventListener('message', (e) => {
       if (e.data && e.data.type === 'SLIDE_NAV') {
         if (e.data.action === 'next') nextSlide();
         if (e.data.action === 'prev') prevSlide();
         if (e.data.action === 'theme') toggleTheme();
+        if (e.data.action === 'print') openPrintModal();
       }
     });
 
@@ -447,7 +644,7 @@
       hudBar.classList.remove('hidden');
       clearTimeout(hideTimer);
       hideTimer = setTimeout(() => {
-        if (!overviewDrawer.classList.contains('open')) {
+        if (!overviewDrawer.classList.contains('open') && (!printModal || !printModal.classList.contains('open'))) {
           hudBar.classList.add('hidden');
         }
       }, 3500);

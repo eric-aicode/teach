@@ -553,3 +553,190 @@ body::after {
   color: var(--text-body);
   line-height: 1.35;
 }
+
+/* ==========================================================================
+   6. 專業教學列印與講義輸出核心 (@media print & .print-clean-mode)
+   說明：自動白底黑字、極致省墨、精準高對比、避免字圖消失
+   ========================================================================== */
+@media print, (prefers-color-scheme: light) and .print-clean-mode {
+  @page {
+    size: landscape;
+    margin: 0.8cm 1cm;
+  }
+
+  /* 1. 全域強制轉為純白背景與深黑清晰文字 */
+  *, *::before, *::after {
+    box-shadow: none !important;
+    text-shadow: none !important;
+    filter: none !important;
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+  }
+
+  :root, html, body, [data-theme], body.print-clean-mode {
+    background-color: #ffffff !important;
+    background-image: none !important;
+    background: #ffffff !important;
+    color: #0f172a !important;
+    height: auto !important;
+    min-height: 0 !important;
+    overflow: visible !important;
+    -webkit-text-fill-color: initial !important;
+  }
+
+  /* 2. 重設主題 CSS 變數為白底高對比列印色票 */
+  :root, [data-theme] {
+    --bg-deep: #ffffff !important;
+    --bg-space: #ffffff !important;
+    --bg-surface: #ffffff !important;
+    --bg-card: #ffffff !important;
+    --bg-card-hover: #ffffff !important;
+    --bg-gradient: none !important;
+    --bg-input: #f8fafc !important;
+
+    --border-subtle: #cbd5e1 !important;
+    --border-light: #94a3b8 !important;
+    --border-glow: #64748b !important;
+
+    --text-pure: #0f172a !important;
+    --text-heading: #0f172a !important;
+    --text-body: #334155 !important;
+    --text-dim: #64748b !important;
+    --title-gradient: none !important;
+
+    --cyan-core: #0284c7 !important;
+    --cyan-bright: #0369a1 !important;
+    --blue-electric: #2563eb !important;
+    --amber-gold: #b45309 !important;
+    --amber-warm: #b45309 !important;
+    --emerald-mint: #059669 !important;
+    --coral-rose: #dc2626 !important;
+    --purple-accent: #7c3aed !important;
+
+    --shadow-card: none !important;
+    --shadow-glow-cyan: none !important;
+    --shadow-glow-amber: none !important;
+    --shadow-glow-green: none !important;
+    --shadow-glow-coral: none !important;
+  }
+
+  /* 3. 標題與漸層文字重設為深黑 */
+  .slide-title, .slide-title-standard, h1, h2, h3, h4, h5, h6,
+  [class*="title"], [class*="heading"] {
+    background: none !important;
+    -webkit-background-clip: unset !important;
+    -webkit-text-fill-color: #0f172a !important;
+    color: #0f172a !important;
+  }
+
+  /* 4. 徹底隱藏裝飾性暗黑科技背景、網格點、電路圖、發光光暈 */
+  .tech-bg, .circuit-bg, .grid-dots, .scan-line,
+  [class*="watermark"], .ambient-glow, .bg-glow,
+  .light-beam, .laser-line, .particle-canvas,
+  canvas.bg-canvas, .tech-circuit-canvas, .tech-grid-overlay, .tech-vignette {
+    display: none !important;
+    visibility: hidden !important;
+    opacity: 0 !important;
+  }
+
+  /* 5. 徹底隱藏課堂互動控制鈕、大屏底部導覽列與播放器懸浮條 */
+  .lab-bar, .lab-standalone-bar, header.slide-nav-bar,
+  .hud-bar, .bottom-nav-bar, .bottom-nav-wrap, .top-progress-bar,
+  .overview-drawer, .quick-selector, .slot-reset-btn,
+  button, .lab-btn, .hud-btn, .theme-toggle-btn,
+  .drawer-header, .drawer-grid, a.hud-btn,
+  [onclick*="Slide"], [onclick*="Theme"], [onclick*="Reset"] {
+    display: none !important;
+  }
+
+  /* 6. 卡片與容器邊框美化：白色底色、淺灰線條、清晰不刺眼 */
+  .mat-hero-card, .circuit-stage-panel, .step-card,
+  .rule-card, .tool-card, .box-card, .vocab-card,
+  .slide-card, .code-card, .feature-card,
+  .status-bar, .bottom-mantra-bar,
+  [class*="card"], [class*="panel"], section, aside {
+    background: #ffffff !important;
+    background-color: #ffffff !important;
+    border: 1.5px solid #cbd5e1 !important;
+    box-shadow: none !important;
+    page-break-inside: avoid !important;
+    break-inside: avoid !important;
+  }
+
+  /* 7. 主視窗容器自適應展開 */
+  .slide-viewport, main, .lab-layout, .standalone-viewport, .stage-container, .workshop-stage, .slide-stage {
+    height: auto !important;
+    min-height: 0 !important;
+    max-height: none !important;
+    overflow: visible !important;
+    padding: 0 !important;
+    margin: 0 !important;
+  }
+
+  /* 8. SVG 向量圖形高對比修復（防止白色/淺色文字在白紙上印不出來） */
+  svg {
+    filter: none !important;
+  }
+  svg text {
+    font-weight: 700 !important;
+  }
+  svg text[fill="#ffffff"], svg text[fill="white"], svg text[fill="#fff"] {
+    fill: #0f172a !important;
+  }
+  svg text[fill="#fca5a5"], svg text[fill="#fecdd3"] {
+    fill: #b91c1c !important;
+    font-weight: 900 !important;
+  }
+  svg text[fill="#93c5fd"], svg text[fill="#bfdbfe"] {
+    fill: #1d4ed8 !important;
+    font-weight: 900 !important;
+  }
+  svg text[fill="#a7f3d0"], svg text[fill="#6ee7b7"] {
+    fill: #047857 !important;
+    font-weight: 900 !important;
+  }
+  svg text[fill="#fef08a"], svg text[fill="#fde68a"] {
+    fill: #b45309 !important;
+    font-weight: 900 !important;
+  }
+  /* 實色深色膠囊上的白色文字維持反白白色 */
+  svg rect[fill="#ef4444"] ~ text[y="7"],
+  svg rect[fill="#0284c7"] ~ text[y="7"],
+  svg rect[fill="#059669"] ~ text[y="7"] {
+    fill: #ffffff !important;
+  }
+  /* 電路板文字清晰化 */
+  svg rect[fill="#064e3b"] ~ text {
+    fill: #a7f3d0 !important;
+  }
+
+  /* 9. 圖片外框去黑化 */
+  img {
+    border-radius: 8px !important;
+    border: 1px solid #cbd5e1 !important;
+    box-shadow: none !important;
+  }
+}
+
+/* 列印專用純白高對比 class（供列印預覽器在螢幕上即時套用） */
+html.print-clean-mode, body.print-clean-mode {
+  background: #ffffff !important;
+  background-image: none !important;
+  color: #0f172a !important;
+}
+html.print-clean-mode * {
+  box-shadow: none !important;
+  text-shadow: none !important;
+}
+html.print-clean-mode .tech-circuit-canvas,
+html.print-clean-mode .tech-grid-overlay,
+html.print-clean-mode .tech-vignette,
+html.print-clean-mode .lab-bar,
+html.print-clean-mode .slide-nav-fixed,
+html.print-clean-mode .bottom-nav-bar,
+html.print-clean-mode .bottom-nav-wrap,
+html.print-clean-mode .hud-bar,
+html.print-clean-mode button {
+  display: none !important;
+}
+
