@@ -1,0 +1,610 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>生活科技雙語課堂互動小秘笈 (學生 A4 專用舒適大字版)</title>
+  <style>
+    /* A4 直式列印標準尺寸設定 (210mm x 297mm) */
+    @page {
+      size: A4 portrait;
+      margin: 8mm 10mm 8mm 10mm;
+    }
+
+    * {
+      box-sizing: border-box;
+      -webkit-print-color-adjust: exact !important;
+      print-color-adjust: exact !important;
+    }
+
+    body {
+      margin: 0;
+      padding: 0;
+      background: #e2e8f0;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Microsoft JhengHei", "PingFang TC", sans-serif;
+      color: #0f172a;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    /* 螢幕頂部列印工具列 (列印時自動隱藏) */
+    .screen-toolbar {
+      width: 100%;
+      background: #0f172a;
+      color: #ffffff;
+      padding: 12px 24px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      box-shadow: 0 4px 14px rgba(0,0,0,0.25);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+
+    .btn-print {
+      background: #0284c7;
+      color: #ffffff;
+      border: none;
+      padding: 9px 22px;
+      border-radius: 7px;
+      font-size: 16px;
+      font-weight: 800;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      transition: background 0.2s, transform 0.15s;
+    }
+
+    .btn-print:hover {
+      background: #0369a1;
+      transform: translateY(-1px);
+    }
+
+    /* 實體 A4 紙張本體容器 (210mm x 297mm) */
+    .a4-sheet {
+      width: 210mm;
+      height: 297mm;
+      max-height: 297mm;
+      background: #ffffff;
+      margin: 16px auto;
+      padding: 9mm 12mm 8mm 12mm;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.16);
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      position: relative;
+      overflow: hidden;
+    }
+
+    /* 頁首標題 */
+    .header-box {
+      border-bottom: 2.5px solid #0284c7;
+      padding-bottom: 5px;
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-end;
+      gap: 12px;
+      flex-shrink: 0;
+    }
+
+    .title-left {
+      flex: 1;
+      min-width: 0;
+    }
+
+    .title-main {
+      font-size: 22px;
+      font-weight: 900;
+      color: #0f172a;
+      letter-spacing: -0.015em;
+      margin: 0;
+      white-space: nowrap;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .title-sub {
+      font-size: 13px;
+      font-weight: 700;
+      color: #0284c7;
+      margin-top: 2px;
+      white-space: nowrap;
+    }
+
+    .student-info {
+      font-size: 14.5px;
+      font-weight: 800;
+      color: #1e293b;
+      display: flex;
+      gap: 12px;
+      flex-shrink: 0;
+      background: #f8fafc;
+      padding: 5px 12px;
+      border-radius: 8px;
+      border: 1.5px solid #e2e8f0;
+      white-space: nowrap;
+    }
+
+    /* 區塊卡片共通樣式 */
+    .section-card {
+      border: 1.6px solid #cbd5e1;
+      border-radius: 10px;
+      padding: 9px 12px 10px 12px;
+      background: #ffffff;
+      position: relative;
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.02);
+    }
+
+    .section-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: #0f172a;
+      color: #ffffff;
+      font-size: 14px;
+      font-weight: 900;
+      padding: 3px 11px;
+      border-radius: 5px;
+      margin-bottom: 8px;
+      letter-spacing: 0.02em;
+    }
+
+    /* 1. 重要單字庫 雙欄寬敞網格 */
+    .vocab-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
+
+    .vocab-category {
+      background: #f8fafc;
+      border: 1.4px solid #e2e8f0;
+      border-radius: 8px;
+      padding: 8px 11px;
+    }
+
+    .vocab-cat-title {
+      font-size: 13px;
+      font-weight: 900;
+      color: #0284c7;
+      border-bottom: 1.5px dashed #cbd5e1;
+      padding-bottom: 4px;
+      margin-bottom: 6px;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .vocab-list {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .vocab-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      font-size: 15px;
+      line-height: 1.25;
+      padding-bottom: 1px;
+      border-bottom: 1px solid rgba(226, 232, 240, 0.6);
+    }
+
+    .vocab-item:last-child {
+      border-bottom: none;
+      padding-bottom: 0;
+    }
+
+    .vocab-en {
+      font-weight: 900;
+      color: #0f172a;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    }
+
+    .vocab-zh {
+      font-weight: 700;
+      color: #475569;
+      font-size: 13.5px;
+    }
+
+    /* 2. 重要句型卡片 */
+    .sentence-hero-box {
+      background: #fffbeb;
+      border: 1.8px solid #f59e0b;
+      border-radius: 9px;
+      padding: 10px 14px;
+      text-align: center;
+      box-shadow: 0 2px 8px rgba(245, 158, 11, 0.06);
+    }
+
+    .sentence-hero-en {
+      font-size: 19.5px;
+      font-weight: 900;
+      color: #78350f;
+      line-height: 1.35;
+      letter-spacing: -0.01em;
+    }
+
+    .sentence-hero-zh {
+      font-size: 14px;
+      font-weight: 700;
+      color: #92400e;
+      margin-top: 4px;
+    }
+
+    /* 3. 科技產品練習 2x4 網格 */
+    .products-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 8px;
+      margin-top: 5px;
+    }
+
+    .product-cell {
+      background: #f8fafc;
+      border: 1.5px solid #cbd5e1;
+      border-radius: 8px;
+      padding: 7px 9px;
+      text-align: left;
+    }
+
+    .product-top-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 2px;
+    }
+
+    .product-num {
+      font-size: 12.5px;
+      font-weight: 900;
+      color: #0284c7;
+      display: flex;
+      align-items: center;
+      gap: 3px;
+    }
+
+    .product-func {
+      font-size: 11.5px;
+      font-weight: 900;
+      padding: 1.5px 6px;
+      border-radius: 4px;
+      background: #ecfdf5;
+      color: #047857;
+      border: 1px solid #a7f3d0;
+    }
+
+    .product-en {
+      font-size: 15.5px;
+      font-weight: 900;
+      color: #0f172a;
+      line-height: 1.25;
+      margin: 1px 0;
+    }
+
+    .product-zh {
+      font-size: 13px;
+      font-weight: 700;
+      color: #64748b;
+    }
+
+    /* 4. 銲接四步驟 橫向 4 格卡片 */
+    .solder-steps-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 8px;
+      margin-top: 5px;
+    }
+
+    .solder-card {
+      background: #f8fafc;
+      border: 1.6px solid #cbd5e1;
+      border-radius: 9px;
+      padding: 9px 7px;
+      text-align: center;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+    .solder-card.final-card {
+      border-color: #10b981;
+      background: #f0fdf4;
+    }
+
+    .solder-step-badge {
+      font-size: 12px;
+      font-weight: 900;
+      color: #0284c7;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    .solder-step-en {
+      font-size: 15.5px;
+      font-weight: 900;
+      color: #0f172a;
+      margin: 4px 0 2px 0;
+      line-height: 1.25;
+    }
+
+    .solder-step-zh {
+      font-size: 14.5px;
+      font-weight: 900;
+      color: #334155;
+    }
+
+    .solder-step-detail {
+      font-size: 12px;
+      color: #64748b;
+      margin-top: 4px;
+      line-height: 1.35;
+      font-weight: 600;
+    }
+
+    .mantra-bar {
+      background: #fefce8;
+      border: 1.4px solid #fde047;
+      border-radius: 6px;
+      padding: 5px 10px;
+      margin-top: 7px;
+      text-align: center;
+      font-size: 14px;
+      font-weight: 900;
+      color: #854d0e;
+    }
+
+    /* 頁尾 */
+    .sheet-footer {
+      border-top: 1.5px solid #e2e8f0;
+      padding-top: 5px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 12.5px;
+      font-weight: 700;
+      color: #64748b;
+      flex-shrink: 0;
+    }
+
+    /* 列印專用重設 */
+    @media print {
+      body {
+        background: #ffffff !important;
+        padding: 0 !important;
+      }
+      .screen-toolbar {
+        display: none !important;
+      }
+      .a4-sheet {
+        margin: 0 !important;
+        box-shadow: none !important;
+        width: 100% !important;
+        height: 100% !important;
+        padding: 6mm 8mm 5mm 8mm !important;
+        page-break-after: avoid !important;
+        break-after: avoid !important;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- 網頁預覽工具列 (列印時自動隱藏) -->
+  <div class="screen-toolbar">
+    <div style="font-weight: 900; font-size: 17px; display: flex; align-items: center; gap: 10px;">
+      <span>📑 生活科技雙語課堂互動小秘笈 (學生 A4 專用舒適大字版)</span>
+      <span style="font-size: 13px; font-weight: 600; color: #94a3b8;">重要單字・句型・8大科技產品・銲接4步驟 • 滿版舒適 1 頁 A4</span>
+    </div>
+    <button class="btn-print" onclick="window.print()">
+      🖨️ 立即列印此單 / 另存 PDF (A4 直式)
+    </button>
+  </div>
+
+  <!-- A4 單張本體 -->
+  <div class="a4-sheet">
+
+    <!-- 頁首標題與班級座號 -->
+    <header class="header-box">
+      <div class="title-left">
+        <h1 class="title-main">⚡ 生活科技雙語課堂互動小秘笈</h1>
+        <div class="title-sub">Semiconductors & Soldering • 重要單字・核心句型・銲接步驟</div>
+      </div>
+      <div class="student-info">
+        <span>班級：<strong>八年_____班</strong></span>
+        <span>座號：<strong>_____</strong></span>
+        <span>姓名：<strong>_____________</strong></span>
+      </div>
+    </header>
+
+    <!-- 1. 上課重要單字 (Key Vocabulary) -->
+    <section class="section-card">
+      <div class="section-badge">📚 1. 上課會用到的重要單字 (Key Vocabulary)</div>
+      <div class="vocab-grid">
+        <!-- 左欄：半導體概念與生活經濟 -->
+        <div class="vocab-category">
+          <div class="vocab-cat-title">💡【半導體核心與生活經濟】</div>
+          <div class="vocab-list">
+            <div class="vocab-item"><span class="vocab-en">Semiconductor</span><span class="vocab-zh">半導體</span></div>
+            <div class="vocab-item"><span class="vocab-en">Salary (High Salaries)</span><span class="vocab-zh">薪水 (高薪資)</span></div>
+            <div class="vocab-item"><span class="vocab-en">Stock (Stock Market)</span><span class="vocab-zh">股票 (股票市場)</span></div>
+            <div class="vocab-item"><span class="vocab-en">Conductor / Insulator</span><span class="vocab-zh">導體 / 絕緣體</span></div>
+            <div class="vocab-item"><span class="vocab-en">LED</span><span class="vocab-zh">發光二極體 (半導體元件)</span></div>
+          </div>
+        </div>
+
+        <!-- 右欄：四大核心功能與銲接工具 -->
+        <div class="vocab-category">
+          <div class="vocab-cat-title">🛠️【晶片四大功能與銲接工具】</div>
+          <div class="vocab-list">
+            <div class="vocab-item"><span class="vocab-en">Computing / Sensing</span><span class="vocab-zh">運算處理 / 感測環境</span></div>
+            <div class="vocab-item"><span class="vocab-en">Control / Lighting</span><span class="vocab-zh">控制開關 / 發光顯示</span></div>
+            <div class="vocab-item"><span class="vocab-en">Soldering Iron</span><span class="vocab-zh">電烙鐵 (產生高溫工具)</span></div>
+            <div class="vocab-item"><span class="vocab-en">Solder Wire</span><span class="vocab-zh">銲錫絲 (低熔點金屬)</span></div>
+            <div class="vocab-item"><span class="vocab-en">Soldering Stand / Sponge</span><span class="vocab-zh">烙鐵架 / 清潔海綿</span></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 2. 上課重要句型 -->
+    <section class="section-card">
+      <div class="section-badge">🎯 2. 上課會用到的重要句型 (Sentence Pattern)</div>
+      <div class="sentence-hero-box">
+        <div class="sentence-hero-en">
+          "A <span style="color:#0284c7; text-decoration:underline; text-underline-offset: 4px;">[ 科技產品 ]</span> uses semiconductors for <span style="color:#047857; text-decoration:underline; text-underline-offset: 4px;">[ 四大功能 ]</span>."
+        </div>
+        <div class="sentence-hero-zh">
+          💡 <strong>中文意思：</strong>「某個科技產品」使用半導體來進行「運算 Computing / 感測 Sensing / 控制 Control / 發光 Lighting」
+        </div>
+      </div>
+    </section>
+
+    <!-- 3. 口說練習科技產品單字 (8 大生活科技產品) -->
+    <section class="section-card">
+      <div class="section-badge">🗣️ 3. 口說練習科技產品單字 (8 大生活科技產品)</div>
+      <div class="products-grid">
+        <!-- 1. 手機 -->
+        <div class="product-cell">
+          <div class="product-top-row">
+            <span class="product-num">#1 📱</span>
+            <span class="product-func">Computing</span>
+          </div>
+          <div class="product-en">smartphone</div>
+          <div class="product-zh">智慧型手機</div>
+        </div>
+
+        <!-- 2. 筆電 -->
+        <div class="product-cell">
+          <div class="product-top-row">
+            <span class="product-num">#2 💻</span>
+            <span class="product-func">Computing</span>
+          </div>
+          <div class="product-en">laptop</div>
+          <div class="product-zh">筆記型電腦</div>
+        </div>
+
+        <!-- 3. 自動門 -->
+        <div class="product-cell">
+          <div class="product-top-row">
+            <span class="product-num">#3 🚪</span>
+            <span class="product-func">Sensing</span>
+          </div>
+          <div class="product-en">automatic door</div>
+          <div class="product-zh">感應自動門</div>
+        </div>
+
+        <!-- 4. 智慧手錶 -->
+        <div class="product-cell">
+          <div class="product-top-row">
+            <span class="product-num">#4 ⌚</span>
+            <span class="product-func">Sensing</span>
+          </div>
+          <div class="product-en">smartwatch</div>
+          <div class="product-zh">智慧手錶</div>
+        </div>
+
+        <!-- 5. 檯燈 -->
+        <div class="product-cell">
+          <div class="product-top-row">
+            <span class="product-num">#5 💡</span>
+            <span class="product-func">Lighting</span>
+          </div>
+          <div class="product-en">desk lamp</div>
+          <div class="product-zh">檯燈</div>
+        </div>
+
+        <!-- 6. 遙控器 -->
+        <div class="product-cell">
+          <div class="product-top-row">
+            <span class="product-num">#6 🎛️</span>
+            <span class="product-func">Control</span>
+          </div>
+          <div class="product-en">remote control</div>
+          <div class="product-zh">冷氣遙控器</div>
+        </div>
+
+        <!-- 7. 微波爐 -->
+        <div class="product-cell">
+          <div class="product-top-row">
+            <span class="product-num">#7 ⏲️</span>
+            <span class="product-func">Control</span>
+          </div>
+          <div class="product-en">microwave oven</div>
+          <div class="product-zh">微波爐</div>
+        </div>
+
+        <!-- 8. 紅綠燈 -->
+        <div class="product-cell">
+          <div class="product-top-row">
+            <span class="product-num">#8 🚦</span>
+            <span class="product-func">Lighting</span>
+          </div>
+          <div class="product-en">traffic light</div>
+          <div class="product-zh">交通號誌紅綠燈</div>
+        </div>
+      </div>
+
+      <div style="font-size: 13.5px; font-weight: 800; color: #334155; margin-top: 7px; text-align: center; background: #f1f5f9; padding: 4px 10px; border-radius: 6px;">
+        🗣️ <strong>口說示範：</strong>"A <span style="color:#0284c7;">smartphone</span> uses semiconductors for <span style="color:#047857;">computing</span>." ／ "A <span style="color:#0284c7;">traffic light</span> uses semiconductors for <span style="color:#047857;">lighting</span>."
+      </div>
+    </section>
+
+    <!-- 4. 銲接四個步驟英文 (熱、餵、移錫、離鐵) -->
+    <section class="section-card">
+      <div class="section-badge">🛠️ 4. 銲接四步驟英文口訣 (Four Steps of Soldering)</div>
+      <div class="solder-steps-grid">
+        <!-- Step 1 -->
+        <div class="solder-card">
+          <div class="solder-step-badge">STEP 1 • 熱</div>
+          <div class="solder-step-en">Heat the item.</div>
+          <div class="solder-step-zh">加熱接點</div>
+          <div class="solder-step-detail">烙鐵碰觸焊盤與引腳<br>心裡默數 1、2</div>
+        </div>
+
+        <!-- Step 2 -->
+        <div class="solder-card">
+          <div class="solder-step-badge">STEP 2 • 餵</div>
+          <div class="solder-step-en">Melt the solder.</div>
+          <div class="solder-step-zh">送入錫絲</div>
+          <div class="solder-step-detail">錫絲送入接觸點<br>均勻熔化包覆接點</div>
+        </div>
+
+        <!-- Step 3 -->
+        <div class="solder-card">
+          <div class="solder-step-badge">STEP 3 • 移錫</div>
+          <div class="solder-step-en">Remove solder wire.</div>
+          <div class="solder-step-zh">先移錫絲</div>
+          <div class="solder-step-detail">錫量足夠先移開錫絲<br>烙鐵短暫停留 1 秒</div>
+        </div>
+
+        <!-- Step 4 -->
+        <div class="solder-card final-card">
+          <div class="solder-step-badge" style="color: #047857;">STEP 4 • 離鐵</div>
+          <div class="solder-step-en" style="color: #047857;">Remove the iron.</div>
+          <div class="solder-step-zh" style="color: #047857;">移開烙鐵</div>
+          <div class="solder-step-detail">烙鐵放回烙鐵架<br>自然冷卻成火山形！</div>
+        </div>
+      </div>
+
+      <div class="mantra-bar">
+        全班口訣節奏：<strong>加熱 (Heat) ➔ 送錫 (Melt) ➔ 移錫 (Remove Wire) ➔ 移烙鐵 (Remove Iron)！</strong>
+      </div>
+    </section>
+
+    <!-- 頁尾 -->
+    <footer class="sheet-footer">
+      <span>高雄市立福山國中 • 115 生活科技雙語教學演示觀課資料</span>
+      <span>課前 5 分鐘快速瀏覽 • 課堂自信開口說科技</span>
+      <span>生活科技科 教學演示組</span>
+    </footer>
+
+  </div>
+
+</body>
+</html>
