@@ -52,3 +52,16 @@
 - copper_wire_sample.png 銅線導體材質圖
 - led_polarity.png       LED 長短腳極性輔助圖
 - semiconductor_bg.png   半導體材料背景圖
+
+------------------------------------------------------------------------
+【雙語教案網頁與展示 PDF (已整合至首頁與 GitHub)】
+------------------------------------------------------------------------
+- lesson_plan_bilingual_doc.html   雙語課程教案設計 (標準 20 列公版、詳案/簡案切換、A4友善列印、Word匯出)
+- lesson_plan_english_doc.html     全英文教案設計 (Full English Lesson Plan，支援 Word 匯出與列印)
+- classroom_english.html           雙語課堂英語與字彙手冊 (關鍵字詞、師生句型情境對白)
+- student_bilingual_guide.html     學生課堂雙語互動秘笈 (A4 舒適大字列印版)
+- 雙語課程教案設計：電子小尖兵（半導體認識與電子銲接實作）.pdf   雙語教案完整正式版 PDF (972KB)
+- 115雙語公開授課-王朝葦.pdf       115 學年度公開授課教學計畫表與觀課表件 PDF
+
+💡 註：其餘本機 Word 編輯檔 (.docx / .mht)、大型觀課評鑑檔、Markdown 講稿大綱與開發驗證腳本，
+已依分類獨立存放於外層之「00_本機備課與行政資料」中，本資料夾維持精簡乾淨，專供 GitHub 線上發布與課堂放映。

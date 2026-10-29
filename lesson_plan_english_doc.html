@@ -1,0 +1,1359 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Bilingual Lesson Plan: Electronic Pioneers (Full English Version)</title>
+  <style>
+    @page {
+      size: A4;
+      margin: 18mm 15mm 18mm 15mm;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: "Calibri", "Aptos", "Segoe UI", Arial, sans-serif;
+      font-size: 11pt;
+      line-height: 1.5;
+      color: #1e293b;
+      background-color: #f1f5f9;
+      padding: 2rem 1rem;
+    }
+
+    .doc-page {
+      max-width: 950px;
+      margin: 0 auto;
+      background: #fff;
+      padding: 2.8rem 2.8rem;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+      border-radius: 4px;
+    }
+
+    /* Screen Action Bar (Sleek Single-row & Collapsible) */
+    .print-bar {
+      max-width: 950px;
+      margin: 0 auto 1.2rem auto;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: #0f172a;
+      color: #fff;
+      padding: 0.45rem 1rem;
+      border-radius: 8px;
+      gap: 0.6rem;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+      transition: all 0.25s ease;
+    }
+
+    .print-bar.is-hidden {
+      display: none !important;
+    }
+
+    .bar-left, .bar-right {
+      display: flex;
+      align-items: center;
+      gap: 0.55rem;
+    }
+
+    .bar-title {
+      font-weight: 700;
+      font-size: 0.92rem;
+      color: #f8fafc;
+      white-space: nowrap;
+      margin-right: 0.2rem;
+    }
+
+    .print-bar a {
+      color: #38bdf8;
+      text-decoration: none;
+      font-weight: 600;
+      font-size: 0.84rem;
+      padding: 0.25rem 0.5rem;
+      border-radius: 4px;
+      transition: background 0.15s;
+      white-space: nowrap;
+    }
+
+    .print-bar a:hover {
+      background: rgba(255, 255, 255, 0.12);
+      text-decoration: none;
+    }
+
+    /* Mode Switcher Buttons */
+    .mode-switch-group {
+      display: inline-flex;
+      background: rgba(255, 255, 255, 0.12);
+      border-radius: 5px;
+      padding: 2px;
+      gap: 2px;
+    }
+
+    .mode-switch-btn {
+      background: transparent;
+      border: none;
+      color: #94a3b8;
+      padding: 0.22rem 0.65rem;
+      border-radius: 4px;
+      font-size: 0.82rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.15s;
+      white-space: nowrap;
+    }
+
+    .mode-switch-btn:hover {
+      color: #f1f5f9;
+    }
+
+    .mode-switch-btn.active {
+      background: #0284c7;
+      color: #ffffff;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.3);
+    }
+
+    .action-btn {
+      background: #0284c7;
+      color: #fff;
+      border: none;
+      padding: 0.32rem 0.75rem;
+      border-radius: 5px;
+      font-size: 0.82rem;
+      font-weight: bold;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.3rem;
+      transition: all 0.15s;
+      white-space: nowrap;
+    }
+
+    .action-btn:hover {
+      background: #0369a1;
+      transform: translateY(-1px);
+    }
+
+    .btn-word {
+      background: #1d4ed8;
+    }
+    .btn-word:hover {
+      background: #1e40af;
+    }
+
+    .btn-collapse {
+      background: rgba(255, 255, 255, 0.1);
+      color: #94a3b8;
+      border: none;
+      padding: 0.32rem 0.55rem;
+      border-radius: 5px;
+      font-size: 0.82rem;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.25rem;
+      transition: all 0.15s;
+      white-space: nowrap;
+    }
+    .btn-collapse:hover {
+      background: rgba(239, 68, 68, 0.25);
+      color: #fca5a5;
+    }
+
+    /* Floating show button when collapsed */
+    .floating-show-btn {
+      position: fixed;
+      top: 12px;
+      right: 16px;
+      background: rgba(15, 23, 42, 0.88);
+      color: #e2e8f0;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      backdrop-filter: blur(8px);
+      padding: 0.35rem 0.85rem;
+      border-radius: 20px;
+      font-size: 0.82rem;
+      font-weight: 600;
+      cursor: pointer;
+      display: none;
+      align-items: center;
+      gap: 0.35rem;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
+      z-index: 9999;
+      transition: all 0.2s;
+    }
+    .floating-show-btn:hover {
+      background: #0284c7;
+      color: #fff;
+      border-color: transparent;
+      transform: translateY(-1px);
+    }
+    .floating-show-btn.is-visible {
+      display: inline-flex !important;
+    }
+
+    /* Document Title Headers (Official Format) */
+    .doc-header {
+      text-align: center;
+      margin-bottom: 1.5rem;
+    }
+
+    .doc-header .sub-header {
+      font-size: 11pt;
+      font-weight: bold;
+      color: #475569;
+      margin-bottom: 0.3rem;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    .doc-header h1 {
+      font-size: 17pt;
+      font-weight: bold;
+      margin-bottom: 0.2rem;
+    }
+
+    .doc-header .en-title {
+      font-size: 13.5pt;
+      font-style: italic;
+      color: #334155;
+    }
+
+    /* Table Styles */
+    table.plan-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-bottom: 1.5rem;
+      border: 1.0pt solid #000;
+      mso-table-layout-alt: fixed;
+    }
+
+    table.plan-table td, table.plan-table th {
+      border: 1.0pt solid #000;
+      padding: 5pt 7pt;
+      vertical-align: top;
+      font-size: 11pt;
+      line-height: 1.45;
+    }
+
+    .bg-title {
+      background-color: #f2f2f2;
+      font-weight: bold;
+      text-align: center;
+    }
+
+    .label-col {
+      width: 18%;
+      background-color: #f8fafc;
+      font-weight: bold;
+      text-align: center;
+      vertical-align: middle !important;
+    }
+
+    .val-col {
+      width: 32%;
+    }
+
+    /* Inner Sub-Table for balanced nested columns */
+    table.inner-sub-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 0;
+      border: none;
+      table-layout: fixed;
+    }
+    table.inner-sub-table td {
+      border: 1.0pt solid #000;
+      padding: 5pt 7pt;
+      vertical-align: top;
+      font-size: 11pt;
+      line-height: 1.45;
+      box-sizing: border-box;
+    }
+    table.inner-sub-table tr:first-child > td {
+      border-top: none;
+    }
+    table.inner-sub-table tr:last-child > td {
+      border-bottom: none;
+    }
+    table.inner-sub-table tr > td:first-child {
+      border-left: none;
+    }
+    table.inner-sub-table tr > td:last-child {
+      border-right: none;
+    }
+
+    /* Interaction summary styling */
+    .interaction-summary {
+      background-color: #f8fafc;
+      border-left: 3pt solid #0284c7;
+      padding: 4pt 7pt;
+      margin: 4pt 0 6pt 0;
+      font-size: 10pt;
+      color: #0f172a;
+      line-height: 1.45;
+    }
+
+    .interaction-summary strong {
+      color: #0369a1;
+    }
+
+    /* Teacher verbatim dialogue script */
+    .teacher-script {
+      background-color: #fafafa;
+      border-left: 3pt solid #64748b;
+      padding: 4pt 7pt;
+      margin: 4pt 0 6pt 0;
+      font-size: 10pt;
+      line-height: 1.45;
+    }
+
+    .teacher-script blockquote {
+      margin: 0;
+      font-style: normal;
+    }
+
+    /* In Summary Mode: Hide dialogues/verbatim scripts */
+    body.mode-summary .teacher-script,
+    body.mode-summary .detailed-only {
+      display: none !important;
+    }
+
+    .step-heading {
+      font-size: 11.5pt;
+      font-weight: bold;
+      color: #000;
+      margin-top: 6pt;
+      margin-bottom: 3pt;
+      display: block;
+    }
+
+    ul, ol {
+      margin-left: 1.4rem;
+      margin-top: 0.2rem;
+      margin-bottom: 0.2rem;
+    }
+
+    li {
+      margin-bottom: 0.2rem;
+    }
+
+    @media print {
+      @page {
+        size: A4;
+        margin: 15mm 12mm 15mm 12mm;
+      }
+      body {
+        background-color: #fff;
+        padding: 0;
+        margin: 0;
+      }
+      .print-bar, .floating-show-btn {
+        display: none !important;
+      }
+      .doc-page {
+        box-shadow: none;
+        padding: 0 1.5mm !important;
+        margin: 0 auto !important;
+        max-width: 100% !important;
+        width: 100% !important;
+        box-sizing: border-box !important;
+      }
+      table.plan-table {
+        width: 100% !important;
+        border-collapse: collapse !important;
+        box-sizing: border-box !important;
+        page-break-inside: auto;
+      }
+      table.plan-table td, table.plan-table th {
+        box-sizing: border-box;
+      }
+      table.plan-table tr > td:last-child,
+      table.plan-table tr > th:last-child {
+        border-right: 1.0pt solid #000 !important;
+      }
+      tr {
+        page-break-inside: auto;
+        page-break-after: auto;
+      }
+      td, th {
+        page-break-inside: auto;
+      }
+      thead, thead tr, tr.bg-title {
+        page-break-inside: avoid;
+        page-break-after: avoid;
+      }
+      thead {
+        display: table-header-group;
+      }
+      body.mode-summary .teacher-script,
+      body.mode-summary .detailed-only {
+        display: none !important;
+      }
+    }
+  </style>
+</head>
+<body class="mode-detailed">
+
+  <!-- Floating Button to restore toolbar when hidden -->
+  <button id="floatingShowBtn" class="floating-show-btn" onclick="toggleToolbar(true)" title="Click or press H to show toolbar">
+    ⚙️ Controls
+  </button>
+
+  <!-- Screen Action Bar with Detailed / Summary Switcher (Sleek Single-row & Collapsible) -->
+  <div id="printBar" class="print-bar">
+    <div class="bar-left">
+      <span class="bar-title">📄 English Plan</span>
+      <div class="mode-switch-group">
+        <button id="btnDetailedMode" class="mode-switch-btn active" onclick="setPlanMode('detailed')">
+          📝 Detailed
+        </button>
+        <button id="btnSummaryMode" class="mode-switch-btn" onclick="setPlanMode('summary')">
+          📋 Summary
+        </button>
+      </div>
+      <a href="lesson_plan_bilingual_doc.html">← Bilingual Plan</a>
+      <a href="index.html">🏠 Portal</a>
+    </div>
+
+    <div class="bar-right">
+      <button class="action-btn" onclick="printPlan()" title="Print Current Lesson Plan (Ctrl+P)">
+        🖨️ Print
+      </button>
+      <button class="action-btn btn-word" onclick="exportToWord()" title="Export Current Plan to Word (.doc)">
+        📥 Export Word
+      </button>
+      <button class="btn-collapse" onclick="toggleToolbar(false)" title="Hide toolbar for clean presentation (or press H key)">
+        👁️ Hide
+      </button>
+    </div>
+  </div>
+
+  <div class="doc-page">
+    
+    <div class="doc-header">
+      <div class="sub-header">Establishment and Promotion of Local Bilingual Education Models: Field Practice in Taiwanese K-9 Schools</div>
+      <h1>Bilingual Lesson Plan Design</h1>
+      <div class="en-title">Electronic Pioneers: Semiconductor Basics &amp; Electronic Soldering</div>
+    </div>
+
+    <!-- Table 1: Official Basic Information Table (20 Rows) -->
+    <table class="plan-table">
+      <tr>
+        <td class="label-col">School</td>
+        <td class="val-col">Kaohsiung Municipal Fushan Junior High School (FSJH)</td>
+        <td class="label-col">Course</td>
+        <td class="val-col">Living Technology</td>
+      </tr>
+      <tr>
+        <td class="label-col">Unit</td>
+        <td class="val-col">Electronic Pioneers</td>
+        <td class="label-col">Domain / Subject</td>
+        <td class="val-col">Technology / Living Technology</td>
+      </tr>
+      <tr>
+        <td class="label-col">Teaching Material</td>
+        <td class="val-col">Self-compiled Teacher Materials</td>
+        <td class="label-col">Lesson Designer</td>
+        <td class="val-col">Eric Wang (王朝葦)</td>
+      </tr>
+      <tr>
+        <td class="label-col">Grade Level</td>
+        <td class="val-col">Grade 8 (Junior High Year 2)</td>
+        <td class="label-col">Total Sessions</td>
+        <td class="val-col">1 Session (45 Minutes)</td>
+      </tr>
+      <tr>
+        <td class="label-col">Rationale for Instructional Design</td>
+        <td colspan="3">
+          To guide 8th-grade students in exploring semiconductor components and fundamental circuit operating principles through everyday technology products, and to master safety protocols and hands-on skills in electronic soldering.
+        </td>
+      </tr>
+      <!-- Curriculum Core Competencies -->
+      <tr>
+        <td class="label-col">Curriculum Core Competencies</td>
+        <td colspan="3" style="padding: 0;">
+          <table class="inner-sub-table">
+            <tr>
+              <td class="label-col" style="width: 17%; text-align: center; vertical-align: middle;">General Guidelines</td>
+              <td>A2 Systematic Thinking &amp; Problem Solving</td>
+            </tr>
+            <tr>
+              <td class="label-col" style="width: 17%; text-align: center; vertical-align: middle;">Domain Guidelines</td>
+              <td>Tech-J-A2: Utilize technological tools to comprehend and synthesize problems, and formulate feasible solutions.</td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+
+      <!-- Learning Focus -->
+      <tr>
+        <td class="label-col">Learning Focus</td>
+        <td colspan="3" style="padding: 0;">
+          <table class="inner-sub-table">
+            <tr>
+              <td class="label-col" style="width: 17%; text-align: center; vertical-align: middle;">Learning Performance</td>
+              <td>
+                • Design-k-IV-2: Understand the fundamental principles, historical evolution, and key innovations of technological products.<br>
+                • Design-k-IV-3: Understand the essential knowledge of selecting appropriate materials and proper tools.
+              </td>
+            </tr>
+            <tr>
+              <td class="label-col" style="width: 17%; text-align: center; vertical-align: middle;">Learning Content</td>
+              <td>
+                • Tech-P-IV-5: Material selection and processing techniques.<br>
+                • Tech-P-IV-6: Operation and proper usage of common machinery and tools.
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+
+      <!-- Students' Readiness -->
+      <tr>
+        <td class="label-col">Students' Readiness</td>
+        <td colspan="3" style="padding: 0;">
+          <table class="inner-sub-table">
+            <tr>
+              <td class="label-col" style="width: 17%; text-align: center; vertical-align: middle;">Subject Readiness</td>
+              <td>
+                1. Possess foundational electrical concepts, such as electronic components and battery polarity (+ / -).<br>
+                2. Understand and comply with workshop safety rules and tool usage protocols in the Living Technology classroom.
+              </td>
+            </tr>
+            <tr>
+              <td class="label-col" style="width: 17%; text-align: center; vertical-align: middle;">English Readiness</td>
+              <td>
+                1. Able to comprehend simple classroom English instructions and teacher cues.<br>
+                2. Able to respond to questions using teacher-provided sentence frames.
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+
+      <tr>
+        <td class="label-col">Learning Objectives</td>
+        <td colspan="3">
+          1. <strong>Cognitive:</strong> Explain the electrical conductivity of semiconductor materials and identify daily applications of common semiconductor devices (e.g., TSMC chips, LEDs).<br>
+          2. <strong>Psychomotor &amp; Safety:</strong> Comply with soldering iron safety rules, master the 4-step soldering procedure, recognize LED polarities and maintain consistent pin orientation, and complete shaped LED board assembly with immediate battery polarity checks.
+        </td>
+      </tr>
+
+      <!-- Timing for Language Usage -->
+      <tr>
+        <td class="label-col">Timing for Language Usage</td>
+        <td colspan="3" style="padding: 0;">
+          <table class="inner-sub-table">
+            <tr>
+              <td class="bg-title" style="width: 50%; text-align: center;">Teacher</td>
+              <td class="bg-title" style="width: 50%; text-align: center;">Students</td>
+            </tr>
+            <tr>
+              <td style="width: 50%; vertical-align: top;">
+                • Greeting students at the beginning of class.<br>
+                • Giving instructions for stage transitions (e.g., tool handling, starting hands-on practice, clean-up).<br>
+                • Presenting slide headings, core concepts, and key terms on the display.<br>
+                • Facilitating structured Q&amp;A using designated sentence patterns.
+              </td>
+              <td style="width: 50%; vertical-align: top;">
+                • Greeting the teacher and responding to classroom greetings.<br>
+                • Following classroom English instructions for workspace setup and safety routines.<br>
+                • Answering questions using structured sentence frames.<br>
+                • Requesting teacher verification and feedback in English.
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+      <tr>
+        <td class="label-col">Teaching Methods</td>
+        <td colspan="3">
+          1. <strong>Lecture:</strong> Introduce semiconductor concepts and functions via interactive multimedia presentation.<br>
+          2. <strong>Discussion:</strong> Encourage student inquiry and verbal responses using structured sentence frames.<br>
+          3. <strong>Demonstration:</strong> Demonstrate tool safety, 4-step dry-run technique, polarity layout recommendations, and cross tweezers usage.<br>
+          4. <strong>Hands-on Practice:</strong> Enable students to safely operate the soldering iron, solder LEDs, and conduct real-time battery tests.
+        </td>
+      </tr>
+      <tr>
+        <td class="label-col">Teaching Strategies</td>
+        <td colspan="3">Demonstration Teaching, Activity-based Learning, Scaffolding Instruction.</td>
+      </tr>
+      <tr>
+        <td class="label-col">Teaching Resources &amp; Equipment</td>
+        <td colspan="3">Interactive classroom display system, demo video clips; Group Tool Kit (cutting mat, soldering iron, soldering stand, brass wire sponge, cross tweezers, solder wire, 5mm LEDs, shaped LED circuit board, test battery, scrap collection box).</td>
+      </tr>
+      <tr>
+        <td class="label-col">Assessment Methods</td>
+        <td colspan="3">Skill Checklist, Hands-on Performance Assessment, Final Product Verification.</td>
+      </tr>
+      <tr>
+        <td class="label-col">Evaluation Rubrics</td>
+        <td colspan="3">
+          <strong>Level A:</strong> Successfully completes all operations and soldering tasks with an accuracy of 80% or above.<br>
+          <strong>Level B:</strong> Completes tasks with an accuracy of 50% to 79%.<br>
+          <strong>Level C:</strong> Partially completes tasks with an accuracy below 50%.<br>
+          <strong>Level D:</strong> Unable to complete the operation safely.
+        </td>
+      </tr>
+    </table>
+
+    <!-- Table 2: Official 3-Column Teaching Procedures Table -->
+    <table class="plan-table">
+      <thead>
+        <tr class="bg-title">
+          <th colspan="3" style="text-align: center; font-size: 13pt; padding: 6pt;">Teaching Procedures</th>
+        </tr>
+        <tr class="bg-title">
+          <th style="width: 14%; text-align: center;">Session</th>
+          <th style="width: 74%; text-align: center;">Electronic Pioneers</th>
+          <th style="width: 12%; text-align: center;">Time</th>
+        </tr>
+      </thead>
+      <tbody>
+
+        <!-- Stage 1 -->
+        <tr>
+          <td style="text-align: center; font-weight: bold;">
+            Session 1<br><br>
+            <strong>Stage 1</strong><br>
+            Preparation &amp; Introduction<br>
+            <span style="font-size: 9pt; color: #0284c7; font-weight: bold;">Part 1</span>
+          </td>
+          <td>
+            <div style="font-weight: bold; font-size: 11.5pt; color: #0f172a; margin-bottom: 4pt;">
+              [Stage 1: Preparation &amp; Conceptual Introduction]
+            </div>
+
+            <span class="step-heading">1. Opening &amp; Lesson Objectives (approx. 1.5 mins)</span>
+            • Focus: Introduce lesson topic and state the two key tasks (understanding semiconductors and soldering iron safety).
+            <div class="interaction-summary">
+              <strong>Interaction Summary:</strong> Teacher welcomes the class in classroom English, states the two core lesson objectives (semiconductors &amp; soldering iron safety), and checks students' readiness. Students respond to greetings and focus on the presentation.
+            </div>
+            <div class="teacher-script">
+              <strong>Teacher Script:</strong>
+              <blockquote>
+                "Hello, everyone. Nice to see you again!<br>
+                Today, we are going to learn about <strong>semiconductors</strong> 📱, and <strong>how to use a soldering iron safely</strong> ⚠️."
+              </blockquote>
+            </div>
+
+            <span class="step-heading">2. Warm-up &amp; Hook: Discovering TSMC (approx. 1.5 mins)</span>
+            • Focus: Connect with local tech industry and everyday life to introduce the term "Semiconductor".
+            <div style="overflow: hidden; margin: 4pt 0;">
+              <img src="Tsmc.svg" alt="TSMC" style="width: 110px; height: auto; float: right; margin: 0 0 8px 12px; border: 1px solid #e2e8f0; padding: 4px; border-radius: 4px; background: #fff;">
+              <div class="interaction-summary">
+                <strong>Interaction Summary:</strong> Teacher projects the TSMC company logo, eliciting student recognition of Taiwan's leading semiconductor enterprise. Students actively answer "TSMC!", building connection between local industry and the lesson topic.
+              </div>
+            </div>
+            <div class="teacher-script">
+              <strong>Teacher Script:</strong>
+              <blockquote>
+                "Look at this logo 📱. Do you know it?"
+              </blockquote>
+              <strong>Students:</strong> "TSMC!"<br>
+              <strong>Teacher Script:</strong>
+              <blockquote>
+                "Yes! It's TSMC — <strong>Taiwan Semiconductor Manufacturing Company</strong> 🏢.<br>
+                The company that made a lot of people rich!<br>
+                Almost all modern tech products rely on <strong>semiconductors</strong> 📱."
+              </blockquote>
+            </div>
+
+            <span class="step-heading">3. Review: Electrical Conductivity (approx. 2 mins)</span>
+            • Focus: Contrast conductors, insulators, and semiconductors using concise action verbs.
+            <div class="interaction-summary">
+              <strong>Interaction Summary:</strong> Teacher reviews electrical states by contrasting conductors ("can pass"), insulators ("stops"), and semiconductors ("switchable / controllable"). Students contrast the three conductivity behaviors using action verbs.
+            </div>
+            <div class="teacher-script">
+              <strong>Teacher Script:</strong>
+              <blockquote>
+                "Let's review our previous lesson!<br>
+                What is a <strong>conductor</strong> ⚡? A conductor means: <strong>electricity can pass!</strong><br>
+                What is an <strong>insulator</strong> 🧱? An insulator means: <strong>electricity stops!</strong><br>
+                Then, what is a <strong>semiconductor</strong>?<br>
+                The most special feature of a semiconductor: <strong>Sometimes it can pass, sometimes it cannot!</strong><br>
+                It acts just like a switch, through control, allowing electricity to pass at certain times and block it at other times!"
+              </blockquote>
+            </div>
+
+            <span class="step-heading">4. Four Core Functions of Semiconductors &amp; Structured Q&amp;A (approx. 3 mins)</span>
+            • Focus: Introduce raw material Silicon and the 4 core functions, providing a language scaffold for structured verbal interaction.<br>
+            • <strong>Core Functions:</strong>
+            <ol>
+              <li><strong>Computing</strong> 💻: Processing calculations (e.g., smartphone and computer CPU/GPU chips).</li>
+              <li><strong>Sensing</strong> 🌡️: Detecting environment (e.g., ambient light sensors, temperature sensors).</li>
+              <li><strong>Control</strong> 🎛️: Electronic switching and motor regulation (e.g., transistors controlling current paths).</li>
+              <li><strong>Lighting</strong> 💡: Generating light directly from electricity (e.g., today's star component: LED).</li>
+            </ol>
+            <div class="interaction-summary">
+              <strong>Interaction Summary:</strong> Teacher bridges from beach sand to high-tech Silicon chips, explains the 4 core functions (Computing, Sensing, Control, Lighting) via Slide 4, and introduces the sentence frame <em>'A [______] uses semiconductors for [______].'</em> via Slide 5. Students formulate complete sentences to present everyday tech applications, and the teacher provides positive reinforcement before transitioning to soldering safety.
+            </div>
+            <div class="teacher-script">
+              <strong>Teacher (Silicon Connection):</strong>
+              <blockquote>
+                "Speaking of TSMC, do you know what raw material makes up these high-tech chips?<br>
+                It comes from the most common thing in nature—common sand! The refined chemical element is called <strong>Silicon</strong>.<br>
+                Through advanced manufacturing, these <strong>semiconductors</strong> are given four core superpowers! Let's look at the screen!"
+              </blockquote>
+              <strong>Teacher (4 Core Functions, with Slide 4):</strong>
+              <blockquote>
+                "So, what are the four core functions of semiconductors?<br>
+                1. <strong>Computing 💻:</strong> Processing! Like CPU chips in computers and smartphones running billions of calculations per second.<br>
+                2. <strong>Sensing 🌡️:</strong> Detecting changes in light, temperature, or distance in the environment.<br>
+                3. <strong>Control 🎛️:</strong> Electronic switching! Transistors act like micro-switches to regulate motors and redirect current.<br>
+                4. <strong>Lighting 💡:</strong> Emitting light! Today's star component—the <strong>LED (Light Emitting Diode)</strong>, which transforms electrical energy directly into light!"
+              </blockquote>
+              <strong>Teacher (Sentence Frame Scaffolding, with Slide 5):</strong>
+              <blockquote>
+                "Now, look at the screen. Let's practice this sentence frame:<br>
+                📝 <strong>'A [ Product ] uses semiconductors for [ Function ].'</strong><br>
+                For example: <em>'A <strong>smartphone</strong> uses semiconductors for <strong>computing</strong>.'</em> See how easy and intuitive it is?"
+              </blockquote>
+              <strong>Structured Q&amp;A:</strong><br>
+              <strong>Teacher:</strong> "Who wants to try? Any volunteers? Kevin, please try!"<br>
+              <strong>Student 1:</strong> "A desk lamp uses semiconductors for lighting."<br>
+              <strong>Teacher:</strong> "Awesome! Bingo! 👏 Desk lamps use LEDs to emit light, completely correct! One more! Amy, give it a shot!"<br>
+              <strong>Student 2:</strong> "An automatic door uses semiconductors for sensing."<br>
+              <strong>Teacher (Feedback &amp; Transition to Part 2):</strong>
+              <blockquote>
+                "Excellent! Automatic doors use sensors to detect people approaching, very good!<br>
+                You all did a fantastic job! Now that we know semiconductors have these superpowers, and our hero today is <strong>LED (Lighting)</strong>, how do we assemble them securely?<br>
+                Through soldering! <strong>Now, let's learn how to use the tools safely! Tool keepers, get ready!</strong>"
+              </blockquote>
+            </div>
+          </td>
+          <td style="text-align: center; vertical-align: middle; font-weight: bold; font-size: 11pt;">
+            8 mins
+          </td>
+        </tr>
+
+        <!-- Stage 2 -->
+        <tr>
+          <td style="text-align: center; font-weight: bold;">
+            Session 1<br><br>
+            <strong>Stage 2</strong><br>
+            Safety Setup &amp; Demo<br>
+            <span style="font-size: 9pt; color: #0284c7; font-weight: bold;">Part 2</span>
+          </td>
+          <td>
+            <div style="font-weight: bold; font-size: 11.5pt; color: #0f172a; margin-bottom: 4pt;">
+              [Stage 2: Safety Setup &amp; Operational Demonstration]
+            </div>
+
+            <span class="step-heading">1. Workspace Setup &amp; Tool Identification (approx. 3 mins)</span>
+            • Focus: Appoint the "Tool Master", arrange workspace layout, establish personal safety routines, explain tool functions, and enforce the "no plug-in yet" rule.
+            <div class="interaction-summary">
+              <strong>Interaction Summary:</strong> Teacher designates group "Tool Masters" to retrieve group kits and instructs students to place cutting mats centrally, soldering stands to the front-right, and clean sponges nearby, strictly prohibiting plugging in beforehand.
+            </div>
+            <div class="teacher-script">
+              <strong>Teacher Script:</strong>
+              <blockquote>
+                "OK, <strong>Tool Master</strong>, please get the tools! 🛠️<br>
+                All right, <strong>let's get ready to work!</strong> Safety first before plugging in!<br>
+                1. <strong>Please tie up your hair.</strong> Tie up long hair or pin back bangs 💇.<br>
+                2. <strong>Then, put everything in the right place!</strong> Take out the tools and identify them:<br>
+                • <strong>Cutting Mat</strong> 🟩: Place in the center of the work area to protect the table.<br>
+                • <strong>Soldering Stand</strong> 🛠️: Place on your front-right. It is the dedicated home for the hot iron. When not in use, the iron must stay inside.<br>
+                • <strong>Brass Wire Sponge</strong> 🧽: Place beside the stand to clean residual solder off the tip.<br>
+                3. <strong>Do not plug in yet!</strong> Keep it unplugged for now!"
+              </blockquote>
+            </div>
+
+            <span class="step-heading">2. Unpowered Dry Run: 4-Step Soldering Technique (approx. 3 mins)</span>
+            • Focus: Use clear, rhythmic English commands to guide physical dry-run practice and build muscle memory.
+            <div class="interaction-summary">
+              <strong>Interaction Summary:</strong> Teacher demonstrates the 4-step soldering dry run with large, rhythmic motions (Heat joint, Feed solder, Remove solder, Remove iron back to stand). Students physically mimic each step in sync, internalizing timing and muscle memory.
+            </div>
+            <div class="teacher-script">
+              <strong>Teacher Script:</strong>
+              <blockquote>
+                "Before plugging in, let's simulate the soldering motion!<br>
+                <strong>Now, let's practice the 4 steps for soldering!</strong><br>
+                Everyone follow along with large motions:<br>
+                1. <strong>Heat the item!</strong> ⏱️ Touch the joint and count in your head: 1, 2.<br>
+                2. <strong>Feed the solder!</strong> 🧵 Feed the solder wire in.<br>
+                3. <strong>Remove the solder!</strong> ⬅️ Pull the solder wire away.<br>
+                4. <strong>Remove the iron!</strong> 🖐️ Lift the iron and return it to the stand (<strong>Back to the stand!</strong>).<br>
+                Remember the rhythm: <strong>Heat the item → Feed the solder → Remove the solder → Remove the iron.</strong>"
+              </blockquote>
+            </div>
+
+            <span class="step-heading">3. Video Demo &amp; Task Walkthrough (approx. 6 mins)</span>
+            • Focus: Screen demonstrational video highlighting polarity layout recommendations (long pin outside is a helpful template, but not mandatory as long as orientation is consistent), cross tweezers clamping, and five vital safety rules.
+            <div class="interaction-summary">
+              <strong>Interaction Summary:</strong> Teacher projects the demonstration video, explaining the polarity layout tip (long leg on the outside lane is recommended, but orientation consistency is what truly matters) and cross tweezers usage. Students review polarity rules, repeat safety protocols, and prepare to start.
+            </div>
+            <div class="teacher-script">
+              <strong>Teacher Script:</strong>
+              <blockquote>
+                "Eyes on the screen! 📺 Watch the demonstration video closely:<br>
+                • <strong>Placement Tip 🏃:</strong> Imagine a running track—the outside lane is longer, so <strong>putting the long leg on the outside lane ➕ and short leg on the inside lane ➖ is generally easier</strong>. This is just a helpful template; it is completely fine if you don't put it on the outside, as long as all pins follow the same direction!<br>
+                • <strong>Cross Tweezers 🗜️:</strong> After bending the pins, use cross tweezers to clamp the two pins firmly together.<br>
+                • <strong>Safety Rules:</strong> Don't play, Don't burn anything, Don't waste solder, Don't leave table, Avoid touching metal.<br>
+                Now, it's your turn. Let's start! 🛠️"
+              </blockquote>
+            </div>
+          </td>
+          <td style="text-align: center; vertical-align: middle; font-weight: bold; font-size: 11pt;">
+            12 mins
+          </td>
+        </tr>
+
+        <!-- Stage 3 -->
+        <tr>
+          <td style="text-align: center; font-weight: bold;">
+            Session 1<br><br>
+            <strong>Stage 3</strong><br>
+            Hands-on &amp; Testing<br>
+            <span style="font-size: 9pt; color: #0284c7; font-weight: bold;">Part 3</span>
+          </td>
+          <td>
+            <div style="font-weight: bold; font-size: 11.5pt; color: #0f172a; margin-bottom: 4pt;">
+              [Stage 3: Powered Assembly &amp; Real-time Testing]
+            </div>
+
+            <span class="step-heading">1. Plug In &amp; Shaped Board Assembly (approx. 3 mins)</span>
+            • Focus: Power up irons safely, arrange LEDs along the board in sequence during heating, maintain consistent polarity (outer long pin recommended), and clamp pins with cross tweezers.
+            <div class="interaction-summary">
+              <strong>Interaction Summary:</strong> Students plug in soldering irons and leave them securely in stands to heat up. Simultaneously, they place 5mm LEDs in sequence onto the shaped PCB, keeping pin orientation consistent (outer long pin recommended), clamping joints with cross tweezers.
+            </div>
+            <div class="teacher-script">
+              <strong>Teacher Script:</strong>
+              <blockquote>
+                "Now, <strong>plug in your iron!</strong> 🔌 Leave the iron in the stand while it heats up.<br>
+                While waiting for it to reach working temperature, let's position our LEDs:<br>
+                1. <strong>Sequential Placement 💡:</strong> Starting from the handle, arrange the LEDs along the shaped board in order.<br>
+                2. <strong>Polarity Alignment 🏃:</strong> Long leg on the outside lane ➕ and short leg on the inside lane ➖ is recommended (template tip—consistent direction is the key!).<br>
+                3. <strong>Cross Tweezers 🗜️:</strong> Bend the pins on the back and clamp the two intersecting pins with cross tweezers!"
+              </blockquote>
+            </div>
+
+            <span class="step-heading">2. Step-by-Step Soldering &amp; Instant Battery Test (approx. 14 mins)</span>
+            • Focus: Execute 4-step soldering technique, allow natural cooling for 3 seconds, and immediately test polarity and continuity with a single battery.
+            <div class="interaction-summary">
+              <strong>Interaction Summary:</strong> Students solder LED pins using the 4-step sequence (Heat → Solder → Remove solder → Remove iron). After 3 seconds of cooling, they immediately touch the battery (+ to outside pin, - to inside pin) to confirm illumination before proceeding to the next LED.
+            </div>
+            <div class="teacher-script">
+              <strong>Teacher Script:</strong>
+              <blockquote>
+                "Once clamped securely, pick up the hot iron and solder:<br>
+                1. <strong>Solder ⏱️:</strong> Follow the chant: Heat (1, 2) → Feed solder → Remove solder → Remove iron (<strong>Back to the stand!</strong>). Let it cool naturally for 3 seconds—never blow on it!<br>
+                2. <strong>Battery Test 🔋: Test with the battery immediately after each soldered LED!</strong> Touch positive (+) to the outside long pin, negative (-) to the inside short pin.<br>
+                Once lit and confirmed, advance clockwise to the next LED!"
+              </blockquote>
+            </div>
+
+            <span class="step-heading">3. Troubleshooting &amp; Roving Supervision (approx. 3 mins)</span>
+            • Excess Solder (Bridge Risk): Clean iron tip with brass sponge and reheat joint to draw away excess solder.<br>
+            • Cold Solder Joint (No Continuity): Ensure the iron tip contacts both metal pins simultaneously to flow solder properly.<br>
+            • Safety Vigilance: Emphasize "Back to the stand!" whenever the iron leaves the hand; never rest it flat on the desk.
+          </td>
+          <td style="text-align: center; vertical-align: middle; font-weight: bold; font-size: 11pt;">
+            20 mins
+          </td>
+        </tr>
+
+        <!-- Stage 4 -->
+        <tr>
+          <td style="text-align: center; font-weight: bold;">
+            Session 1<br><br>
+            <strong>Stage 4</strong><br>
+            Clean up &amp; Pack up<br>
+            <span style="font-size: 9pt; color: #0284c7; font-weight: bold;">Part 4</span>
+          </td>
+          <td>
+            <div style="font-weight: bold; font-size: 11.5pt; color: #0f172a; margin-bottom: 4pt;">
+              [Stage 4: Tool Storage &amp; Workspace Clean-up]
+            </div>
+
+            <span class="step-heading">1. Power Off &amp; Natural Cooling (approx. 1 min)</span>
+            • Focus: Unplug first, leave irons in stands to cool down naturally, strictly forbid touching hot metal.
+            <div class="interaction-summary">
+              <strong>Interaction Summary:</strong> Teacher announces time's up. Students immediately unplug power cords, leaving soldering irons securely resting in stands to cool down naturally without touching metal surfaces.
+            </div>
+            <div class="teacher-script">
+              <strong>Teacher Script:</strong>
+              <blockquote>
+                "Time is up! ⏰ Let's pack up!<br>
+                1. <strong>Unplug the iron! 🔌:</strong> First step for all groups: unplug the power cord immediately!<br>
+                2. <strong>Stay on the stand! 🛠️:</strong> The iron remains extremely hot after unplugging. Never touch it with your bare hands; leave it in the stand to cool down."
+              </blockquote>
+            </div>
+
+            <span class="step-heading">2. Tool Packing &amp; Return (approx. 2 mins)</span>
+            • Focus: Tool Masters check and return tools into kit boxes without item-by-item enumeration.
+            <div class="interaction-summary">
+              <strong>Interaction Summary:</strong> Teacher directs: <em>"Tool Master, please check the tools and get back the tools."</em> Students check kit boxes, close lids neatly, and leave cooling stands on tables.
+            </div>
+            <div class="teacher-script">
+              <strong>Teacher Script:</strong>
+              <blockquote>
+                "<strong>Tool Master, please check the tools and get back the tools!</strong> 🧰<br>
+                Please check all items in your kit box, pack them neatly, and close the box! Leave the soldering stand and cooling iron on the table until fully cold."
+              </blockquote>
+            </div>
+
+            <span class="step-heading">3. Workspace Clean-up &amp; Hygiene Reminder (approx. 2 mins)</span>
+            • Focus: Collect clipped wire scraps and solder fragments into waste boxes, wipe cutting mats, and mandate soap handwashing before eating.
+            <div class="interaction-summary">
+              <strong>Interaction Summary:</strong> Teacher directs: <em>"Please clean the table."</em> and <em>"After class, remember to wash your hands."</em> Students clean debris into waste boxes, wipe cutting mats, and prepare for dismissal.
+            </div>
+            <div class="teacher-script">
+              <strong>Teacher Script:</strong>
+              <blockquote>
+                "1. <strong>Please clean the table! 🧹</strong> Inspect your cutting mats and desks. Collect clipped pins and solder debris into the scrap box—do not drop them on the floor, and wipe your cutting mats clean!<br>
+                2. <strong>After class, remember to wash your hands! 🧼</strong> Everyone handled solder wire today. Remember to wash your hands thoroughly with soap before eating anything!<br>
+                Today, everybody did a great job! 👏 Stand up, push in your chairs, and you're dismissed. See you next week!"
+              </blockquote>
+            </div>
+          </td>
+          <td style="text-align: center; vertical-align: middle; font-weight: bold; font-size: 11pt;">
+            5 mins
+          </td>
+        </tr>
+
+        <!-- Total Row -->
+        <tr class="bg-title" style="font-weight: bold;">
+          <td colspan="2" style="text-align: right; padding-right: 15pt; font-size: 11.5pt;">
+            Total Duration
+          </td>
+          <td style="text-align: center; font-size: 11.5pt;">
+            45 mins
+          </td>
+        </tr>
+
+      </tbody>
+    </table>
+
+  </div>
+
+  <script>
+    function setPlanMode(mode) {
+      const body = document.body;
+      const btnDetailed = document.getElementById('btnDetailedMode');
+      const btnSummary = document.getElementById('btnSummaryMode');
+
+      if (mode === 'summary') {
+        body.classList.remove('mode-detailed');
+        body.classList.add('mode-summary');
+        if (btnDetailed) btnDetailed.classList.remove('active');
+        if (btnSummary) btnSummary.classList.add('active');
+      } else {
+        body.classList.remove('mode-summary');
+        body.classList.add('mode-detailed');
+        if (btnSummary) btnSummary.classList.remove('active');
+        if (btnDetailed) btnDetailed.classList.add('active');
+      }
+    }
+
+    function printPlan(mode) {
+      if (mode) setPlanMode(mode);
+      setTimeout(() => {
+        window.print();
+      }, 150);
+    }
+
+    function toggleToolbar(show) {
+      const printBar = document.getElementById('printBar');
+      const floatingBtn = document.getElementById('floatingShowBtn');
+      const isHidden = typeof show === 'boolean' ? !show : !printBar.classList.contains('is-hidden');
+      
+      if (isHidden) {
+        printBar.classList.add('is-hidden');
+        if (floatingBtn) floatingBtn.classList.add('is-visible');
+        try { localStorage.setItem('toolbar_hidden_en', '1'); } catch(e){}
+      } else {
+        printBar.classList.remove('is-hidden');
+        if (floatingBtn) floatingBtn.classList.remove('is-visible');
+        try { localStorage.removeItem('toolbar_hidden_en'); } catch(e){}
+      }
+    }
+
+    // Keyboard shortcut: Press 'H' to toggle toolbar
+    document.addEventListener('keydown', (e) => {
+      if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') return;
+      if (e.key === 'h' || e.key === 'H') {
+        toggleToolbar();
+      }
+    });
+
+    // Check if previously hidden
+    try {
+      if (localStorage.getItem('toolbar_hidden_en') === '1') {
+        toggleToolbar(false);
+      }
+    } catch(e){}
+
+    function exportToWord(mode) {
+      const targetMode = mode || (document.body.classList.contains('mode-summary') ? 'summary' : 'detailed');
+      const isSummary = targetMode === 'summary';
+      const docPage = document.querySelector('.doc-page');
+      if (!docPage) return;
+
+      const clone = docPage.cloneNode(true);
+
+      if (isSummary) {
+        clone.querySelectorAll('.teacher-script').forEach(el => el.remove());
+        clone.querySelectorAll('.detailed-only').forEach(el => el.remove());
+      }
+
+      // Ensure every tr has inline styles for Word pagination
+      clone.querySelectorAll('tr').forEach(tr => {
+        if (tr.classList.contains('bg-title') || tr.closest('thead')) {
+          tr.setAttribute('style', (tr.getAttribute('style') || '') + '; page-break-inside: avoid; page-break-after: avoid; mso-yfti-cant-split: yes; mso-yfti-header: yes;');
+        } else {
+          tr.setAttribute('style', (tr.getAttribute('style') || '') + '; page-break-inside: auto; mso-yfti-cant-split: no;');
+        }
+      });
+      // Handle floating images in clone so Word doesn't lock row pagination
+      clone.querySelectorAll('img').forEach(img => {
+        img.style.float = 'none';
+        img.style.display = 'inline-block';
+        img.style.verticalAlign = 'middle';
+      });
+
+      const fileName = isSummary 
+        ? 'English_Lesson_Plan_Electronic_Pioneers_Summary.doc' 
+        : 'English_Lesson_Plan_Electronic_Pioneers_Detailed.doc';
+
+      const wordDocHtml = `<!DOCTYPE html>
+<html xmlns:v="urn:schemas-microsoft-com:vml"
+      xmlns:o="urn:schemas-microsoft-com:office:office"
+      xmlns:w="urn:schemas-microsoft-com:office:word"
+      xmlns="http://www.w3.org/TR/REC-html40">
+<head>
+  <meta charset="utf-8">
+  <title>${isSummary ? 'English Lesson Plan (Summary)' : 'English Lesson Plan (Detailed)'}</title>
+  <!--[if gte mso 9]>
+  <xml>
+    <w:WordDocument>
+      <w:View>Print</w:View>
+      <w:Zoom>100</w:Zoom>
+      <w:DoNotOptimizeForBrowser/>
+      <w:Compatibility>
+        <w:BreakWrappedTables/>
+        <w:SplitPgBreakAndParaMark/>
+        <w:SnapToGridInCell/>
+        <w:WrapTextWithPunct/>
+        <w:UseAsianBreakRules/>
+        <w:DontGrowAutofit/>
+        <w:DontUseIndentAsForNumber/>
+      </w:Compatibility>
+    </w:WordDocument>
+  </xml>
+  <![endif]-->
+  <style>
+    @font-face {
+      font-family: "Calibri";
+      panose-1: 2 15 5 2 2 2 4 3 2 4;
+      mso-font-charset: 0;
+      mso-generic-font-family: swiss;
+      mso-font-pitch: variable;
+    }
+    @font-face {
+      font-family: "Microsoft JhengHei";
+      panose-1: 2 11 6 4 3 5 4 4 2 4;
+      mso-font-charset: 136;
+      mso-generic-font-family: swiss;
+      mso-font-pitch: variable;
+    }
+
+    @page Section1 {
+      size: 595.3pt 841.9pt; /* A4 */
+      margin: 38.0pt 36.0pt 38.0pt 36.0pt;
+      mso-header-margin: 18.0pt;
+      mso-footer-margin: 24.0pt;
+      mso-paper-source: 0;
+    }
+    div.Section1 {
+      page: Section1;
+    }
+
+    /* Comfortable Typography & Paragraphs (0 Space Before, 0 Space After, Single Line Spacing) */
+    body, p.MsoNormal, li.MsoNormal, div.MsoNormal, p, div, table, td, th, span, li, blockquote {
+      font-family: "Calibri", "Aptos", "Segoe UI", Arial, sans-serif;
+      mso-ascii-font-family: "Calibri";
+      mso-hansi-font-family: "Calibri";
+      mso-bidi-font-family: "Calibri";
+      mso-fareast-font-family: "Microsoft JhengHei";
+      font-size: 12.0pt;
+      color: #1e293b;
+    }
+
+    body, p.MsoNormal, li.MsoNormal, div.MsoNormal, p, li, blockquote {
+      margin-top: 0cm;
+      margin-bottom: 0cm;
+      margin-bottom: .0001pt;
+      mso-para-margin-top: 0cm;
+      mso-para-margin-bottom: 0cm;
+      mso-para-margin-bottom: .0001pt;
+      line-height: normal;
+      mso-line-height-rule: at-least;
+      mso-pagination: widow-orphan;
+    }
+
+    .doc-header {
+      text-align: center;
+      margin-top: 0cm;
+      margin-bottom: 12pt;
+      mso-para-margin-top: 0cm;
+      mso-para-margin-bottom: 12pt;
+    }
+    .doc-header .sub-header {
+      font-size: 13pt;
+      font-weight: bold;
+      color: #475569;
+      letter-spacing: 0.03em;
+      margin-bottom: 2pt;
+      line-height: normal;
+      mso-line-height-rule: at-least;
+      mso-para-margin-bottom: 2pt;
+    }
+    .doc-header h1 {
+      font-size: 18pt;
+      font-weight: bold;
+      color: #0f172a;
+      margin-top: 2pt;
+      margin-bottom: 3pt;
+      line-height: normal;
+      mso-line-height-rule: at-least;
+      mso-para-margin-top: 2pt;
+      mso-para-margin-bottom: 3pt;
+    }
+    .doc-header .en-title {
+      font-size: 14pt;
+      color: #0284c7;
+      font-weight: 600;
+      margin-top: 0cm;
+      margin-bottom: 6pt;
+      line-height: normal;
+      mso-line-height-rule: at-least;
+      mso-para-margin-top: 0cm;
+      mso-para-margin-bottom: 6pt;
+    }
+
+    /* Table Formatting & Page-Break Controls */
+    table.plan-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 0cm;
+      margin-bottom: 12pt;
+      border: 1.0pt solid #334155;
+      mso-table-layout-alt: fixed;
+      mso-padding-alt: 4.5pt 6.0pt 4.5pt 6.0pt;
+      mso-table-overlap: never;
+    }
+    table.plan-table td, table.plan-table th {
+      border: 1.0pt solid #334155;
+      padding: 4.5pt 6.0pt;
+      vertical-align: top;
+      font-size: 12.0pt;
+      line-height: normal;
+      mso-line-height-rule: at-least;
+      word-break: normal;
+      page-break-inside: auto;
+    }
+
+    thead, thead tr, tr.bg-title {
+      page-break-inside: avoid;
+      page-break-after: avoid;
+      mso-yfti-cant-split: yes;
+      mso-yfti-header: yes;
+    }
+    thead {
+      display: table-header-group;
+    }
+    tr {
+      page-break-inside: auto;
+      mso-yfti-cant-split: no;
+    }
+    td {
+      page-break-inside: auto;
+    }
+
+    .bg-title {
+      background-color: #f1f5f9;
+      font-weight: bold;
+      font-size: 12.5pt;
+      line-height: normal;
+      mso-line-height-rule: at-least;
+      text-align: center;
+      color: #0f172a;
+    }
+    .label-col {
+      width: 18%;
+      background-color: #f8fafc;
+      font-weight: bold;
+      font-size: 12.0pt;
+      line-height: normal;
+      mso-line-height-rule: at-least;
+      text-align: center;
+      vertical-align: middle;
+      color: #1e293b;
+    }
+    .val-col {
+      width: 32%;
+      font-size: 12.0pt;
+      line-height: normal;
+      mso-line-height-rule: at-least;
+    }
+
+    table.inner-sub-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 0;
+      border: none;
+      mso-table-layout-alt: fixed;
+    }
+    table.inner-sub-table td {
+      border: 1.0pt solid #334155;
+      padding: 4.5pt 6.0pt;
+      vertical-align: top;
+      font-size: 12.0pt;
+      line-height: normal;
+      mso-line-height-rule: at-least;
+    }
+    table.inner-sub-table tr:first-child > td {
+      border-top: none;
+    }
+    table.inner-sub-table tr:last-child > td {
+      border-bottom: none;
+    }
+    table.inner-sub-table tr > td:first-child {
+      border-left: none;
+    }
+    table.inner-sub-table tr > td:last-child {
+      border-right: none;
+    }
+
+    .interaction-summary {
+      background-color: #f0f9ff;
+      border-left: 3.5pt solid #0284c7;
+      padding: 4.5pt 7pt;
+      margin-top: 3pt;
+      margin-bottom: 3pt;
+      mso-para-margin-top: 0cm;
+      mso-para-margin-bottom: 0cm;
+      font-size: 12.0pt;
+      line-height: normal;
+      mso-line-height-rule: at-least;
+      color: #0c4a6e;
+    }
+
+    .teacher-script {
+      background-color: #f8fafc;
+      border-left: 3.5pt solid #64748b;
+      padding: 4.5pt 7pt;
+      margin-top: 3pt;
+      margin-bottom: 3pt;
+      mso-para-margin-top: 0cm;
+      mso-para-margin-bottom: 0cm;
+      font-size: 12.0pt;
+      line-height: normal;
+      mso-line-height-rule: at-least;
+      color: #1e293b;
+    }
+
+    blockquote {
+      margin: 2pt 0 2pt 8pt;
+      padding: 2.5pt 5.5pt;
+      border-left: 2.5pt solid #cbd5e1;
+      background-color: #f8fafc;
+      font-size: 12.0pt;
+      line-height: normal;
+      mso-line-height-rule: at-least;
+      color: #334155;
+      mso-para-margin-top: 0cm;
+      mso-para-margin-bottom: 0cm;
+      mso-para-margin-left: 8pt;
+    }
+
+    .step-heading {
+      font-weight: bold;
+      font-size: 12.5pt;
+      color: #0f172a;
+      line-height: normal;
+      mso-line-height-rule: at-least;
+      margin-top: 5pt;
+      margin-bottom: 1pt;
+      mso-para-margin-top: 0cm;
+      mso-para-margin-bottom: 0cm;
+      display: block;
+    }
+
+    p {
+      margin-top: 0cm;
+      margin-bottom: 0cm;
+      margin-bottom: .0001pt;
+      font-size: 12.0pt;
+      line-height: normal;
+      mso-line-height-rule: at-least;
+      mso-para-margin-top: 0cm;
+      mso-para-margin-bottom: 0cm;
+      mso-para-margin-bottom: .0001pt;
+    }
+
+    ul, ol {
+      margin-top: 0cm;
+      margin-bottom: 0cm;
+      margin-bottom: .0001pt;
+      margin-left: 16pt;
+      padding-left: 0;
+      font-size: 12.0pt;
+      line-height: normal;
+      mso-line-height-rule: at-least;
+      mso-para-margin-top: 0cm;
+      mso-para-margin-bottom: 0cm;
+      mso-para-margin-bottom: .0001pt;
+      mso-para-margin-left: 16pt;
+    }
+    li {
+      margin-top: 0cm;
+      margin-bottom: 0cm;
+      margin-bottom: .0001pt;
+      font-size: 12.0pt;
+      line-height: normal;
+      mso-line-height-rule: at-least;
+      mso-para-margin-top: 0cm;
+      mso-para-margin-bottom: 0cm;
+      mso-para-margin-bottom: .0001pt;
+    }
+
+    code {
+      font-family: Consolas, "Courier New", monospace;
+      font-size: 10.5pt;
+      background-color: #f1f5f9;
+      padding: 1pt 3pt;
+      color: #0284c7;
+    }
+  </style>
+</head>
+<body>
+  <div class="Section1">
+    ${clone.innerHTML}
+  </div>
+</body>
+</html>`;
+
+      const blob = new Blob(['\ufeff', wordDocHtml], {
+        type: 'application/msword;charset=utf-8'
+      });
+
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = fileName;
+      document.body.appendChild(a);
+      a.click();
+      setTimeout(() => {
+        document.body.removeChild(a);
+        URL.revokeObjectURL(url);
+      }, 150);
+    }
+  </script>
+
+</body>
+</html>

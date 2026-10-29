@@ -1,0 +1,1414 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>雙語課程教案設計：電子小尖兵（半導體認識與電子銲接實作）</title>
+  <style>
+    @page {
+      size: A4;
+      margin: 18mm 15mm 18mm 15mm;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: "Microsoft JhengHei", "微軟正黑體", "Segoe UI", Arial, sans-serif;
+      font-size: 11pt;
+      line-height: 1.5;
+      color: #1e293b;
+      background-color: #f1f5f9;
+      padding: 2rem 1rem;
+    }
+
+    .doc-page {
+      max-width: 950px;
+      margin: 0 auto;
+      background: #fff;
+      padding: 2.8rem 2.8rem;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+      border-radius: 4px;
+    }
+
+    /* Screen Action Bar (Sleek Single-row & Collapsible) */
+    .print-bar {
+      max-width: 950px;
+      margin: 0 auto 1.2rem auto;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: #0f172a;
+      color: #fff;
+      padding: 0.45rem 1rem;
+      border-radius: 8px;
+      gap: 0.6rem;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+      transition: all 0.25s ease;
+    }
+
+    .print-bar.is-hidden {
+      display: none !important;
+    }
+
+    .bar-left, .bar-right {
+      display: flex;
+      align-items: center;
+      gap: 0.55rem;
+    }
+
+    .bar-title {
+      font-weight: 700;
+      font-size: 0.92rem;
+      color: #f8fafc;
+      white-space: nowrap;
+      margin-right: 0.2rem;
+    }
+
+    .print-bar a {
+      color: #38bdf8;
+      text-decoration: none;
+      font-weight: 600;
+      font-size: 0.84rem;
+      padding: 0.25rem 0.5rem;
+      border-radius: 4px;
+      transition: background 0.15s;
+      white-space: nowrap;
+    }
+
+    .print-bar a:hover {
+      background: rgba(255, 255, 255, 0.12);
+      text-decoration: none;
+    }
+
+    /* Mode Switcher Buttons */
+    .mode-switch-group {
+      display: inline-flex;
+      background: rgba(255, 255, 255, 0.12);
+      border-radius: 5px;
+      padding: 2px;
+      gap: 2px;
+    }
+
+    .mode-switch-btn {
+      background: transparent;
+      border: none;
+      color: #94a3b8;
+      padding: 0.22rem 0.65rem;
+      border-radius: 4px;
+      font-size: 0.82rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.15s;
+      white-space: nowrap;
+    }
+
+    .mode-switch-btn:hover {
+      color: #f1f5f9;
+    }
+
+    .mode-switch-btn.active {
+      background: #0284c7;
+      color: #ffffff;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.3);
+    }
+
+    .action-btn {
+      background: #0284c7;
+      color: #fff;
+      border: none;
+      padding: 0.32rem 0.75rem;
+      border-radius: 5px;
+      font-size: 0.82rem;
+      font-weight: bold;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.3rem;
+      transition: all 0.15s;
+      white-space: nowrap;
+    }
+
+    .action-btn:hover {
+      background: #0369a1;
+      transform: translateY(-1px);
+    }
+
+    .btn-word {
+      background: #1d4ed8;
+    }
+    .btn-word:hover {
+      background: #1e40af;
+    }
+
+    .btn-collapse {
+      background: rgba(255, 255, 255, 0.1);
+      color: #94a3b8;
+      border: none;
+      padding: 0.32rem 0.55rem;
+      border-radius: 5px;
+      font-size: 0.82rem;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.25rem;
+      transition: all 0.15s;
+      white-space: nowrap;
+    }
+    .btn-collapse:hover {
+      background: rgba(239, 68, 68, 0.25);
+      color: #fca5a5;
+    }
+
+    /* Floating show button when collapsed */
+    .floating-show-btn {
+      position: fixed;
+      top: 12px;
+      right: 16px;
+      background: rgba(15, 23, 42, 0.88);
+      color: #e2e8f0;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      backdrop-filter: blur(8px);
+      padding: 0.35rem 0.85rem;
+      border-radius: 20px;
+      font-size: 0.82rem;
+      font-weight: 600;
+      cursor: pointer;
+      display: none;
+      align-items: center;
+      gap: 0.35rem;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
+      z-index: 9999;
+      transition: all 0.2s;
+    }
+    .floating-show-btn:hover {
+      background: #0284c7;
+      color: #fff;
+      border-color: transparent;
+      transform: translateY(-1px);
+    }
+    .floating-show-btn.is-visible {
+      display: inline-flex !important;
+    }
+
+    /* Document Title Headers (公版標準表頭) */
+    .doc-header {
+      text-align: center;
+      margin-bottom: 1.5rem;
+    }
+
+    .doc-header .sub-header {
+      font-family: "DFKai-SB", "標楷體", serif;
+      font-size: 13pt;
+      line-height: 24pt;
+      color: #000;
+      margin-bottom: 0.2rem;
+    }
+
+    .doc-header h1 {
+      font-family: "DFKai-SB", "標楷體", serif;
+      font-size: 16.5pt;
+      font-weight: bold;
+      color: #000;
+      margin-bottom: 0.2rem;
+    }
+
+    .doc-header .en-title {
+      font-family: "Times New Roman", serif;
+      font-size: 15.5pt;
+      font-weight: bold;
+      color: #000;
+    }
+
+    /* Table Styles (公版標準表格規範：黑線 1pt，間距精確) */
+    table.plan-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-bottom: 1.5rem;
+      border: 1.0pt solid #000;
+      mso-table-layout-alt: fixed;
+    }
+
+    table.plan-table td, table.plan-table th {
+      border: 1.0pt solid #000;
+      padding: 5pt 7pt;
+      vertical-align: top;
+      font-size: 11pt;
+      line-height: 1.45;
+    }
+
+    .bg-title {
+      background-color: #f2f2f2;
+      font-weight: bold;
+      text-align: center;
+    }
+
+    .label-col {
+      width: 16%;
+      background-color: #f8fafc;
+      font-weight: bold;
+      text-align: center;
+      vertical-align: middle !important;
+    }
+
+    .val-col {
+      width: 34%;
+    }
+
+    .en-sub {
+      font-family: "Times New Roman", serif;
+      font-size: 10pt;
+      color: #334155;
+      font-weight: normal;
+      display: block;
+      margin-top: 1.5pt;
+      line-height: 1.35;
+    }
+
+    /* 內部巢狀表格樣式 (用於素養指標次項目與教學時機雙欄平分) */
+    table.inner-sub-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 0;
+      border: none;
+      table-layout: fixed;
+    }
+    table.inner-sub-table td {
+      border: 1.0pt solid #000;
+      padding: 5pt 7pt;
+      vertical-align: top;
+      font-size: 11pt;
+      line-height: 1.45;
+      box-sizing: border-box;
+    }
+    /* 消除外圍重疊框線，與外層儲存格無縫接合 */
+    table.inner-sub-table tr:first-child > td {
+      border-top: none;
+    }
+    table.inner-sub-table tr:last-child > td {
+      border-bottom: none;
+    }
+    table.inner-sub-table tr > td:first-child {
+      border-left: none;
+    }
+    table.inner-sub-table tr > td:last-child {
+      border-right: none;
+    }
+
+    /* Interaction summary styling - visible in both detailed and summary modes */
+    .interaction-summary {
+      background-color: #f8fafc;
+      border-left: 3pt solid #0284c7;
+      padding: 4pt 7pt;
+      margin: 4pt 0 6pt 0;
+      font-size: 10pt;
+      color: #0f172a;
+      line-height: 1.45;
+    }
+
+    .interaction-summary strong {
+      color: #0369a1;
+    }
+
+    /* Teacher verbatim dialogue script */
+    .teacher-script {
+      background-color: #fafafa;
+      border-left: 3pt solid #64748b;
+      padding: 4pt 7pt;
+      margin: 4pt 0 6pt 0;
+      font-size: 10pt;
+      line-height: 1.45;
+    }
+
+    .teacher-script blockquote {
+      margin: 0;
+      font-style: normal;
+    }
+
+    /* In Summary Mode: Hide dialogues/verbatim scripts */
+    body.mode-summary .teacher-script,
+    body.mode-summary .detailed-only {
+      display: none !important;
+    }
+
+    /* Section Subheadings */
+    .step-heading {
+      font-size: 11.5pt;
+      font-weight: bold;
+      color: #000;
+      margin-top: 6pt;
+      margin-bottom: 3pt;
+      display: block;
+    }
+
+    ul, ol {
+      margin-left: 1.4rem;
+      margin-top: 0.2rem;
+      margin-bottom: 0.2rem;
+    }
+
+    li {
+      margin-bottom: 0.2rem;
+    }
+
+    @media print {
+      @page {
+        size: A4;
+        margin: 15mm 12mm 15mm 12mm;
+      }
+      body {
+        background-color: #fff;
+        padding: 0;
+        margin: 0;
+      }
+      .print-bar, .floating-show-btn {
+        display: none !important;
+      }
+      .doc-page {
+        box-shadow: none;
+        padding: 0 1.5mm !important;
+        margin: 0 auto !important;
+        max-width: 100% !important;
+        width: 100% !important;
+        box-sizing: border-box !important;
+      }
+      table.plan-table {
+        width: 100% !important;
+        border-collapse: collapse !important;
+        box-sizing: border-box !important;
+        page-break-inside: auto;
+      }
+      table.plan-table td, table.plan-table th {
+        box-sizing: border-box;
+      }
+      table.plan-table tr > td:last-child,
+      table.plan-table tr > th:last-child {
+        border-right: 1.0pt solid #000 !important;
+      }
+      tr {
+        page-break-inside: auto;
+        page-break-after: auto;
+      }
+      td, th {
+        page-break-inside: auto;
+      }
+      thead, thead tr, tr.bg-title {
+        page-break-inside: avoid;
+        page-break-after: avoid;
+      }
+      thead {
+        display: table-header-group;
+      }
+      body.mode-summary .teacher-script,
+      body.mode-summary .detailed-only {
+        display: none !important;
+      }
+    }
+  </style>
+</head>
+<body class="mode-detailed">
+
+  <!-- Floating Button to restore toolbar when hidden -->
+  <button id="floatingShowBtn" class="floating-show-btn" onclick="toggleToolbar(true)" title="點擊或按鍵盤 H 展開控制列">
+    ⚙️ 工具列
+  </button>
+
+  <!-- Screen Action Bar with Detailed / Summary Switcher (Sleek Single-row & Collapsible) -->
+  <div id="printBar" class="print-bar">
+    <div class="bar-left">
+      <span class="bar-title">📄 雙語教案</span>
+      <div class="mode-switch-group">
+        <button id="btnDetailedMode" class="mode-switch-btn active" onclick="setPlanMode('detailed')">
+          📝 詳案
+        </button>
+        <button id="btnSummaryMode" class="mode-switch-btn" onclick="setPlanMode('summary')">
+          📋 簡案
+        </button>
+      </div>
+      <a href="lesson_plan_english_doc.html">Full English →</a>
+      <a href="index.html">🏠 首頁</a>
+    </div>
+
+    <div class="bar-right">
+      <button class="action-btn" onclick="printPlan()" title="列印目前顯示的教案模式 (快捷鍵 Ctrl+P)">
+        🖨️ 列印
+      </button>
+      <button class="action-btn btn-word" onclick="exportToWord()" title="匯出目前教案模式為 Word (.doc) 檔">
+        📥 匯出 Word
+      </button>
+      <button class="btn-collapse" onclick="toggleToolbar(false)" title="隱藏工具列，以純淨版面展示給他人觀看 (或按鍵盤 H 鍵)">
+        👁️ 隱藏
+      </button>
+    </div>
+  </div>
+
+  <div class="doc-page">
+
+    <div class="doc-header">
+      <p class="sub-header">本土雙語教育模式之建構與推廣：以臺灣國中小為現場之實踐</p>
+      <h1>雙語課程教案設計</h1>
+      <div class="en-title">The Design of Bilingual Lesson Plan: Electronic Pioneers</div>
+    </div>
+
+    <!-- Table 1: 公版基本資料與素養指標對照表 (20 橫列標準公版) -->
+    <table class="plan-table">
+      <tr>
+        <td class="label-col">學校名稱<span class="en-sub">School</span></td>
+        <td class="val-col">高雄市福山國中<span class="en-sub">Kaohsiung Municipal Fushan Junior High School (FSJH)</span></td>
+        <td class="label-col">課程名稱<span class="en-sub">Course</span></td>
+        <td class="val-col">生活科技<span class="en-sub">Living Technology</span></td>
+      </tr>
+      <tr>
+        <td class="label-col">單元名稱<span class="en-sub">Unit</span></td>
+        <td class="val-col">電子小尖兵<span class="en-sub">Electronic Pioneers</span></td>
+        <td class="label-col">學科領域<span class="en-sub">Domain / Subject</span></td>
+        <td class="val-col">科技領域／生活科技<span class="en-sub">Technology / Living Technology</span></td>
+      </tr>
+      <tr>
+        <td class="label-col">教材來源<span class="en-sub">Teaching Material</span></td>
+        <td class="val-col">自編教材<span class="en-sub">Teacher-compiled Materials</span></td>
+        <td class="label-col">教案設計者<span class="en-sub">Designer</span></td>
+        <td class="val-col">王朝葦<span class="en-sub">Eric Wang</span></td>
+      </tr>
+      <tr>
+        <td class="label-col">實施年級<span class="en-sub">Grade</span></td>
+        <td class="val-col">八年級（國二）<span class="en-sub">Grade 8</span></td>
+        <td class="label-col">實施節數<span class="en-sub">Total Sessions</span></td>
+        <td class="val-col">本單元共 1 節（45 分鐘）<span class="en-sub">1 Session (45 mins)</span></td>
+      </tr>
+      <tr>
+        <td class="label-col">教學設計理念<span class="en-sub">Rationale for Instructional Design</span></td>
+        <td colspan="3">
+          引導八年級學生從日常科技產品中認識半導體元件與電路運作基礎，並熟練掌握電烙鐵銲接的安全規範與操作技能。<br>
+          <span class="en-sub">Guide 8th-grade students to understand semiconductor components and basic circuit operations through everyday tech devices, and proficiently follow safety rules and hands-on skills in electronic soldering.</span>
+        </td>
+      </tr>
+      <!-- 核心素養 -->
+      <tr>
+        <td class="label-col">學科核心素養<br>對應內容<span class="en-sub">Core Competences</span></td>
+        <td colspan="3" style="padding: 0;">
+          <table class="inner-sub-table">
+            <tr>
+              <td class="label-col" style="width: 17%; text-align: center; vertical-align: middle;">總綱<span class="en-sub">General</span></td>
+              <td>A2 系統思考與解決問題<span class="en-sub">A2 Systematic Thinking &amp; Problem Solving</span></td>
+            </tr>
+            <tr>
+              <td class="label-col" style="width: 17%; text-align: center; vertical-align: middle;">領綱<span class="en-sub">Domain</span></td>
+              <td>科-J-A2 運用科技工具，理解與歸納問題，進而提出簡易的解決之道。<span class="en-sub">Use tech tools to understand and synthesize problems, proposing feasible solutions.</span></td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+
+      <!-- 學習重點 -->
+      <tr>
+        <td class="label-col">學科學習重點<span class="en-sub">Learning Focus</span></td>
+        <td colspan="3" style="padding: 0;">
+          <table class="inner-sub-table">
+            <tr>
+              <td class="label-col" style="width: 17%; text-align: center; vertical-align: middle;">學習表現<span class="en-sub">Learning Performance</span></td>
+              <td>
+                • <strong>設k-IV-2</strong> 能了解科技產品的基本原理、發展歷程、與創新關鍵。<br>
+                <span class="en-sub">Understand the fundamental principles, development history, and key innovations of technological products.</span><br>
+                • <strong>設k-IV-3</strong> 能了解選用適當材料及正確工具的基本知識。<br>
+                <span class="en-sub">Understand fundamental knowledge in selecting appropriate materials and proper tools.</span>
+              </td>
+            </tr>
+            <tr>
+              <td class="label-col" style="width: 17%; text-align: center; vertical-align: middle;">學習內容<span class="en-sub">Learning Contents</span></td>
+              <td>
+                • <strong>生P-IV-5</strong> 材料的選用與加工處理。<span class="en-sub">Selection and processing of fabrication materials.</span><br>
+                • <strong>生P-IV-6</strong> 常用的機具操作與使用。<span class="en-sub">Operation and application of common tools and machinery.</span>
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+
+      <!-- 學生準備度 -->
+      <tr>
+        <td class="label-col">學生準備度<span class="en-sub">Students' Readiness</span></td>
+        <td colspan="3" style="padding: 0;">
+          <table class="inner-sub-table">
+            <tr>
+              <td class="label-col" style="width: 17%; text-align: center; vertical-align: middle;">學科準備度<span class="en-sub">Subject</span></td>
+              <td>
+                1. 能認識基礎的電子概念，如電子元件、電池的極性等。<span class="en-sub">Understand fundamental electronics concepts, such as components and battery polarities.</span><br>
+                2. 能了解並遵守生活科技教室的機具操作及使用規則。<span class="en-sub">Follow workshop safety protocols and tool operating instructions.</span>
+              </td>
+            </tr>
+            <tr>
+              <td class="label-col" style="width: 17%; text-align: center; vertical-align: middle;">英語準備度<span class="en-sub">English</span></td>
+              <td>
+                1. 可以理解簡易上課英文指令語言。<span class="en-sub">Can understand simple classroom English instructions.</span><br>
+                2. 能夠使用老師設計的句型回應課程問答。<span class="en-sub">Can answer class questions using teacher-designed sentence frames.</span>
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+
+      <tr>
+        <td class="label-col">單元學習目標<span class="en-sub">Learning Objectives</span></td>
+        <td colspan="3">
+          1. <strong>認知 (Cognitive)</strong>：能說明半導體材料的導電特性，並舉例說明常見半導體元件在生活中的應用實例。<br>
+          <span class="en-sub">Explain semiconductor conductivity and daily applications of common semiconductor devices (e.g., TSMC chips, LEDs).</span><br>
+          2. <strong>技能與安全 (Psychomotor &amp; Safety)</strong>：能遵守電烙鐵操作安全規範，熟練「銲接四步驟」操作，理解 LED 極性辨識與排列方向一致性，安全完成造型 LED 燈板之銲接組裝與即時電池極性檢測。<br>
+          <span class="en-sub">Comply with soldering safety rules, master the 4-step soldering technique, recognize LED polarities and maintain consistent pin orientation, and complete shaped LED board assembly with battery polarity testing.</span>
+        </td>
+      </tr>
+
+      <!-- 中／英文使用時機 -->
+      <tr>
+        <td class="label-col">中／英文 使用時機<span class="en-sub">Timing for Using Chinese/English</span></td>
+        <td colspan="3" style="padding: 0;">
+          <table class="inner-sub-table">
+            <tr>
+              <td class="bg-title" style="width: 50%; text-align: center;">教師 Teacher</td>
+              <td class="bg-title" style="width: 50%; text-align: center;">學生 Students</td>
+            </tr>
+            <tr>
+              <td style="width: 50%; vertical-align: top;">
+                • 課堂開始時向學生打招呼與問候。<span class="en-sub">T greeting Ss at the beginning of class.</span><br>
+                • 說明各階段轉換指令（如領取工具、開始實作、收拾）。<span class="en-sub">T giving instructions for stage transitions.</span><br>
+                • 呈現簡報上的標題、關鍵字詞與安全規範。<span class="en-sub">T presenting slide headings and key safety terms.</span><br>
+                • 引導特定句型之問答與口語互動。<span class="en-sub">T guiding Q&amp;A with structured sentence patterns.</span>
+              </td>
+              <td style="width: 50%; vertical-align: top;">
+                • 向教師問好並回應課堂問候。<span class="en-sub">Ss greeting T and responding to greetings.</span><br>
+                • 聽從教師常態課室英語指令進行就位與操作。<span class="en-sub">Ss following classroom English instructions.</span><br>
+                • 使用指定句型回答半導體功能與應用。<span class="en-sub">Ss answering questions using designated sentence frames.</span><br>
+                • 實作時以英文請求教師檢核成品。<span class="en-sub">Ss asking T for task verification in English.</span>
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+      <tr>
+        <td class="label-col">教學方法<span class="en-sub">Teaching Methods</span></td>
+        <td colspan="3">
+          1. 講授法 (Lecture) ：使用多媒體簡報教學，介紹半導體導電原理與生活應用。<br>
+          2. 討論法 (Discussion) ：提供鷹架句型，引導學生互動發表日常科技中的半導體功能。<br>
+          3. 示範法 (Demonstration) ：實體示範工具配置、四步驟無電空操、極性排列樣板建議與逆向鑷子操作技巧。<br>
+          4. 實作法 (Hands-on Practice) ：學生親自操作電烙鐵進行 LED 元件銲接與單顆電池檢測。
+        </td>
+      </tr>
+      <tr>
+        <td class="label-col">教學策略<span class="en-sub">Teaching Strategies</span></td>
+        <td colspan="3">示範教學法、活動式學習、鷹架教學法（Demonstration, Activity-based Learning, Scaffolding Instruction）。</td>
+      </tr>
+      <tr>
+        <td class="label-col">教學資源及輔助器材<span class="en-sub">Resources &amp; Equipment</span></td>
+        <td colspan="3">自編簡報、示範影片、課堂大螢幕演示系統；小組工具箱（耐熱切割墊、電烙鐵、烙鐵架、金屬清潔鋼絲球、逆向鑷子、銲錫絲、5mm LED、造型電路板、測試電池、廢料收集盒）。</td>
+      </tr>
+      <tr>
+        <td class="label-col">評量方法<span class="en-sub">Assessment Methods</span></td>
+        <td colspan="3">技能檢核與實作評量、作品功能檢驗、課室口語互動評量（Skill Checklist, Hands-on Performance Assessment, Oral Interaction）。</td>
+      </tr>
+      <tr>
+        <td class="label-col">評量規準<span class="en-sub">Evaluation Rubrics</span></td>
+        <td colspan="3">
+          <strong>A 級 (Level A)：</strong>能嚴格遵守安全規範，熟練操作四步驟銲接，作品外觀圓錐飽滿無虛銲，電池測試全部發光（正確度達 80% 以上）。<br>
+          <strong>B 級 (Level B)：</strong>能遵守安全規範，能獨立完成銲接與測試，功能正常（正確度達 50%~79%）。<br>
+          <strong>C 級 (Level C)：</strong>在教師或同儕引導下能完成部分銲接，操作偶有猶豫或極性需修正（正確度 50% 以下）。<br>
+          <strong>D 級 (Level D)：</strong>無法遵守機具操作安全守則或未能完成實作任務。
+        </td>
+      </tr>
+    </table>
+
+    <!-- Table 2: 公版 3 欄式教學流程表 (Teaching Procedures: 節次 | 單元名稱 | 時間) -->
+    <table class="plan-table">
+      <thead>
+        <tr class="bg-title">
+          <th colspan="3" style="text-align: center; font-size: 13pt; padding: 6pt;">教學流程 Teaching Procedures</th>
+        </tr>
+        <tr class="bg-title">
+          <th style="width: 14%; text-align: center;">節次<br><span class="en-sub" style="font-size: 9.5pt;">Session</span></th>
+          <th style="width: 74%; text-align: center;">電子小尖兵<br><span class="en-sub" style="font-size: 9.5pt;">Electronic Pioneers</span></th>
+          <th style="width: 12%; text-align: center;">時間<br><span class="en-sub" style="font-size: 9.5pt;">Time</span></th>
+        </tr>
+      </thead>
+      <tbody>
+
+        <!-- Stage 1 -->
+        <tr>
+          <td style="text-align: center; font-weight: bold;">
+            第 1 節<br><br>
+            <strong>準備階段</strong><br>
+            <span class="en-sub">Preparation Stage</span>
+            <br>
+            <span style="font-size: 9pt; color: #0284c7; font-weight: bold;">Part 1</span>
+          </td>
+          <td>
+            <div style="font-weight: bold; font-size: 11.5pt; color: #0f172a; margin-bottom: 4pt;">
+              【第一階段：準備與概念引導】
+            </div>
+
+            <span class="step-heading">1. 開場與課程目標 (Opening &amp; Lesson Objectives，約 1.5 分鐘)</span>
+            • 說明本單元課程摘要說明與今日兩大任務（半導體認識、電烙鐵安全）。
+            <div class="interaction-summary">
+              <strong>師生互動摘要：</strong>教師以課室英語問候全班，布達今日學習重點為認識半導體及掌握電烙鐵安全操作規範，學生專注聆聽並回應問候。
+            </div>
+            <div class="teacher-script">
+              <strong>Teacher:</strong>
+              <blockquote>
+                "Hello, everyone. Nice to see you again!<br>
+                Today, we are going to learn about <strong>semiconductors</strong>, and <strong>how to use a soldering iron safely</strong>."<br>
+                <em>（今天的目標：認識半導體，以及學會安全使用電烙鐵。）</em>
+              </blockquote>
+            </div>
+
+            <span class="step-heading">2. 引起動機：認識 TSMC (Warm-up &amp; Hook: Discovering TSMC，約 1.5 分鐘)</span>
+            • 連結在地代表企業與生活經驗，引出 "Semiconductor" 字彙。
+            <div style="overflow: hidden; margin: 4pt 0;">
+              <img src="Tsmc.svg" alt="TSMC" style="width: 110px; height: auto; float: right; margin: 0 0 8px 12px; border: 1px solid #e2e8f0; padding: 4px; border-radius: 4px; background: #fff;">
+              <div class="interaction-summary">
+                <strong>師生互動摘要：</strong>教師展示台積電企業標誌，引導學生辨識台灣半導體產業重要性；學生主動回答 "TSMC / 台積電"，建立生活科技連結。
+              </div>
+            </div>
+            <div class="teacher-script">
+              <strong>Teacher:</strong>
+              <blockquote>
+                "Look at this logo. Do you know it?"<br>
+                <em>（看一下這個標誌，大家知道它是哪家公司嗎？）</em>
+              </blockquote>
+              <strong>Students:</strong> "TSMC!" / "台積電！"<br>
+              <strong>Teacher:</strong>
+              <blockquote>
+                "Yes! It's TSMC — <strong>Taiwan Semiconductor Manufacturing Company</strong>.<br>
+                Many people made big money from it. 就是讓很多人賺大錢的那個台積電。<br>
+                其中 <strong>semiconductor</strong> 就是我們說的半導體，現代所有科技產品都離不開它。"
+              </blockquote>
+            </div>
+
+            <span class="step-heading">3. 溫故知新：導電特性複習 (Review: Electrical Conductivity，約 2 分鐘)</span>
+            • 以簡短對比動作詞複習物質分類（導體、絕緣體與半導體）。
+            <div class="interaction-summary">
+              <strong>師生互動摘要：</strong>教師透過問答複習「導體 (Conductor: 電流通過)」與「絕緣體 (Insulator: 電流通不過)」，進而點出「半導體 (Semiconductor)」可受控制改變導電狀態的特質。
+            </div>
+            <div class="teacher-script">
+              <strong>Teacher:</strong>
+              <blockquote>
+                "Let's review our previous lesson. What is a <strong>conductor</strong>?<br>
+                在一般狀態下可以讓電流通過的叫做導體：<strong>Electricity can pass!</strong><br>
+                What is an <strong>insulator</strong>?<br>
+                在一般狀態下不可讓電流通過的叫做絕緣體：<strong>Electricity stops!</strong><br>
+                那麼，什麼叫做 <strong>semiconductor（半導體）</strong> 呢？<br>
+                <strong>Sometimes it can pass, sometimes it cannot!</strong> 它可以透過控制，讓電流有時候通過、有時候不通過！"
+              </blockquote>
+            </div>
+
+            <span class="step-heading">4. 半導體四大核心功能與課堂問答 (4 Core Functions of Semiconductors &amp; Structured Q&amp;A，約 3 分鐘)</span>
+            • 介紹矽 (Silicon) 原料與四大核心功能，並以鷹架提示句型進行口說問答：
+            <ol>
+              <li><strong>運算 (Computing)</strong>：手機與電腦 CPU/GPU 處理晶片。</li>
+              <li><strong>感測 (Sensing)</strong>：光敏電阻 (LDR)、溫度與距離感測器。</li>
+              <li><strong>控制 (Control)</strong>：電晶體微型開關（控制馬達啟閉、切換電流路徑）。</li>
+              <li><strong>發光 (Lighting)</strong>：我們今天要銲接的主角 LED（發光二極體）。</li>
+            </ol>
+            <div class="interaction-summary">
+              <strong>師生互動摘要：</strong>教師由沙子原料連結至高科技矽晶片 (Silicon)，揭示半導體四大核心功能（Computing, Sensing, Control, Lighting），並以 Slide 5 鷹架句型 <em>'A [______] uses semiconductors for [______].'</em> 引導學生口語發表；學生主動造句回答，教師給予正向增強後順勢轉場至電烙鐵安全教學。
+            </div>
+            <div class="teacher-script">
+              <strong>Teacher (Silicon 原料引言)：</strong>
+              <blockquote>
+                "剛才提到台積電，大家知道製作晶片最主要的原料是什麼嗎？<br>
+                其實就是大自然中最常見的『沙子』！沙子裡面提煉出來的元素叫做 <strong>Silicon（矽）</strong>。<br>
+                經過高科技提煉製造後，這些 <strong>Semiconductors（半導體）</strong> 就被賦予了四大核心超能力！我們看大螢幕！"
+              </blockquote>
+              <strong>Teacher (四大核心功能中英快講，配合 Slide 4)：</strong>
+              <blockquote>
+                "So, what are the 4 core functions of semiconductors?<br>
+                1. <strong>Computing 💻：</strong>運算！例如手機和電腦裡的 CPU 晶片，每秒進行幾十億次計算。<br>
+                2. <strong>Sensing 🌡️：</strong>感測！用來感應環境光線變化或溫度。<br>
+                3. <strong>Control 🎛️：</strong>控制！像電晶體就像微型電子開關，控制馬達運轉與切換電流路徑。<br>
+                4. <strong>Lighting 💡：</strong>發光照明！也就是我們今天實作的大主角——<strong>LED（發光二極體）</strong>！通電後直接把電能轉換成光！"
+              </blockquote>
+              <strong>Teacher (雙語句型鷹架布達，配合 Slide 5)：</strong>
+              <blockquote>
+                "Now, look at the screen. Let's practice this sentence frame:<br>
+                📝 <strong>'A [ Product ] uses semiconductors for [ Function ].'</strong><br>
+                <em>（某個科技產品，使用半導體來達到某個功能。）</em><br>
+                For example: <em>'A <strong>smartphone</strong> uses semiconductors for <strong>computing</strong>.'</em> 手機運用半導體來做運算。是不是很簡單？"
+              </blockquote>
+              <strong>課堂問答與正向回饋 (Structured Q&amp;A)：</strong><br>
+              <strong>Teacher:</strong> "Who wants to try? 誰想試著造一個句子？Any volunteers? Kevin, please try!"<br>
+              <strong>Student 1:</strong> "A desk lamp uses semiconductors for lighting."<br>
+              <strong>Teacher:</strong> "Awesome! Bingo! 👏 檯燈用 LED 發光照明，完全正確！One more! Amy, give it a shot!"<br>
+              <strong>Student 2:</strong> "An automatic door uses semiconductors for sensing."<br>
+              <strong>Teacher (正向回饋與轉場至 Part 2)：</strong>
+              <blockquote>
+                "Excellent! 自動門用感測器偵測人員接近，Very good!<br>
+                大家表現得太好了！既然知道半導體這麼厲害，而且今天的主角是 <strong>LED (Lighting)</strong>，那我們要怎麼把這些精密的元件安全組裝起來呢？沒錯，就是靠『銲接技術』！<br>
+                <strong>Now, let's learn how to use the tools safely! 工具人，準備就位！</strong>"
+              </blockquote>
+            </div>
+          </td>
+          <td style="text-align: center; vertical-align: middle; font-weight: bold; font-size: 11pt;">
+            8 分鐘<br>
+            <span class="en-sub" style="font-size: 9pt;">(8 mins)</span>
+          </td>
+        </tr>
+
+        <!-- Stage 2 -->
+        <tr>
+          <td style="text-align: center; font-weight: bold;">
+            第 1 節<br><br>
+            <strong>發展階段 (一)</strong><br>
+            <span class="en-sub">Development Stage I</span>
+            <br>
+            <span style="font-size: 9pt; color: #0284c7; font-weight: bold;">Part 2</span>
+          </td>
+          <td>
+            <div style="font-weight: bold; font-size: 11.5pt; color: #0f172a; margin-bottom: 4pt;">
+              【第二階段：安全設置與操作示範】
+            </div>
+
+            <span class="step-heading">1. 領取工具與安全擺放＋工具介紹 (Workspace Setup &amp; Tools，約 3 分鐘)</span>
+            • 指派「工具人」領取工具箱、工作區定位配置、個人安全防護、暫不通電原則。
+            <div class="interaction-summary">
+              <strong>師生互動摘要：</strong>教師以雙語指令引導各組工具人就位領取器材，學生依指示將耐熱切割墊置中、烙鐵架放置於右前方、銅絲球在旁，頭髮紮好，嚴格遵守「尚未插電 (Do not plug in yet)」規範。
+            </div>
+            <div class="teacher-script">
+              <strong>Teacher:</strong>
+              <blockquote>
+                "OK, <strong>工具人</strong>，please get the tools! All right, let's get ready to work! 在插電之前，安全第一！<br>
+                1. <strong>Please tie up your hair.</strong> 頭髮紮好，如果瀏海太長別上髮夾。<br>
+                2. <strong>Put everything in the right place!</strong><br>
+                把電烙鐵組，放到桌子的兩側，底下放切割墊，<br>
+                電烙鐵架放在右手前方（慣用手），讓插座在你的慣用手，電線才不會干擾銲接。<br>
+                <strong>不使用時，一定要把電烙鐵放進電烙鐵架中。</strong><br>
+                3. <strong>操作電烙鐵時，務必遵守以下安全守則：</strong><br>
+                • <strong>Don't play</strong>（嚴禁嬉戲）<br>
+                • <strong>Don't burn anything</strong>（不要燒焦任何物品）<br>
+                • <strong>Don't waste solder</strong>（不要浪費銲錫）<br>
+                • <strong>Don't leave table</strong>（不要離開座位）<br>
+                • <strong>Avoid touching metal</strong>（避免碰觸金屬）"
+              </blockquote>
+            </div>
+
+            <span class="step-heading">2. 不插電動作模擬：四步驟節奏口訣 (Dry Run: 4-Step Soldering，約 3 分鐘)</span>
+            • 尚未插電前進行肢體空操，建立肌肉記憶與時間節奏：
+            <div class="interaction-summary">
+              <strong>師生互動摘要：</strong>教師帶領全班進行「四步驟口訣大動作空操」：碰接點心裡數 1、2，送錫，移錫，移烙鐵放回架子。學生跟隨指令整齊練習口訣與動作節奏。
+            </div>
+            <div class="teacher-script">
+              <strong>Teacher:</strong>
+              <blockquote>
+                "在還沒插電之前，我們先來模擬銲接動作！Now, let's practice the 4 steps for soldering!<br>
+                1. <strong>Heat the item!</strong> 碰到接點，心裡數 1、2。<br>
+                2. <strong>Feed the solder!</strong> 送入銲錫。<br>
+                3. <strong>Remove the solder!</strong> 移開銲錫。<br>
+                4. <strong>Remove the iron!</strong> 移開烙鐵，放回架子（<strong>Back to the stand!</strong>）。<br>
+                口訣節奏：<strong>Heat the item → Feed the solder → Remove the solder → Remove the iron.</strong>"
+              </blockquote>
+            </div>
+
+            <span class="step-heading">3. 示範展示與任務發動 (Video Demo &amp; Task Walkthrough，約 6 分鐘)</span>
+            • 播放實作示範影片，強調兩大實作關鍵：
+            <ol>
+              <li><strong>極性排列建議 (Polarity Placement Tip)</strong>：以跑操場外圈較長為比喻，<strong>推薦長腳放外圈 ➕、短腳在內圈 ➖ 比較順手好做</strong>（這只是一個方便的樣板參考，沒有放外圈也沒關係，重點是整圈極性方向保持一致）。</li>
+              <li><strong>逆向鑷子 (Cross Tweezers)</strong>：折彎好後用逆向鑷子夾持咬合兩隻接腳，穩固後再銲接。</li>
+              <li>五大安全守則宣導：Don't play, Don't burn anything, Don't waste solder, Don't leave table, Avoid touching metal.</li>
+            </ol>
+            <div class="interaction-summary">
+              <strong>師生互動摘要：</strong>教師透過示範影片說明 LED 極性排列建議（推薦長外短內，但整圈方向一致即可），並展示逆向鑷子夾持技巧；學生確認折腳方向並複誦安全守則。
+            </div>
+            <div class="teacher-script">
+              <strong>Teacher:</strong>
+              <blockquote>
+                "Eyes on the screen! Let me show you the task. 仔細看清楚折彎角度和銲接動作：<br>
+                • <strong>Placement Tip 🏃：推薦長腳在外圈 ➕，短腳在內圈 ➖ 比較順手！</strong>這只是樣板建議，沒有放外圈也沒關係，重點是整圈方向一致！<br>
+                • <strong>Cross Tweezers 🗜️：</strong>使用逆向鑷子夾緊要銲接的兩隻腳。<br>
+                看完示範，Now, it's your turn. Let's start!"
+              </blockquote>
+            </div>
+          </td>
+          <td style="text-align: center; vertical-align: middle; font-weight: bold; font-size: 11pt;">
+            12 分鐘<br>
+            <span class="en-sub" style="font-size: 9pt;">(12 mins)</span>
+          </td>
+        </tr>
+
+        <!-- Stage 3 -->
+        <tr>
+          <td style="text-align: center; font-weight: bold;">
+            第 1 節<br><br>
+            <strong>發展階段 (二)</strong><br>
+            <span class="en-sub">Development Stage II</span>
+            <br>
+            <span style="font-size: 9pt; color: #0284c7; font-weight: bold;">Part 3</span>
+          </td>
+          <td>
+            <div style="font-weight: bold; font-size: 11.5pt; color: #0f172a; margin-bottom: 4pt;">
+              【第三階段：通電與組裝實作】
+            </div>
+
+            <span class="step-heading">1. 通電加熱與燈板折腳固定 (Plug In &amp; Assembly，約 3 分鐘)</span>
+            • 插上電源升溫，利用加熱等待時間進行造型燈板 LED 元件排列與折腳。
+            <div class="interaction-summary">
+              <strong>師生互動摘要：</strong>學生插上電源，烙鐵置於架上安全加熱；同時在造型燈板上依序排列 LED，保持極性方向一致（推薦長腳在外圈 ➕、短腳在內圈 ➖），並以逆向鑷子夾緊背面接腳。
+            </div>
+            <div class="teacher-script">
+              <strong>Teacher:</strong>
+              <blockquote>
+                "Now, <strong>plug in your iron!</strong> 請大家插上電源！<br>
+                烙鐵放在架子上加熱不要動。在電烙鐵達到工作溫度前，我們先固定 LED 燈板：<br>
+                1. <strong>Sequential Placement：</strong>以握柄為起點，順著造型依序排列。<br>
+                2. <strong>Polarity Alignment：</strong>推薦長腳靠外圈 ➕，短腳在內圈 ➖（樣板參考，方向一致即可）。<br>
+                3. <strong>Cross Tweezers：</strong>翻到背面折彎好，用逆向鑷子緊緊夾住兩隻腳！"
+              </blockquote>
+            </div>
+
+            <span class="step-heading">2. 單顆銲接與即時電池檢測 (Step-by-Step Soldering &amp; Battery Test，約 14 分鐘)</span>
+            • 落實四步驟動作、自然冷卻、每銲一顆即時以單顆電池進行極性檢測。
+            <div class="interaction-summary">
+              <strong>師生互動摘要：</strong>學生親手操作電烙鐵進行銲接，每完成一顆接點靜置 3 秒自然冷卻，立刻拿電池碰觸外圈長腳(+)與內圈短腳(-)檢測是否發光；教師巡視指導並提醒烙鐵放回架上。
+            </div>
+            <div class="teacher-script">
+              <strong>Teacher:</strong>
+              <blockquote>
+                "夾穩之後，拿起熱烙鐵動手銲接：<br>
+                1. <strong>Solder：</strong>Heat item (1, 2) → Feed solder → Remove solder → Remove iron (<strong>Back to the stand!</strong>)。靜置 3 秒自然冷卻，千萬不要用嘴巴吹！<br>
+                2. <strong>Battery Test 🔋：每銲完一顆，就拿電池測試！</strong> 外圈長腳碰正極 ➕，內圈短腳碰負極 ➖。<br>
+                確定燈亮且極性正確，再依順時針前進到下一顆！"
+              </blockquote>
+            </div>
+
+            <span class="step-heading">3. 常見狀況與巡視除錯提醒 (Troubleshooting &amp; Safety Tips，約 3 分鐘)</span>
+            • 錫球過大（短路風險）：以清潔鋼絲球清理烙鐵頭後，重新觸碰融開多餘錫。<br>
+            • 假銲／不導通：確認烙鐵頭同時加熱到兩隻金屬接腳，而非只熔在單一腳上。<br>
+            • 安全第一：烙鐵離手必須放回架上（<strong>Back to the stand!</strong>），嚴禁平放桌面。
+          </td>
+          <td style="text-align: center; vertical-align: middle; font-weight: bold; font-size: 11pt;">
+            20 分鐘<br>
+            <span class="en-sub" style="font-size: 9pt;">(20 mins)</span>
+          </td>
+        </tr>
+
+        <!-- Stage 4 -->
+        <tr>
+          <td style="text-align: center; font-weight: bold;">
+            第 1 節<br><br>
+            <strong>總結階段</strong><br>
+            <span class="en-sub">Summary Stage</span>
+            <br>
+            <span style="font-size: 9pt; color: #0284c7; font-weight: bold;">Part 4</span>
+          </td>
+          <td>
+            <div style="font-weight: bold; font-size: 11.5pt; color: #0f172a; margin-bottom: 4pt;">
+              【第四階段：工具收納與桌面清潔】
+            </div>
+
+            <span class="step-heading">1. 斷電冷卻 (Power Off &amp; Cooling，約 1 分鐘)</span>
+            • 先拔除電源插頭，烙鐵留在烙鐵架上自然冷卻，嚴禁用手碰觸。
+            <div class="interaction-summary">
+              <strong>師生互動摘要：</strong>教師宣達操作時間截止，各組第一動作拔除電源插頭，烙鐵穩置於烙鐵架上自然冷卻，絕不用手碰觸高溫金屬。
+            </div>
+            <div class="teacher-script">
+              <strong>Teacher:</strong>
+              <blockquote>
+                "Time is up! 時間到了，我們開始收工！<br>
+                1. <strong>Unplug the iron!</strong> 請各組第一步先拔掉電源插頭！<br>
+                2. <strong>Stay on the stand!</strong> 烙鐵拔掉後依然高溫，絕對不能用手摸，讓它留在架上冷卻。"
+              </blockquote>
+            </div>
+
+            <span class="step-heading">2. 工具清點與歸位 (Tool Packing，約 2 分鐘)</span>
+            • 工具人檢查工具並歸位收納，烙鐵與烙鐵架留在桌上自然降溫。
+            <div class="interaction-summary">
+              <strong>師生互動摘要：</strong>教師以課室指令 <em>"工具人，please check the tools and get back the tools."</em> 指導各組收納，工具人檢查盒內工具、確實蓋妥，冷卻中的烙鐵架維持置於桌面上。
+            </div>
+            <div class="teacher-script">
+              <strong>Teacher:</strong>
+              <blockquote>
+                "<strong>工具人，please check the tools and get back the tools!</strong> 🧰<br>
+                請打開工具盒檢查工具、確實放好並把盒子蓋好！烙鐵架與冷卻中的烙鐵先留在桌上，等待完全降溫。"
+              </blockquote>
+            </div>
+
+            <span class="step-heading">3. 桌面清潔與衛生提醒 (Desk Cleaning &amp; Hygiene Reminder，約 2 分鐘)</span>
+            • 清理廢棄針腳與殘錫碎屑，擦拭切割墊，宣導課後肥皂洗手衛生習慣。
+            <div class="interaction-summary">
+              <strong>師生互動摘要：</strong>教師以課室指令 <em>"Please clean the table."</em> 與 <em>"After class, remember to wash your hands."</em> 叮嚀桌面整理與洗手，學生清理桌面針腳倒至廢料盒，全員以肥皂徹底洗手後下課。
+            </div>
+            <div class="teacher-script">
+              <strong>Teacher:</strong>
+              <blockquote>
+                "1. <strong>Please clean the table! 🧹</strong> 把剪下的針腳、細小殘錫屑集中倒進廢料盒，不要掉在地上，切割墊擦乾淨疊好！<br>
+                2. <strong>After class, remember to wash your hands! 🧼</strong> 剛剛手都有摸過銲錫，等等下課後第一件事請務必去洗手間用肥皂把手洗乾淨，再拿東西吃！<br>
+                Today, everybody did a great job! 👏 Stand up, push in your chairs, and you're dismissed. See you next week!"
+              </blockquote>
+            </div>
+          </td>
+          <td style="text-align: center; vertical-align: middle; font-weight: bold; font-size: 11pt;">
+            5 分鐘<br>
+            <span class="en-sub" style="font-size: 9pt;">(5 mins)</span>
+          </td>
+        </tr>
+
+        <!-- Total Row -->
+        <tr class="bg-title" style="font-weight: bold;">
+          <td colspan="2" style="text-align: right; padding-right: 15pt; font-size: 11.5pt;">
+            合計授課時間 Total Duration
+          </td>
+          <td style="text-align: center; font-size: 11.5pt;">
+            45 分鐘<br>
+            <span class="en-sub" style="font-size: 9pt;">(45 mins)</span>
+          </td>
+        </tr>
+
+      </tbody>
+    </table>
+
+  </div>
+
+  <script>
+    function setPlanMode(mode) {
+      const body = document.body;
+      const btnDetailed = document.getElementById('btnDetailedMode');
+      const btnSummary = document.getElementById('btnSummaryMode');
+
+      if (mode === 'summary') {
+        body.classList.remove('mode-detailed');
+        body.classList.add('mode-summary');
+        if (btnDetailed) btnDetailed.classList.remove('active');
+        if (btnSummary) btnSummary.classList.add('active');
+      } else {
+        body.classList.remove('mode-summary');
+        body.classList.add('mode-detailed');
+        if (btnSummary) btnSummary.classList.remove('active');
+        if (btnDetailed) btnDetailed.classList.add('active');
+      }
+    }
+
+    function printPlan(mode) {
+      if (mode) setPlanMode(mode);
+      setTimeout(() => {
+        window.print();
+      }, 150);
+    }
+
+    function toggleToolbar(show) {
+      const printBar = document.getElementById('printBar');
+      const floatingBtn = document.getElementById('floatingShowBtn');
+      const isHidden = typeof show === 'boolean' ? !show : !printBar.classList.contains('is-hidden');
+      
+      if (isHidden) {
+        printBar.classList.add('is-hidden');
+        if (floatingBtn) floatingBtn.classList.add('is-visible');
+        try { localStorage.setItem('toolbar_hidden', '1'); } catch(e){}
+      } else {
+        printBar.classList.remove('is-hidden');
+        if (floatingBtn) floatingBtn.classList.remove('is-visible');
+        try { localStorage.removeItem('toolbar_hidden'); } catch(e){}
+      }
+    }
+
+    // Keyboard shortcut: Press 'H' to toggle toolbar
+    document.addEventListener('keydown', (e) => {
+      if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') return;
+      if (e.key === 'h' || e.key === 'H') {
+        toggleToolbar();
+      }
+    });
+
+    // Check if previously hidden
+    try {
+      if (localStorage.getItem('toolbar_hidden') === '1') {
+        toggleToolbar(false);
+      }
+    } catch(e){}
+
+    function exportToWord(mode) {
+      const targetMode = mode || (document.body.classList.contains('mode-summary') ? 'summary' : 'detailed');
+      const isSummary = targetMode === 'summary';
+      const docPage = document.querySelector('.doc-page');
+      if (!docPage) return;
+
+      const clone = docPage.cloneNode(true);
+
+      if (isSummary) {
+        clone.querySelectorAll('.teacher-script').forEach(el => el.remove());
+        clone.querySelectorAll('.detailed-only').forEach(el => el.remove());
+      }
+
+      // Ensure every tr has inline styles for Word pagination
+      clone.querySelectorAll('tr').forEach(tr => {
+        if (tr.classList.contains('bg-title') || tr.closest('thead')) {
+          tr.setAttribute('style', (tr.getAttribute('style') || '') + '; page-break-inside: avoid; page-break-after: avoid; mso-yfti-cant-split: yes; mso-yfti-header: yes;');
+        } else {
+          tr.setAttribute('style', (tr.getAttribute('style') || '') + '; page-break-inside: auto; mso-yfti-cant-split: no;');
+        }
+      });
+      // Handle floating images in clone so Word doesn't lock row pagination
+      clone.querySelectorAll('img').forEach(img => {
+        img.style.float = 'none';
+        img.style.display = 'inline-block';
+        img.style.verticalAlign = 'middle';
+      });
+
+      const fileName = isSummary 
+        ? '雙語課程教案_電子小尖兵_簡案.doc' 
+        : '雙語課程教案_電子小尖兵_詳案.doc';
+
+      const wordDocHtml = `<!DOCTYPE html>
+<html xmlns:v="urn:schemas-microsoft-com:vml"
+      xmlns:o="urn:schemas-microsoft-com:office:office"
+      xmlns:w="urn:schemas-microsoft-com:office:word"
+      xmlns="http://www.w3.org/TR/REC-html40">
+<head>
+  <meta charset="utf-8">
+  <title>${isSummary ? '雙語課程教案 (簡案)' : '雙語課程教案 (詳案)'}</title>
+  <!--[if gte mso 9]>
+  <xml>
+    <w:WordDocument>
+      <w:View>Print</w:View>
+      <w:Zoom>100</w:Zoom>
+      <w:DoNotOptimizeForBrowser/>
+      <w:Compatibility>
+        <w:BreakWrappedTables/>
+        <w:SplitPgBreakAndParaMark/>
+        <w:SnapToGridInCell/>
+        <w:WrapTextWithPunct/>
+        <w:UseAsianBreakRules/>
+        <w:DontGrowAutofit/>
+        <w:DontUseIndentAsForNumber/>
+      </w:Compatibility>
+    </w:WordDocument>
+  </xml>
+  <![endif]-->
+  <style>
+    @font-face {
+      font-family: "微軟正黑體";
+      panose-1: 2 11 6 4 3 5 4 4 2 4;
+      mso-font-charset: 136;
+      mso-generic-font-family: swiss;
+      mso-font-pitch: variable;
+    }
+    @font-face {
+      font-family: "Calibri";
+      panose-1: 2 15 5 2 2 2 4 3 2 4;
+      mso-font-charset: 0;
+      mso-generic-font-family: swiss;
+      mso-font-pitch: variable;
+    }
+
+    @page Section1 {
+      size: 595.3pt 841.9pt; /* A4 */
+      margin: 38.0pt 36.0pt 38.0pt 36.0pt;
+      mso-header-margin: 18.0pt;
+      mso-footer-margin: 24.0pt;
+      mso-paper-source: 0;
+    }
+    div.Section1 {
+      page: Section1;
+    }
+
+    /* 全域字體與段落舒適排版 (0 行前段、0 行後段、單行間距) */
+    body, p.MsoNormal, li.MsoNormal, div.MsoNormal, p, div, table, td, th, span, li, blockquote {
+      font-family: "Calibri", "Microsoft JhengHei", "微軟正黑體", "Segoe UI", sans-serif;
+      mso-ascii-font-family: "Calibri";
+      mso-hansi-font-family: "Calibri";
+      mso-bidi-font-family: "Calibri";
+      mso-fareast-font-family: "微軟正黑體";
+      font-size: 12.0pt;
+      color: #1e293b;
+    }
+
+    body, p.MsoNormal, li.MsoNormal, div.MsoNormal, p, li, blockquote {
+      margin-top: 0cm;
+      margin-bottom: 0cm;
+      margin-bottom: .0001pt;
+      mso-para-margin-top: 0cm;
+      mso-para-margin-bottom: 0cm;
+      mso-para-margin-bottom: .0001pt;
+      line-height: normal;
+      mso-line-height-rule: at-least;
+      mso-pagination: widow-orphan;
+    }
+
+    /* 公版表頭 */
+    .doc-header {
+      text-align: center;
+      margin-top: 0cm;
+      margin-bottom: 12pt;
+      mso-para-margin-top: 0cm;
+      mso-para-margin-bottom: 12pt;
+    }
+    .doc-header .sub-header {
+      font-family: "Microsoft JhengHei", "微軟正黑體", sans-serif;
+      font-size: 13pt;
+      color: #475569;
+      margin-top: 0cm;
+      margin-bottom: 2pt;
+      line-height: normal;
+      mso-line-height-rule: at-least;
+      mso-para-margin-top: 0cm;
+      mso-para-margin-bottom: 2pt;
+    }
+    .doc-header h1 {
+      font-family: "Microsoft JhengHei", "微軟正黑體", sans-serif;
+      font-size: 18pt;
+      font-weight: bold;
+      color: #0f172a;
+      margin-top: 2pt;
+      margin-bottom: 3pt;
+      line-height: normal;
+      mso-line-height-rule: at-least;
+      mso-para-margin-top: 2pt;
+      mso-para-margin-bottom: 3pt;
+    }
+    .doc-header .en-title {
+      font-family: "Calibri", "Segoe UI", sans-serif;
+      font-size: 14pt;
+      font-weight: bold;
+      color: #0284c7;
+      margin-top: 0cm;
+      margin-bottom: 6pt;
+      line-height: normal;
+      mso-line-height-rule: at-least;
+      mso-para-margin-top: 0cm;
+      mso-para-margin-bottom: 6pt;
+    }
+
+    /* 表格樣式與自動換頁防斷排版 */
+    table.plan-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 0cm;
+      margin-bottom: 12pt;
+      border: 1.0pt solid #334155;
+      mso-table-layout-alt: fixed;
+      mso-padding-alt: 4.5pt 6.0pt 4.5pt 6.0pt;
+      mso-table-overlap: never;
+    }
+    table.plan-table td, table.plan-table th {
+      border: 1.0pt solid #334155;
+      padding: 4.5pt 6.0pt;
+      vertical-align: top;
+      font-size: 12.0pt;
+      line-height: normal;
+      mso-line-height-rule: at-least;
+      word-break: normal;
+      page-break-inside: auto;
+    }
+
+    /* 表格允許跨頁，表頭固定重複 */
+    thead, thead tr, tr.bg-title {
+      page-break-inside: avoid;
+      page-break-after: avoid;
+      mso-yfti-cant-split: yes;
+      mso-yfti-header: yes;
+    }
+    thead {
+      display: table-header-group;
+    }
+    tr {
+      page-break-inside: auto;
+      mso-yfti-cant-split: no;
+    }
+    td {
+      page-break-inside: auto;
+    }
+
+    .bg-title {
+      background-color: #f1f5f9;
+      font-weight: bold;
+      font-size: 12.5pt;
+      line-height: normal;
+      mso-line-height-rule: at-least;
+      text-align: center;
+      color: #0f172a;
+    }
+    .label-col {
+      width: 16%;
+      background-color: #f8fafc;
+      font-weight: bold;
+      font-size: 12.0pt;
+      line-height: normal;
+      mso-line-height-rule: at-least;
+      text-align: center;
+      vertical-align: middle;
+      color: #1e293b;
+    }
+    .val-col {
+      width: 34%;
+      font-size: 12.0pt;
+      line-height: normal;
+      mso-line-height-rule: at-least;
+    }
+    .en-sub {
+      font-family: "Calibri", "Segoe UI", sans-serif;
+      font-size: 11pt;
+      color: #475569;
+      display: block;
+      margin-top: 1pt;
+      line-height: normal;
+      mso-line-height-rule: at-least;
+      mso-para-margin-top: 0cm;
+      mso-para-margin-bottom: 0cm;
+    }
+
+    table.inner-sub-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 0;
+      border: none;
+      mso-table-layout-alt: fixed;
+    }
+    table.inner-sub-table td {
+      border: 1.0pt solid #334155;
+      padding: 4.5pt 6.0pt;
+      vertical-align: top;
+      font-size: 12.0pt;
+      line-height: normal;
+      mso-line-height-rule: at-least;
+    }
+    table.inner-sub-table tr:first-child > td {
+      border-top: none;
+    }
+    table.inner-sub-table tr:last-child > td {
+      border-bottom: none;
+    }
+    table.inner-sub-table tr > td:first-child {
+      border-left: none;
+    }
+    table.inner-sub-table tr > td:last-child {
+      border-right: none;
+    }
+
+    /* 師生互動摘要 (淡藍色背景與左外框) */
+    .interaction-summary {
+      background-color: #f0f9ff;
+      border-left: 3.5pt solid #0284c7;
+      padding: 4.5pt 7pt;
+      margin-top: 3pt;
+      margin-bottom: 3pt;
+      mso-para-margin-top: 0cm;
+      mso-para-margin-bottom: 0cm;
+      font-size: 12.0pt;
+      line-height: normal;
+      mso-line-height-rule: at-least;
+      color: #0c4a6e;
+    }
+
+    /* 教師話語區塊 (灰白卡片風格與左外框) */
+    .teacher-script {
+      background-color: #f8fafc;
+      border-left: 3.5pt solid #64748b;
+      padding: 4.5pt 7pt;
+      margin-top: 3pt;
+      margin-bottom: 3pt;
+      mso-para-margin-top: 0cm;
+      mso-para-margin-bottom: 0cm;
+      font-size: 12.0pt;
+      line-height: normal;
+      mso-line-height-rule: at-least;
+      color: #1e293b;
+    }
+
+    /* 對話引言 blockquote */
+    blockquote {
+      margin: 2pt 0 2pt 8pt;
+      padding: 2.5pt 5.5pt;
+      border-left: 2.5pt solid #cbd5e1;
+      background-color: #f8fafc;
+      font-size: 12.0pt;
+      line-height: normal;
+      mso-line-height-rule: at-least;
+      color: #334155;
+      mso-para-margin-top: 0cm;
+      mso-para-margin-bottom: 0cm;
+      mso-para-margin-left: 8pt;
+    }
+
+    .step-heading {
+      font-weight: bold;
+      font-size: 12.5pt;
+      color: #0f172a;
+      line-height: normal;
+      mso-line-height-rule: at-least;
+      margin-top: 5pt;
+      margin-bottom: 1pt;
+      mso-para-margin-top: 0cm;
+      mso-para-margin-bottom: 0cm;
+      display: block;
+    }
+
+    p {
+      margin-top: 0cm;
+      margin-bottom: 0cm;
+      margin-bottom: .0001pt;
+      font-size: 12.0pt;
+      line-height: normal;
+      mso-line-height-rule: at-least;
+      mso-para-margin-top: 0cm;
+      mso-para-margin-bottom: 0cm;
+      mso-para-margin-bottom: .0001pt;
+    }
+
+    ul, ol {
+      margin-top: 0cm;
+      margin-bottom: 0cm;
+      margin-bottom: .0001pt;
+      margin-left: 16pt;
+      padding-left: 0;
+      font-size: 12.0pt;
+      line-height: normal;
+      mso-line-height-rule: at-least;
+      mso-para-margin-top: 0cm;
+      mso-para-margin-bottom: 0cm;
+      mso-para-margin-bottom: .0001pt;
+      mso-para-margin-left: 16pt;
+    }
+    li {
+      margin-top: 0cm;
+      margin-bottom: 0cm;
+      margin-bottom: .0001pt;
+      font-size: 12.0pt;
+      line-height: normal;
+      mso-line-height-rule: at-least;
+      mso-para-margin-top: 0cm;
+      mso-para-margin-bottom: 0cm;
+      mso-para-margin-bottom: .0001pt;
+    }
+
+    code {
+      font-family: Consolas, "Courier New", monospace;
+      font-size: 10.5pt;
+      background-color: #f1f5f9;
+      padding: 1pt 3pt;
+      color: #0284c7;
+    }
+  </style>
+</head>
+<body>
+  <div class="Section1">
+    ${clone.innerHTML}
+  </div>
+</body>
+</html>`;
+
+      const blob = new Blob(['\ufeff', wordDocHtml], {
+        type: 'application/msword;charset=utf-8'
+      });
+
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = fileName;
+      document.body.appendChild(a);
+      a.click();
+      setTimeout(() => {
+        document.body.removeChild(a);
+        URL.revokeObjectURL(url);
+      }, 150);
+    }
+  </script>
+
+</body>
+</html>

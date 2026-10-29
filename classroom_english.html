@@ -1,0 +1,575 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>雙語課堂英語與字彙手冊 | Classroom English Guide</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&family=Outfit:wght@400;700;800&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-color: #0b0f19;
+      --card-bg: #111827;
+      --border-color: rgba(255, 255, 255, 0.08);
+      --text-main: #f3f4f6;
+      --text-muted: #9ca3af;
+      --accent-cyan: #06b6d4;
+      --accent-purple: #8b5cf6;
+      --accent-red: #ef4444;
+      --font-outfit: 'Outfit', sans-serif;
+      --font-inter: 'Inter', sans-serif;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background-color: var(--bg-color);
+      color: var(--text-main);
+      font-family: var(--font-inter);
+      padding-bottom: 4rem;
+    }
+
+    header {
+      border-bottom: 1px solid var(--border-color);
+      padding: 1.5rem 2rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background-color: rgba(11, 15, 25, 0.8);
+      backdrop-filter: blur(8px);
+      position: sticky;
+      top: 0;
+      z-index: 10;
+    }
+
+    .nav-left {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+
+    .btn-back {
+      color: var(--text-muted);
+      text-decoration: none;
+      font-size: 0.95rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      transition: color 0.3s;
+    }
+
+    .btn-back:hover {
+      color: #fff;
+    }
+
+    h1.page-title {
+      font-family: var(--font-outfit);
+      font-size: 1.5rem;
+      font-weight: 700;
+    }
+
+    .main-container {
+      max-width: 1000px;
+      margin: 2rem auto;
+      padding: 0 1.5rem;
+    }
+
+    h2.section-title {
+      font-family: var(--font-outfit);
+      font-size: 1.8rem;
+      margin-bottom: 1.5rem;
+      color: #fff;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    /* Vocabulary Section */
+    .vocab-search {
+      width: 100%;
+      padding: 0.85rem 1.25rem;
+      background-color: #1f2937;
+      border: 1px solid var(--border-color);
+      border-radius: 0.5rem;
+      color: #fff;
+      font-size: 1rem;
+      margin-bottom: 1.5rem;
+      outline: none;
+      transition: border-color 0.3s;
+    }
+
+    .vocab-search:focus {
+      border-color: var(--accent-cyan);
+    }
+
+    .vocab-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 1rem;
+      margin-bottom: 3rem;
+    }
+
+    .vocab-card {
+      background: var(--card-bg);
+      border: 1px solid var(--border-color);
+      padding: 1.25rem;
+      border-radius: 0.5rem;
+      transition: transform 0.2s, border-color 0.2s;
+    }
+
+    .vocab-card:hover {
+      transform: translateY(-2px);
+      border-color: var(--accent-cyan);
+    }
+
+    .vocab-en {
+      font-family: var(--font-outfit);
+      font-size: 1.15rem;
+      font-weight: 700;
+      color: var(--accent-cyan);
+      margin-bottom: 0.25rem;
+    }
+
+    .vocab-zh {
+      font-weight: 600;
+      font-size: 0.95rem;
+      margin-bottom: 0.5rem;
+    }
+
+    .vocab-desc {
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      line-height: 1.5;
+    }
+
+    /* Dialogue Section */
+    .filter-tabs {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+      margin-bottom: 2rem;
+      border-bottom: 1px solid var(--border-color);
+      padding-bottom: 1rem;
+    }
+
+    .tab-btn {
+      background: transparent;
+      border: 1px solid var(--border-color);
+      color: var(--text-muted);
+      padding: 0.5rem 1.25rem;
+      border-radius: 9999px;
+      cursor: pointer;
+      font-size: 0.9rem;
+      font-family: var(--font-outfit);
+      transition: all 0.3s;
+    }
+
+    .tab-btn:hover, .tab-btn.active {
+      color: #fff;
+      background-color: var(--accent-purple);
+      border-color: var(--accent-purple);
+    }
+
+    .dialogue-list {
+      display: flex;
+      flex-direction: column;
+      gap: 1.5rem;
+    }
+
+    .bubble-wrapper {
+      display: flex;
+      flex-direction: column;
+      max-width: 85%;
+      margin-right: auto;
+    }
+
+    .bubble-wrapper.safety {
+      border-left: 4px solid var(--accent-red);
+      padding-left: 1rem;
+    }
+
+    .bubble {
+      background: var(--card-bg);
+      border: 1px solid var(--border-color);
+      border-radius: 1rem;
+      padding: 1.25rem 1.5rem;
+      position: relative;
+    }
+
+    .bubble-en {
+      font-size: 1.1rem;
+      font-weight: 600;
+      color: #fff;
+      line-height: 1.5;
+      margin-bottom: 0.5rem;
+    }
+
+    .bubble-zh {
+      color: var(--text-muted);
+      font-size: 0.95rem;
+      line-height: 1.5;
+    }
+
+    .bubble-meta {
+      font-size: 0.75rem;
+      color: var(--accent-cyan);
+      margin-top: 0.5rem;
+      font-weight: bold;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    .hide {
+      display: none !important;
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <div class="nav-left">
+      <a href="index.html" class="btn-back">← Back to Portal</a>
+      <h1 class="page-title">雙語課堂英語與字彙手冊</h1>
+    </div>
+  </header>
+
+  <div class="main-container">
+    <!-- Vocab Search -->
+    <h2 class="section-title">🔍 科技與銲接關鍵字彙 (Vocabulary)</h2>
+    <input type="text" class="vocab-search" placeholder="Type to filter vocabulary..." onkeyup="filterVocab(this.value)">
+    
+    <div class="vocab-grid">
+      <div class="vocab-card" data-keyword="semiconductor 半導體">
+        <div class="vocab-en">Semiconductor</div>
+        <div class="vocab-zh">半導體</div>
+        <div class="vocab-desc">Materials that conduct electricity under certain conditions.</div>
+      </div>
+      <div class="vocab-card" data-keyword="conductor 導體">
+        <div class="vocab-en">Conductor</div>
+        <div class="vocab-zh">導體</div>
+        <div class="vocab-desc">Materials that allow electricity to flow easily (e.g., copper wire / 銅線).</div>
+      </div>
+      <div class="vocab-card" data-keyword="insulator 絕緣體">
+        <div class="vocab-en">Insulator</div>
+        <div class="vocab-zh">絕緣體</div>
+        <div class="vocab-desc">Materials that block the flow of electricity (e.g., plastic, rubber / 塑膠、橡膠).</div>
+      </div>
+      <div class="vocab-card" data-keyword="poor conductor 不良導體">
+        <div class="vocab-en">Poor Conductor</div>
+        <div class="vocab-zh">不良導體</div>
+        <div class="vocab-desc">Materials that conduct electricity poorly, showing high resistance (e.g., pencil lead, tap water / 鉛筆芯、自來水).</div>
+      </div>
+      <div class="vocab-card" data-keyword="pencil lead 鉛筆芯 graphite 石墨">
+        <div class="vocab-en">Pencil Lead</div>
+        <div class="vocab-zh">鉛筆芯</div>
+        <div class="vocab-desc">A carbon-based material (graphite) that acts as a poor conductor.</div>
+      </div>
+      <div class="vocab-card" data-keyword="led light emitting diode 發光二極體">
+        <div class="vocab-en">LED (Light Emitting Diode)</div>
+        <div class="vocab-zh">發光二極體</div>
+        <div class="vocab-desc">A semiconductor light source that emits light when current flows.</div>
+      </div>
+      <div class="vocab-card" data-keyword="anode 正極 long leg">
+        <div class="vocab-en">Anode</div>
+        <div class="vocab-zh">正極</div>
+        <div class="vocab-desc">The long leg of the LED (+). Connects to positive voltage.</div>
+      </div>
+      <div class="vocab-card" data-keyword="cathode 負極 short leg">
+        <div class="vocab-en">Cathode</div>
+        <div class="vocab-zh">負極</div>
+        <div class="vocab-desc">The short leg of the LED (-). Connects to Ground/Negative.</div>
+      </div>
+      <div class="vocab-card" data-keyword="polarity 極性">
+        <div class="vocab-en">Polarity</div>
+        <div class="vocab-zh">極性</div>
+        <div class="vocab-desc">Possessing distinct positive and negative terminals.</div>
+      </div>
+      <div class="vocab-card" data-keyword="soldering iron 電烙鐵">
+        <div class="vocab-en">Soldering Iron</div>
+        <div class="vocab-zh">電烙鐵</div>
+        <div class="vocab-desc">The hand tool used to heat and melt solder wire.</div>
+      </div>
+      <div class="vocab-card" data-keyword="solder wire 銲錫絲">
+        <div class="vocab-en">Solder Wire</div>
+        <div class="vocab-zh">銲錫絲</div>
+        <div class="vocab-desc">The fusible metal alloy used to join pins to the circuit board.</div>
+      </div>
+      <div class="vocab-card" data-keyword="safety goggles 護目鏡">
+        <div class="vocab-en">Safety Goggles</div>
+        <div class="vocab-zh">護目鏡</div>
+        <div class="vocab-desc">Protective eyewear designed to keep hot solder splashes away.</div>
+      </div>
+      <div class="vocab-card" data-keyword="multimeter 三用電表">
+        <div class="vocab-en">Multimeter</div>
+        <div class="vocab-zh">三用電表</div>
+        <div class="vocab-desc">The tool used to measure resistance, voltage, and current.</div>
+      </div>
+      <div class="vocab-card" data-keyword="computing 運算 處理">
+        <div class="vocab-en">Computing / Processing</div>
+        <div class="vocab-zh">運算 / 處理</div>
+        <div class="vocab-desc">Processing data and instructions in CPUs and microcontrollers.</div>
+      </div>
+      <div class="vocab-card" data-keyword="switching control 開關 控制">
+        <div class="vocab-en">Switching / Control</div>
+        <div class="vocab-zh">開關 / 控制</div>
+        <div class="vocab-desc">Controlling electrical current flow using transistors.</div>
+      </div>
+    </div>
+
+    <!-- Dialogue Section -->
+    <h2 class="section-title">💬 課堂情境口說引導 (Classroom Dialogues)</h2>
+    <div class="filter-tabs">
+      <button class="tab-btn active" onclick="filterCategory('all', this)">All</button>
+      <button class="tab-btn" onclick="filterCategory('opening', this)">Opening / 導入</button>
+      <button class="tab-btn" onclick="filterCategory('safety', this)">Safety / 安全</button>
+      <button class="tab-btn" onclick="filterCategory('step', this)">Steps / 焊接步驟</button>
+      <button class="tab-btn" onclick="filterCategory('test', this)">Testing / 測試與除錯</button>
+      <button class="tab-btn" onclick="filterCategory('cleanup', this)">Clean-up / 下課整理</button>
+      <button class="tab-btn" onclick="filterCategory('student', this)">Student Patterns / 學生句型</button>
+    </div>
+
+    <div class="dialogue-list">
+      <!-- Opening Cues -->
+      <div class="bubble-wrapper" data-cat="opening">
+        <div class="bubble">
+          <div class="bubble-en">"Good morning, everyone! Welcome to our Life Technology class."</div>
+          <div class="bubble-zh">大家早安！歡迎來到我們的生活科技課。</div>
+          <div class="bubble-meta">Opening</div>
+        </div>
+      </div>
+
+      <div class="bubble-wrapper" data-cat="opening">
+        <div class="bubble">
+          <div class="bubble-en">"Last class, we used a multimeter to measure different materials. Do you remember what conductors, poor conductors, and insulators are?"</div>
+          <div class="bubble-zh">上節課我們使用三用電表測量了不同的材料。你們還記得什麼是導體、不良導體和絕緣體嗎？</div>
+          <div class="bubble-meta">Review</div>
+        </div>
+      </div>
+
+      <div class="bubble-wrapper" data-cat="opening">
+        <div class="bubble">
+          <div class="bubble-en">"Why did the multimeter show a high resistance value for pencil lead? Because pencil lead is a poor conductor!"</div>
+          <div class="bubble-zh">為什麼三用電表測量鉛筆芯時會顯示高電阻值？因為鉛筆芯是不良導體！</div>
+          <div class="bubble-meta">Review</div>
+        </div>
+      </div>
+
+      <div class="bubble-wrapper" data-cat="opening">
+        <div class="bubble">
+          <div class="bubble-en">"Today, we are going to explore the world of semiconductors and learn how to solder!"</div>
+          <div class="bubble-zh">今天我們要一起來探索半導體的世界，並學習如何銲接！</div>
+          <div class="bubble-meta">Opening</div>
+        </div>
+      </div>
+
+      <div class="bubble-wrapper" data-cat="opening">
+        <div class="bubble">
+          <div class="bubble-en">"Are semiconductors only used for sensing? No! They are also used for computing, switching, and emitting light!"</div>
+          <div class="bubble-zh">半導體只用於感測嗎？不！它們還可以用於運算、開關切換和發光！</div>
+          <div class="bubble-meta">Opening</div>
+        </div>
+      </div>
+
+      <!-- Safety Cues -->
+      <div class="bubble-wrapper safety" data-cat="safety">
+        <div class="bubble">
+          <div class="bubble-en">"Rule 1: Don't play."</div>
+          <div class="bubble-zh">規則一：嚴禁嬉戲。</div>
+          <div class="bubble-meta">Safety Warning</div>
+        </div>
+      </div>
+
+      <div class="bubble-wrapper safety" data-cat="safety">
+        <div class="bubble">
+          <div class="bubble-en">"Rule 2: Don't burn anything."</div>
+          <div class="bubble-zh">規則二：不要燒焦任何物品。</div>
+          <div class="bubble-meta">Safety Warning</div>
+        </div>
+      </div>
+
+      <div class="bubble-wrapper safety" data-cat="safety">
+        <div class="bubble">
+          <div class="bubble-en">"Rule 3: Don't waste solder."</div>
+          <div class="bubble-zh">規則三：不要浪費銲錫。</div>
+          <div class="bubble-meta">Safety Warning</div>
+        </div>
+      </div>
+
+      <div class="bubble-wrapper safety" data-cat="safety">
+        <div class="bubble">
+          <div class="bubble-en">"Rule 4: Don't leave your group table."</div>
+          <div class="bubble-zh">規則四：不要離開小組座位。</div>
+          <div class="bubble-meta">Safety Warning</div>
+        </div>
+      </div>
+
+      <div class="bubble-wrapper safety" data-cat="safety">
+        <div class="bubble">
+          <div class="bubble-en">"Rule 5: Avoid touching metal."</div>
+          <div class="bubble-zh">規則五：避免碰觸金屬。</div>
+          <div class="bubble-meta">Safety Warning</div>
+        </div>
+      </div>
+
+      <!-- Step Cues -->
+      <div class="bubble-wrapper" data-cat="step">
+        <div class="bubble">
+          <div class="bubble-en">"Let's practice the four steps of soldering: Heat the joint, Apply the solder, Remove the solder, Remove the iron."</div>
+          <div class="bubble-zh">我們來練習銲接的四個步驟：加熱接點、加銲錫、移開錫絲、移開烙鐵。</div>
+          <div class="bubble-meta">Instruction</div>
+        </div>
+      </div>
+
+      <div class="bubble-wrapper" data-cat="step">
+        <div class="bubble">
+          <div class="bubble-en">"Step 1: Heat the joint with the iron for 2 seconds. Step 2: Apply the solder wire to melt it. Step 3: Remove the solder wire. Step 4: Remove the iron."</div>
+          <div class="bubble-zh">第一步：加熱接點 2 秒。第二步：靠上錫絲使其融化。第三步：移開錫絲。第四步：移開電烙鐵。</div>
+          <div class="bubble-meta">Instruction</div>
+        </div>
+      </div>
+
+      <div class="bubble-wrapper" data-cat="step">
+        <div class="bubble">
+          <div class="bubble-en">"Look at your solder joint. Is it a volcano shape? It should be smooth and shiny."</div>
+          <div class="bubble-zh">看看你的銲點，是火山形狀嗎？它應該要光滑而且亮亮的。</div>
+          <div class="bubble-meta">Quality Check</div>
+        </div>
+      </div>
+
+      <!-- Test Cues -->
+      <div class="bubble-wrapper" data-cat="test">
+        <div class="bubble">
+          <div class="bubble-en">"Now, connect your soldered LED to your pre-made Light-Sensing Circuit."</div>
+          <div class="bubble-zh">現在，把你焊好的 LED 連接到先前做好的光感應電路。</div>
+          <div class="bubble-meta">Testing</div>
+        </div>
+      </div>
+
+      <div class="bubble-wrapper" data-cat="test">
+        <div class="bubble">
+          <div class="bubble-en">"Cover the LDR light sensor with your hand. Does the LED light up?"</div>
+          <div class="bubble-zh">用手遮住 LDR 光感應器。LED 有亮起來嗎？</div>
+          <div class="bubble-meta">Testing</div>
+        </div>
+      </div>
+
+      <div class="bubble-wrapper safety" data-cat="test">
+        <div class="bubble">
+          <div class="bubble-en">"If it doesn't light up, check the polarity. Did you swap the positive and negative legs?"</div>
+          <div class="bubble-zh">如果不亮，檢查看看極性。你是不是把正負極腳接反了？</div>
+          <div class="bubble-meta">Troubleshooting</div>
+        </div>
+      </div>
+
+      <!-- Cleanup Cues -->
+      <div class="bubble-wrapper" data-cat="cleanup">
+        <div class="bubble">
+          <div class="bubble-en">"Time is up! Please unplug your soldering irons."</div>
+          <div class="bubble-zh">時間到！請拔掉電烙鐵插頭。</div>
+          <div class="bubble-meta">Clean-up</div>
+        </div>
+      </div>
+
+      <div class="bubble-wrapper" data-cat="cleanup">
+        <div class="bubble">
+          <div class="bubble-en">"Let's review: What is a conductor? What is an insulator? And what is a semiconductor?"</div>
+          <div class="bubble-zh">我們來複習一下：什麼是導體？什麼是絕緣體？那半導體又是什麼？</div>
+          <div class="bubble-meta">Review</div>
+        </div>
+      </div>
+
+      <div class="bubble-wrapper" data-cat="cleanup">
+        <div class="bubble">
+          <div class="bubble-en">"A conductor allows electricity to flow, an insulator blocks it, and a semiconductor controls it under specific conditions."</div>
+          <div class="bubble-zh">導體讓電流通過，絕緣體阻擋電流，而半導體在特定條件下控制電流。</div>
+          <div class="bubble-meta">Review</div>
+        </div>
+      </div>
+
+      <div class="bubble-wrapper safety" data-cat="cleanup">
+        <div class="bubble">
+          <div class="bubble-en">"Clean your desk, and wash your hands with soap immediately."</div>
+          <div class="bubble-zh">整理桌面，並立刻去用肥皂洗手。</div>
+          <div class="bubble-meta">Hygiene & Safety</div>
+        </div>
+      </div>
+
+      <!-- Student Response Cues -->
+      <div class="bubble-wrapper" data-cat="student" style="border-left: 4px solid var(--accent-cyan); padding-left: 1rem;">
+        <div class="bubble">
+          <div class="bubble-en">"[Copper wire/Pencil lead/Plastic/Silicon] is a/an [conductor/poor conductor/insulator/semiconductor]."</div>
+          <div class="bubble-zh">"Copper wire is a conductor." (銅線是導體) / "Pencil lead is a poor conductor." (鉛筆芯是不良導體) / "Plastic is an insulator." (塑膠是絕緣體) / "Silicon is a semiconductor." (矽是半導體)</div>
+          <div class="bubble-meta">Student: Material Classification</div>
+        </div>
+      </div>
+
+      <div class="bubble-wrapper" data-cat="student" style="border-left: 4px solid var(--accent-cyan); padding-left: 1rem;">
+        <div class="bubble">
+          <div class="bubble-en">"There is a semiconductor inside the [AC/phone/trash can/robot vacuum]. It senses [A] to control [B]."</div>
+          <div class="bubble-zh">"There is a semiconductor inside the AC. It senses temperature to control airflow." (冷氣機內有半導體。感測溫度控制風量。)</div>
+          <div class="bubble-meta">Student: Semiconductor in Life</div>
+        </div>
+      </div>
+
+      <div class="bubble-wrapper" data-cat="student" style="border-left: 4px solid var(--accent-cyan); padding-left: 1rem;">
+        <div class="bubble">
+          <div class="bubble-en">"The [long/short] leg is the [Anode/Cathode]."</div>
+          <div class="bubble-zh">"The long leg is the Anode." (長腳是正極) / "The short leg is the Cathode." (短腳是負極)</div>
+          <div class="bubble-meta">Student: LED Polarity</div>
+        </div>
+      </div>
+
+      <div class="bubble-wrapper" data-cat="student" style="border-left: 4px solid var(--accent-cyan); padding-left: 1rem;">
+        <div class="bubble">
+          <div class="bubble-en">"Step [1/2/3/4] is [Heat the joint / Apply the solder / Remove the solder / Remove the iron]."</div>
+          <div class="bubble-zh">"Step 1 is Heat the joint." (步驟一加熱接點) / "Step 2 is Apply the solder." (步驟二加銲錫)</div>
+          <div class="bubble-meta">Student: Soldering Steps</div>
+        </div>
+      </div>
+
+      <div class="bubble-wrapper" data-cat="student" style="border-left: 4px solid var(--accent-cyan); padding-left: 1rem;">
+        <div class="bubble">
+          <div class="bubble-en">"My LED is [on/off] because [I covered the LDR / I connected it backwards / it is a bad solder joint]."</div>
+          <div class="bubble-zh">"My LED is on because I covered the LDR." (亮了，因為遮住光敏) / "My LED is off because I connected it backwards." (不亮，因為接反)</div>
+          <div class="bubble-meta">Student: Testing & Debug</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Search filter for vocabulary cards
+    function filterVocab(query) {
+      query = query.toLowerCase().trim();
+      document.querySelectorAll('.vocab-card').forEach(card => {
+        const keyword = card.getAttribute('data-keyword').toLowerCase();
+        if (keyword.includes(query)) {
+          card.classList.remove('hide');
+        } else {
+          card.classList.add('hide');
+        }
+      });
+    }
+
+    // Category filter tabs for speech bubbles
+    function filterCategory(category, button) {
+      document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+      button.classList.add('active');
+
+      document.querySelectorAll('.dialogue-list .bubble-wrapper').forEach(bubble => {
+        const cat = bubble.getAttribute('data-cat');
+        if (category === 'all' || cat === category) {
+          bubble.classList.remove('hide');
+        } else {
+          bubble.classList.add('hide');
+        }
+      });
+    }
+  </script>
+</body>
+</html>
